@@ -1,42 +1,61 @@
-import swaggerJsdoc from "swagger-jsdoc";
+import { schemas } from "../docs/swagger/components/schemas.js";
+import { userPaths } from "../docs/swagger/paths/user.paths.js";
+import { tags } from "../docs/swagger/tags.js";
 
-const options = {
-  definition: {
-    openapi: "3.0.0",
-    info: {
-      title: "POS Inventory API",
-      version: "1.0.0",
-      description: "API documentation for POS Inventory Server",
-      contact: {
-        name: "API Support",
-        email: "support@example.com",
-      },
-    },
-    servers: [
-      {
-        url: `http://localhost:${process.env.PORT || 8000}/api/v1`,
-        description: "Development server (API v1)",
-      },
-    ],
-    components: {
-      securitySchemes: {
-        bearerAuth: {
-          type: "http",
-          scheme: "bearer",
-          bearerFormat: "JWT",
-        },
-      },
-    },
-    security: [
-      {
-        bearerAuth: [],
-      },
-    ],
+const swaggerDefinition = {
+  openapi: "3.0.0",
+  info: {
+    title: "Nexrox POS Inventory  API",
+    version: "1.0.0",
+    description:
+      "A comprehensive REST API for managing POS inventory system with user authentication, product management, and order processing.",
+    // contact: {
+    //   name: "API Support",
+    //   email: "hh",
+    // },
+    // license: {
+    //   name: "MIT",
+    //   url: "hh",
+    // },
   },
-  // Path to the API routes files where you'll add JSDoc comments
-  apis: ["./src/features/**/*.router.js", "./src/features/**/*.model.js"],
+
+  // servers: [
+  //   {
+  //     url: process.env.API_URL || "http://localhost:8000",
+  //     description: "Development server",
+  //   },
+  //   {
+  //     url: "https://api.posinventory.com",
+  //     description: "Production server",
+  //   },
+  // ],
+
+  tags,
+  components: {
+    schemas,
+    securitySchemes: {
+      bearerAuth: {
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
+        description: "Enter your JWT token",
+      },
+    },
+  },
+
+  // paths
+
+  paths: {
+    ...userPaths,
+    // Add more paths here as you create them
+    // ...productPaths,
+    // ...orderPaths,
+  },
+  security: [
+    {
+      bearerAuth: [],
+    },
+  ],
 };
 
-const swaggerSpec = swaggerJsdoc(options);
-
-export default swaggerSpec;
+export default swaggerDefinition;

@@ -9,14 +9,14 @@ export async function getUserById(id) {
 }
 
 export async function createUser(data) {
-  const user = new User(data);
+  const user = new userModel(data);
   return await user.save();
 }
 
 export async function updateUser(id, data) {
-  return await User.findByIdAndUpdate(id, data, { new: true });
+  return await userModel.findByIdAndUpdate(id, data, { new: true });
 }
 
 export async function deleteUser(id) {
-  return await User.findByIdAndDelete(id);
+  return await userModel.findByIdAndDelete(id);
 }

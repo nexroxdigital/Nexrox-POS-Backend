@@ -5,6 +5,7 @@ import swaggerSpec from "./config/swagger.config.js";
 
 // routes
 import userRouter from "./features/user/user.router.js";
+import userProducts from "./features/products/products.router.js";
 
 const app = express();
 const API_VERSION = process.env.API_VERSION || "/api/v1";
@@ -12,15 +13,26 @@ const API_VERSION = process.env.API_VERSION || "/api/v1";
 // Middleware
 app.use(cors());
 app.use(express.json());
+
 // Swagger Documentation Route
-// Swagger Documentation Route
+
 app.use(
   "/docs",
   swaggerUi.serve,
   swaggerUi.setup(swaggerSpec, {
-    customCss: ".swagger-ui .topbar { display: none }",
+    customCss: `
+      .swagger-ui .topbar { display: none }
+      .swagger-ui .info { margin: 20px 0; }
+      .swagger-ui .scheme-container { background: #fafafa; padding: 15px; }
+    `,
     customSiteTitle: "POS Inventory API Docs",
     customfavIcon: "/favicon.ico",
+    swaggerOptions: {
+      persistAuthorization: true,
+      displayRequestDuration: true,
+      filter: true,
+      tryItOutEnabled: true,
+    },
   })
 );
 
@@ -29,6 +41,7 @@ app.get("/", (req, res) => {
   res.json({
     status: "success",
     message: "Pos Inventory server is running successfully",
+    version: "1.0.0",
     apiVersion: API_VERSION,
     docs: "http://localhost:8000/docs",
     note: "Use the versioned API routes for all endpoints.",
@@ -36,8 +49,12 @@ app.get("/", (req, res) => {
 });
 
 // routes declaration
-app.use("/users", userRouter);
-// app.use("/api/v1/health-check", healthCheckRouter);
+
+// user routes
+app.use(`${API_VERSION}/users`, userRouter);
+
+// products routes
+app.use("/products", userProducts);
 
 // 404 Handler
 app.use((req, res) => {
