@@ -1,5 +1,4 @@
 // diagram.io
-
 Table users {
   _id string [pk]
   avatar string
@@ -23,8 +22,10 @@ Table customers {
   cost number
   location string
   role string [default: 'customer']
-  Crate_Type_1 number
-  Crate_Type_2 number
+  crate_Type_1 number
+  crate_type_1_price number
+  crate_Type_2 number
+  crate_type_2_price number
   
   Note: 'Customer information'
 }
@@ -41,8 +42,12 @@ Table suppliers {
   cost number
   location string
   role string [default: 'supplier']
-  Crate_Type_1 number
-  Crate_Type_2 number
+  crate_1 number
+  crate_1_price number
+  remaining_crate_1 number
+  crate_2 number
+  crate_2_price number
+  remaining_crate_2 number
   
   Note: 'Supplier information'
 }
@@ -187,6 +192,93 @@ Table lots {
   Note: 'Inventory lots'
 }
 
+Table accounts {
+  _id string [pk]
+  name string
+  account_type varchar [note: 'enum: bank, mobile_wallet, cash']
+  account_number string
+  balance string
+  account_details string
+  added_by string
+  
+  Note: 'Financial accounts'
+}
+
+Table expense {
+  _id string [pk]
+  date string
+  amount number
+  expense_for string
+  payment_Type varchar [note: 'enum: cash, card, bank, mobile_wallet']
+  reference_num string
+  expense_by string
+  choose_account string
+  
+  Note: 'Expense tracking'
+}
+
+
+
+Table purchase_Return {
+  _id string [pk]
+  return_date string
+  productsId string
+  supplierId string
+  lotsId string
+  reason string
+  qty_return number
+  
+  Note: 'Purchase returns to suppliers'
+}
+
+Table product_Return {
+  _id string [pk]
+  return_date string
+  productsId string
+  customerId string
+  supplierId string
+  lotsId string
+  return_amount number
+  reason string
+  qty_return number
+  
+  Note: 'Product returns from customers'
+}
+
+Table payments {
+  _id string [pk]
+  purchaseId string
+  supplierId string
+  select_account string
+  payment_Type varchar [note: 'enum: bank, cash, mobile_wallet']
+  account_number number
+  reference string
+  notes string
+  
+  Note: 'Payment transactions'
+}
+
+Table payment_items {
+  _id string [pk]
+  paymentId string
+  selected_lot_id string
+  total_sell number
+  profit number
+  discounted_rate string
+  
+  Note: 'Individual items in payments'
+}
+Table activity_logs {
+    _id string pk
+  date string 
+  logs_feilds_id string 
+  action varchar [note :  "emum : Added,Created,Returned,updated,delated,payment" ]
+  note string
+  by string
+  }
+
+Ref: activity_logs.by > users._id
+
 // Relationships
 Ref: products.categoryId > categories._id
 Ref: income.saleID > sales._id
@@ -201,7 +293,21 @@ Ref: selected_purchase_items.productsId > products._id
 Ref: lots.productsId > products._id
 Ref: lots.supplierId > suppliers._id
 Ref: lots.purchaseListId > purchase._id
+Ref: expense.expense_by > users._id
+Ref: expense.choose_account > accounts._id
+Ref: accounts.added_by > users._id
 
+Ref: purchase_Return.productsId > products._id
+Ref: purchase_Return.supplierId > suppliers._id
+Ref: purchase_Return.lotsId > lots._id
+Ref: product_Return.productsId > products._id
+Ref: product_Return.customerId > customers._id
+Ref: product_Return.supplierId > suppliers._id
+Ref: product_Return.lotsId > lots._id
+Ref: payments.purchaseId > purchase._id
+Ref: payments.supplierId > suppliers._id
+Ref: payments.select_account > accounts._id
+Ref: payment_items.paymentId > payments._id
 
 
 
@@ -211,7 +317,6 @@ Ref: lots.purchaseListId > purchase._id
 
 colorMode pastel
 notation crows-foot
-
 
 users [icon: user, color: blue] {
   _id string pk
@@ -235,8 +340,10 @@ customers [icon: user, color: blue] {
   cost    number
   location string
   role     [customer] string
-  Crate_Type_1 number
-  Crate_Type_2 number
+  crate_Type_1 number
+  carate_type_1_price number
+  crate_Type_2 number
+  carate_type_2_price number
 }
 
 suppliers [icon: user, color: blue] {
@@ -251,8 +358,12 @@ suppliers [icon: user, color: blue] {
   cost    number
   location string
   role     [supplier] string
-  Crate_Type_1 number
-  Crate_Type_2 number
+  crate_1 number
+  carate_1_price number
+  remaning_carate_1 number
+  crate_2 number
+  carate_2_price number
+  remaning_carate_2 number
 }
 
 products [icon: box, color: orange] {
@@ -398,3 +509,83 @@ lots [icon: ship,color:green]{
   total_profit_without_comm number
 }
 
+expense [icon: dollar-sign,color: purple]{
+  _id string
+  date string
+  amount number
+  expense_for string
+  payment_Type enum[cash,card,bank,mobile_wallet]
+  reference_num string
+  expense_by > users._id
+  choose_account 
+}
+
+accounts [icon: piggy-bank,color: purple]  {
+  _id string
+  name string
+  ccount_type enum[bank,mobile_wallet,cash]
+  account_numbar string
+  blance string
+  account_details string
+  added_by > users._id
+}
+
+activity_logs [icon: history,color: yellow]{
+  _id string pk
+  date string 
+  logs_feilds_id string 
+  action emum["Added","Created","Returned","updated","delated","payment"]
+  note string
+  by > users._id
+}
+
+
+purchase_Return [icon: bus, color: orange] {
+  _id string pk
+  return_date string
+
+  productsId > products._id
+  supplierId > suppliers._id
+  lotsId > lots._id
+  reason string
+  qty_return number
+
+}   
+
+product_Return [icon: bus, color: orange] {
+  _id string pk
+  return_date string
+
+  productsId > products._id
+  customerId > customers._id
+  supplierId > suppliers._id
+  lotsId > lots._id
+
+  return_amount number
+  reason string
+  qty_return number
+  return_date string
+}   
+
+payments [icon: credit-card, color: orange] {
+  _id string pk
+  purchaseId > purchase._id
+  supplierId > suppliers._id
+
+  payemnt_items [] > payemnt_items._id
+
+  select_account > accounts._id
+  payment_Type enum["bnak","cash","mobile_wallet"]
+  account_numbar number
+  reference string
+  notes string
+}
+
+payemnt_items [iocn: list, color: orange] {
+  _id string pk
+  selected_lot_id string
+  total_sell number
+  profit numbar 
+  discounted_rate string
+
+}
