@@ -54,7 +54,7 @@ const customerSchema = new mongoose.Schema(
         type: Number,
         default: 0,
       },
-      dua: {
+      due: {
         type: Number,
         default: 0,
       },
