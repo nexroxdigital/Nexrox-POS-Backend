@@ -10,7 +10,7 @@
 
 ### Quick Links
 
-- **Flow Chart (ERD):** [doc/flow-chart/ERD.png](doc/flow-chart/ERD.png)
+- **Flow Chart (ERD):** [doc/flow-chart/ERD.png](doc/flow-chart/flow-chart.png)
 - **DB Diagram Folder:** [doc/db/](doc/db/)
 
 ## .env
