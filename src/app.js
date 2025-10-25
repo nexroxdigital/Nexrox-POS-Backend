@@ -5,7 +5,9 @@ import swaggerSpec from "./config/swagger.config.js";
 
 // routes
 import userRouter from "./features/user/user.router.js";
+import customerRouter from "./features/customer/customer.router.js";
 import userProducts from "./features/products/products.router.js";
+import activityLogRouter from "./features/activity_logs/activityLog.router.js";
 
 const app = express();
 const API_VERSION = process.env.API_VERSION || "/api/v1";
@@ -53,8 +55,14 @@ app.get("/", (req, res) => {
 // user routes
 app.use(`${API_VERSION}/users`, userRouter);
 
+// customer routes
+app.use(`${API_VERSION}/customer`, customerRouter);
+
 // products routes
 app.use("/products", userProducts);
+
+// activity routes
+app.use(`${API_VERSION}/activity`, activityLogRouter);
 
 // 404 Handler
 app.use((req, res) => {

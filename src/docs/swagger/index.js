@@ -11,9 +11,8 @@
  */
 
 export { schemas } from "./components/schemas.js";
-export { userPaths } from "./paths/user.paths.js";
 export { tags } from "./tags.js";
 
-// Future exports
-// export { productPaths } from "./paths/product.paths.js";
-// export { orderPaths } from "./paths/order.paths.js";
+export { activityLog } from "./paths/activityLog.path.js";
+export { userPaths } from "./paths/user.paths.js";
+export { customerPaths } from "./paths/customer.path.js";

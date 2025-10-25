@@ -11,13 +11,17 @@
 
 export const tags = [
   {
+    name: "Activity Log",
+    description: "Activity Log endpoints",
+  },
+  {
     name: "Users",
     description: "User management and authentication endpoints",
   },
-  // {
-  //   name: "Products",
-  //   description: "Product management endpoints",
-  // },
+  {
+    name: "Customers",
+    description: "Customer management endpoints",
+  },
 
   // Add more tags as your API grows
 ];
