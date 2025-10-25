@@ -1,6 +1,8 @@
 import { schemas } from "../docs/swagger/components/schemas.js";
 import { userPaths } from "../docs/swagger/paths/user.paths.js";
+import { customerPaths } from "../docs/swagger/paths/customer.path.js";
 import { tags } from "../docs/swagger/tags.js";
+import { activityLogPaths } from "../docs/swagger/paths/activityLog.path.js";
 
 const swaggerDefinition = {
   openapi: "3.0.0",
@@ -46,7 +48,9 @@ const swaggerDefinition = {
   // paths
 
   paths: {
+    ...activityLogPaths,
     ...userPaths,
+    ...customerPaths,
     // Add more paths here as you create them
     // ...productPaths,
     // ...orderPaths,
