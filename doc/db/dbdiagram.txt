@@ -1,4 +1,16 @@
-// diagram.io
+//---------------------------------------------
+//---------------------------------------------
+//---------------------------------------------
+//---------------------------------------------
+
+      dbdiagram.io
+
+live link :- https://dbdiagram.io/d/pos-68f8bbba357668b73213217e
+//---------------------------------------------
+//---------------------------------------------
+//---------------------------------------------
+//---------------------------------------------
+
 Table users {
   _id string [pk]
   avatar string
@@ -19,8 +31,9 @@ Table customers {
   avatar string
   balance number
   dua number
-  cost number
+  return_amout number
   location string
+  account_numbar string
   role string [default: 'customer']
   crate_Type_1 number
   crate_type_1_price number
@@ -41,6 +54,8 @@ Table suppliers {
   dua number
   cost number
   location string
+  account_numbar string
+  address string
   role string [default: 'supplier']
   crate_1 number
   crate_1_price number
@@ -70,7 +85,6 @@ Table products {
   description string
   categoryId string
   commissionRate number
-  sku string
   allowCommission boolean
   isCrated boolean
   
@@ -102,6 +116,7 @@ Table sales {
   payment_Type string
   received_Amount number
   Vat number
+  items  objects
   Note string
   
   Note: 'Sales transactions'
@@ -283,7 +298,7 @@ Ref: activity_logs.by > users._id
 Ref: products.categoryId > categories._id
 Ref: income.saleID > sales._id
 Ref: sales.customerId > customers._id
-Ref: sales_items.saleId > sales._id
+Ref: sales_items.saleId > sales.items
 Ref: sales_items.productId > products._id
 Ref: selected_lots.sales_item_id > sales_items._id
 Ref: selected_lots.lotId > lots._id
@@ -311,12 +326,23 @@ Ref: payment_items.paymentId > payments._id
 
 
 
-//
-//
-//------------------ eraser.io
+//---------------------------------------------
+//---------------------------------------------
+//---------------------------------------------
+//---------------------------------------------
+
+       eraser.io
+
+//---------------------------------------------
+//---------------------------------------------
+//---------------------------------------------
+//---------------------------------------------
+
+
 
 colorMode pastel
 notation crows-foot
+
 
 users [icon: user, color: blue] {
   _id string pk
@@ -552,6 +578,7 @@ purchase_Return [icon: bus, color: orange] {
 
 }   
 
+
 product_Return [icon: bus, color: orange] {
   _id string pk
   return_date string
@@ -587,5 +614,6 @@ payemnt_items [iocn: list, color: orange] {
   total_sell number
   profit numbar 
   discounted_rate string
-
+  
 }
+
