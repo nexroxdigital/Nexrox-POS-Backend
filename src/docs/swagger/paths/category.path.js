@@ -4,6 +4,28 @@ export const categoryPaths = {
       tags: ["Categories"],
       summary: "Get all categories",
       description: "Retrieve a list of all categories",
+      parameters: [
+        {
+          in: "query",
+          name: "page",
+          schema: {
+            type: "integer",
+            default: 1,
+          },
+          description: "Page number for pagination",
+          example: 1,
+        },
+        {
+          in: "query",
+          name: "limit",
+          schema: {
+            type: "integer",
+            default: 10,
+          },
+          description: "Number of items per page",
+          example: 10,
+        },
+      ],
       responses: {
         200: {
           description: "List of categories retrieved successfully",

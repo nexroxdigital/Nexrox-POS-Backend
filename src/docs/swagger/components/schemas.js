@@ -947,6 +947,152 @@ export const accountSchemas = {
   },
 };
 
+// express schema
+export const expenseSchemas = {
+  Expense: {
+    type: "object",
+    required: [
+      "date",
+      "amount",
+      "expense_for",
+      "payment_type",
+      "expense_by",
+      "choose_account",
+    ],
+    properties: {
+      _id: {
+        type: "string",
+        description: "Auto-generated MongoDB ID",
+        example: "507f1f77bcf86cd799439011",
+      },
+      date: {
+        type: "string",
+        description: "Date of the expense",
+        example: "2025-10-25",
+      },
+      amount: {
+        type: "number",
+        description: "Expense amount",
+        example: 5000,
+      },
+      expense_for: {
+        type: "string",
+        description: "Purpose or reason for the expense",
+        example: "Office supplies",
+      },
+      payment_type: {
+        type: "string",
+        enum: ["cash", "card", "bank", "mobile_wallet"],
+        description: "Payment method used",
+        example: "bank",
+      },
+      reference_num: {
+        type: "string",
+        description: "Transaction reference number",
+        example: "TRX123456789",
+      },
+      expense_by: {
+        type: "string",
+        description: "User ID who made the expense",
+        example: "507f1f77bcf86cd799439012",
+      },
+      choose_account: {
+        type: "string",
+        description: "Account ID used for the expense",
+        example: "507f1f77bcf86cd799439013",
+      },
+      createdAt: {
+        type: "string",
+        format: "date-time",
+        description: "Expense creation timestamp",
+      },
+      updatedAt: {
+        type: "string",
+        format: "date-time",
+        description: "Expense last update timestamp",
+      },
+    },
+  },
+
+  ExpenseInput: {
+    type: "object",
+    required: [
+      "date",
+      "amount",
+      "expense_for",
+      "payment_type",
+      "expense_by",
+      "choose_account",
+    ],
+    properties: {
+      date: {
+        type: "string",
+        example: "2025-10-25",
+      },
+      amount: {
+        type: "number",
+        example: 5000,
+      },
+      expense_for: {
+        type: "string",
+        example: "Office supplies",
+      },
+      payment_type: {
+        type: "string",
+        enum: ["cash", "card", "bank", "mobile_wallet"],
+        example: "bank",
+      },
+      reference_num: {
+        type: "string",
+        example: "TRX123456789",
+      },
+      expense_by: {
+        type: "string",
+        example: "507f1f77bcf86cd799439012",
+      },
+      choose_account: {
+        type: "string",
+        example: "507f1f77bcf86cd799439013",
+      },
+    },
+  },
+
+  ExpenseUpdate: {
+    type: "object",
+    properties: {
+      date: {
+        type: "string",
+        example: "2025-10-26",
+      },
+      amount: {
+        type: "number",
+        example: 7500,
+      },
+      expense_for: {
+        type: "string",
+        example: "Updated expense purpose",
+      },
+      payment_type: {
+        type: "string",
+        enum: ["cash", "card", "bank", "mobile_wallet"],
+        example: "mobile_wallet",
+      },
+      reference_num: {
+        type: "string",
+        example: "TRX987654321",
+      },
+      expense_by: {
+        type: "string",
+        example: "507f1f77bcf86cd799439012",
+      },
+      choose_account: {
+        type: "string",
+        example: "507f1f77bcf86cd799439013",
+      },
+    },
+  },
+};
+
 // Combine all schemas
 export const schemas = {
   ...activityLogSchemas,
@@ -955,4 +1101,5 @@ export const schemas = {
   ...categorySchemas,
   ...supplierSchemas,
   ...accountSchemas,
+  ...expenseSchemas,
 };

@@ -13,6 +13,28 @@ export const customerPaths = {
       summary: "Get all customers",
       description:
         "Retrieve a list of all customers with their complete information including basic info, contact details, account balance and crate tracking",
+      parameters: [
+        {
+          in: "query",
+          name: "page",
+          schema: {
+            type: "integer",
+            default: 1,
+          },
+          description: "Page number for pagination",
+          example: 1,
+        },
+        {
+          in: "query",
+          name: "limit",
+          schema: {
+            type: "integer",
+            default: 10,
+          },
+          description: "Number of items per page",
+          example: 10,
+        },
+      ],
       responses: {
         200: {
           description: "List of customers retrieved successfully",

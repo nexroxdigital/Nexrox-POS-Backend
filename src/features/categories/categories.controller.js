@@ -35,7 +35,12 @@ export const createCategory = async (req, res) => {
 // @access  Public/Admin
 export const getAllCategories = async (req, res) => {
   try {
-    const categories = await categoryService.getAllCategories();
+    const { page = 1, limit = 10 } = req.query;
+
+    const categories = await categoryService.getAllCategories(
+      parseInt(page),
+      parseInt(limit)
+    );
     res.status(200).json(categories);
   } catch (error) {
     console.error("Get Categories Error:", error);

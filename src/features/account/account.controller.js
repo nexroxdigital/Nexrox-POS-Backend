@@ -19,7 +19,13 @@ export const createAccount = async (req, res) => {
 // @route   GET /api/v1/accounts
 export const getAllAccounts = async (req, res) => {
   try {
-    const accounts = await accountService.getAllAccounts();
+    const { page = 1, limit = 10 } = req.query;
+
+    const accounts = await accountService.getAllAccounts(
+      parseInt(page),
+      parseInt(limit)
+    );
+
     res.status(200).json(accounts);
   } catch (error) {
     console.error("Get Accounts Error:", error);

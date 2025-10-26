@@ -8,7 +8,11 @@ export const createCategory = async (data) => {
 
 // Get all categories
 export const getAllCategories = async () => {
-  return await Category.find().sort({ createdAt: -1 });
+  return await Category.find()
+    .sort({ createdAt: -1 })
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit);
 };
 
 // Get single category by ID
