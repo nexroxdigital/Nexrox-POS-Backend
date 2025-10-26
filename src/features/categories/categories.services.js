@@ -7,7 +7,7 @@ export const createCategory = async (data) => {
 };
 
 // Get all categories
-export const getAllCategories = async () => {
+export const getAllCategories = async (skip, limit) => {
   return await Category.find()
     .sort({ createdAt: -1 })
     .sort({ createdAt: -1 })
