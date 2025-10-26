@@ -1,8 +1,12 @@
 import { schemas } from "../docs/swagger/components/schemas.js";
-import { userPaths } from "../docs/swagger/paths/user.paths.js";
-import { customerPaths } from "../docs/swagger/paths/customer.path.js";
 import { tags } from "../docs/swagger/tags.js";
+
+import { userPaths } from "../docs/swagger/paths/user.paths.js";
+import { categoryPaths } from "../docs/swagger/paths/category.path.js";
+import { customerPaths } from "../docs/swagger/paths/customer.path.js";
 import { activityLogPaths } from "../docs/swagger/paths/activityLog.path.js";
+import { supplierPaths } from "../docs/swagger/paths/supplier.path.js";
+import { accountPaths } from "../docs/swagger/paths/account.path.js";
 
 const swaggerDefinition = {
   openapi: "3.0.0",
@@ -51,9 +55,9 @@ const swaggerDefinition = {
     ...activityLogPaths,
     ...userPaths,
     ...customerPaths,
-    // Add more paths here as you create them
-    // ...productPaths,
-    // ...orderPaths,
+    ...supplierPaths,
+    ...categoryPaths,
+    ...accountPaths,
   },
   security: [
     {

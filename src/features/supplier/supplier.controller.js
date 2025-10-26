@@ -1,0 +1,68 @@
+import * as supplierService from "./supplier.service.js";
+
+// @desc    Create a new supplier
+// @route   POST /api/v1/suppliers
+export const createSupplier = async (req, res) => {
+  try {
+    const supplier = await supplierService.createSupplier(req.body);
+    res.status(201).json({
+      message: "Supplier created successfully",
+      data: supplier,
+    });
+  } catch (error) {
+    console.error("Create Supplier Error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// @desc    Get all suppliers
+// @route   GET /api/v1/suppliers
+export const getAllSuppliers = async (req, res) => {
+  try {
+    const suppliers = await supplierService.getAllSuppliers();
+    res.status(200).json(suppliers);
+  } catch (error) {
+    console.error("Get All Suppliers Error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// @desc    Get single supplier details
+// @route   GET /api/v1/suppliers/:id
+export const getSupplierById = async (req, res) => {
+  try {
+    const supplier = await supplierService.getSupplierById(req.params.id);
+
+    if (!supplier) {
+      return res.status(404).json({ message: "Supplier not found" });
+    }
+
+    res.status(200).json(supplier);
+  } catch (error) {
+    console.error("Get Supplier Error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// @desc    Update supplier
+// @route   PUT /api/v1/suppliers/:id
+export const updateSupplier = async (req, res) => {
+  try {
+    const updatedSupplier = await supplierService.updateSupplier(
+      req.params.id,
+      req.body
+    );
+
+    if (!updatedSupplier) {
+      return res.status(404).json({ message: "Supplier not found" });
+    }
+
+    res.status(200).json({
+      message: "Supplier updated successfully",
+      data: updatedSupplier,
+    });
+  } catch (error) {
+    console.error("Update Supplier Error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};

@@ -494,9 +494,465 @@ export const activityLogSchemas = {
   },
 };
 
+// category schema
+export const categorySchemas = {
+  Category: {
+    type: "object",
+    required: ["categoryName", "slug"],
+    properties: {
+      _id: {
+        type: "string",
+        description: "Auto-generated MongoDB ID",
+        example: "507f1f77bcf86cd799439011",
+      },
+      categoryName: {
+        type: "string",
+        description: "Name of the category",
+        example: "Electronics",
+      },
+      slug: {
+        type: "string",
+        description: "URL-friendly unique identifier",
+        example: "electronics",
+      },
+      description: {
+        type: "string",
+        description: "Category description",
+        example: "All electronic items and gadgets",
+      },
+      comment: {
+        type: "string",
+        description: "Additional comments about the category",
+        example: "Popular category with high demand",
+      },
+      createdAt: {
+        type: "string",
+        format: "date-time",
+        description: "Category creation timestamp",
+      },
+      updatedAt: {
+        type: "string",
+        format: "date-time",
+        description: "Category last update timestamp",
+      },
+    },
+  },
+
+  CategoryInput: {
+    type: "object",
+    required: ["categoryName", "slug"],
+    properties: {
+      categoryName: {
+        type: "string",
+        example: "Electronics",
+      },
+      slug: {
+        type: "string",
+        example: "electronics",
+      },
+      description: {
+        type: "string",
+        example: "All electronic items and gadgets",
+      },
+      comment: {
+        type: "string",
+        example: "Popular category with high demand",
+      },
+    },
+  },
+
+  CategoryUpdate: {
+    type: "object",
+    properties: {
+      categoryName: {
+        type: "string",
+        example: "Electronics Updated",
+      },
+      slug: {
+        type: "string",
+        example: "electronics-updated",
+      },
+      description: {
+        type: "string",
+        example: "Updated description for electronics",
+      },
+      comment: {
+        type: "string",
+        example: "Updated comment",
+      },
+    },
+  },
+};
+
+// supplier schema
+export const supplierSchemas = {
+  Supplier: {
+    type: "object",
+    required: ["basic_info"],
+    properties: {
+      _id: {
+        type: "string",
+        description: "Auto-generated MongoDB ID",
+        example: "507f1f77bcf86cd799439011",
+      },
+      basic_info: {
+        type: "object",
+        required: ["sl", "name"],
+        properties: {
+          sl: {
+            type: "string",
+            description: "Serial number or unique identifier",
+            example: "S001",
+          },
+          name: {
+            type: "string",
+            description: "Supplier's full name",
+            example: "Rahman Suppliers",
+          },
+          avatar: {
+            type: "string",
+            description: "URL to supplier's avatar image",
+            example: "https://example.com/avatar.jpg",
+          },
+          role: {
+            type: "string",
+            enum: ["supplier"],
+            description: "Supplier's role (fixed as supplier)",
+            example: "supplier",
+          },
+        },
+      },
+      contact_info: {
+        type: "object",
+        properties: {
+          email: {
+            type: "string",
+            format: "email",
+            description: "Supplier's email address",
+            example: "rahman@example.com",
+          },
+          phone: {
+            type: "string",
+            description: "Supplier's phone number",
+            example: "+8801712345678",
+          },
+          location: {
+            type: "string",
+            description: "Supplier's location or address",
+            example: "Dhaka, Bangladesh",
+          },
+        },
+      },
+      account_info: {
+        type: "object",
+        properties: {
+          accountNumber: {
+            type: "string",
+            description: "Supplier's account number",
+            example: "ACC123456",
+          },
+          balance: {
+            type: "number",
+            description: "Current account balance",
+            example: 15000,
+          },
+          due: {
+            type: "number",
+            description: "Due amount",
+            example: 3000,
+          },
+          cost: {
+            type: "number",
+            description: "Total cost amount",
+            example: 20000,
+          },
+        },
+      },
+      crate_info: {
+        type: "object",
+        properties: {
+          crate1: {
+            type: "number",
+            description: "Number of Crate 1",
+            example: 50,
+          },
+          crate1Price: {
+            type: "number",
+            description: "Price per Crate 1",
+            example: 100,
+          },
+          remainingCrate1: {
+            type: "number",
+            description: "Remaining Crate 1 count",
+            example: 45,
+          },
+          crate2: {
+            type: "number",
+            description: "Number of Crate 2",
+            example: 30,
+          },
+          crate2Price: {
+            type: "number",
+            description: "Price per Crate 2",
+            example: 150,
+          },
+          remainingCrate2: {
+            type: "number",
+            description: "Remaining Crate 2 count",
+            example: 28,
+          },
+        },
+      },
+      createdAt: {
+        type: "string",
+        format: "date-time",
+        description: "Supplier creation timestamp",
+      },
+      updatedAt: {
+        type: "string",
+        format: "date-time",
+        description: "Supplier last update timestamp",
+      },
+    },
+  },
+
+  SupplierInput: {
+    type: "object",
+    required: ["basic_info"],
+    properties: {
+      basic_info: {
+        type: "object",
+        required: ["sl", "name"],
+        properties: {
+          sl: {
+            type: "string",
+            example: "S001",
+          },
+          name: {
+            type: "string",
+            example: "Rahman Suppliers",
+          },
+          avatar: {
+            type: "string",
+            example: "https://example.com/avatar.jpg",
+          },
+          role: {
+            type: "string",
+            enum: ["supplier"],
+            example: "supplier",
+          },
+        },
+      },
+      contact_info: {
+        type: "object",
+        properties: {
+          email: {
+            type: "string",
+            format: "email",
+            example: "rahman@example.com",
+          },
+          phone: {
+            type: "string",
+            example: "+8801712345678",
+          },
+          location: {
+            type: "string",
+            example: "Dhaka, Bangladesh",
+          },
+        },
+      },
+      account_info: {
+        type: "object",
+        properties: {
+          accountNumber: {
+            type: "string",
+            example: "ACC123456",
+          },
+          balance: {
+            type: "number",
+            example: 15000,
+          },
+          due: {
+            type: "number",
+            example: 3000,
+          },
+          cost: {
+            type: "number",
+            example: 20000,
+          },
+        },
+      },
+      crate_info: {
+        type: "object",
+        properties: {
+          crate1: {
+            type: "number",
+            example: 50,
+          },
+          crate1Price: {
+            type: "number",
+            example: 100,
+          },
+          remainingCrate1: {
+            type: "number",
+            example: 45,
+          },
+          crate2: {
+            type: "number",
+            example: 30,
+          },
+          crate2Price: {
+            type: "number",
+            example: 150,
+          },
+          remainingCrate2: {
+            type: "number",
+            example: 28,
+          },
+        },
+      },
+    },
+  },
+};
+
+// account schema
+export const accountSchemas = {
+  Account: {
+    type: "object",
+    required: ["name", "account_type"],
+    properties: {
+      _id: {
+        type: "string",
+        description: "Auto-generated MongoDB ID",
+        example: "507f1f77bcf86cd799439011",
+      },
+      name: {
+        type: "string",
+        description: "Account holder's name",
+        example: "John Doe",
+      },
+      account_type: {
+        type: "string",
+        enum: ["bank", "mobile_wallet", "cash"],
+        description: "Type of account",
+        example: "bank",
+      },
+      account_name: {
+        type: "string",
+        description: "Name of the bank or wallet service",
+        example: "Dhaka Bank",
+      },
+      account_number: {
+        type: "string",
+        description: "Account number or wallet number",
+        example: "1234567890",
+      },
+      balance: {
+        type: "number",
+        description: "Current account balance",
+        example: 50000,
+      },
+      account_details: {
+        type: "string",
+        description: "Additional details about the account",
+        example: "Primary business account",
+      },
+      added_by: {
+        type: "string",
+        description: "User who added this account",
+        example: "Admin User",
+      },
+      createdAt: {
+        type: "string",
+        format: "date-time",
+        description: "Account creation timestamp",
+      },
+      updatedAt: {
+        type: "string",
+        format: "date-time",
+        description: "Account last update timestamp",
+      },
+    },
+  },
+
+  AccountInput: {
+    type: "object",
+    required: ["name", "account_type"],
+    properties: {
+      name: {
+        type: "string",
+        example: "John Doe",
+      },
+      account_type: {
+        type: "string",
+        enum: ["bank", "mobile_wallet", "cash"],
+        example: "bank",
+      },
+      account_name: {
+        type: "string",
+        example: "Dhaka Bank",
+      },
+      account_number: {
+        type: "string",
+        example: "1234567890",
+      },
+      balance: {
+        type: "number",
+        example: 50000,
+      },
+      account_details: {
+        type: "string",
+        example: "Primary business account",
+      },
+      added_by: {
+        type: "string",
+        example: "Admin User",
+      },
+    },
+  },
+
+  AccountUpdate: {
+    type: "object",
+    properties: {
+      name: {
+        type: "string",
+        example: "John Doe Updated",
+      },
+      account_type: {
+        type: "string",
+        enum: ["bank", "mobile_wallet", "cash"],
+        example: "mobile_wallet",
+      },
+      account_name: {
+        type: "string",
+        example: "bKash",
+      },
+      account_number: {
+        type: "string",
+        example: "01712345678",
+      },
+      balance: {
+        type: "number",
+        example: 75000,
+      },
+      account_details: {
+        type: "string",
+        example: "Updated account details",
+      },
+      added_by: {
+        type: "string",
+        example: "Manager User",
+      },
+    },
+  },
+};
+
 // Combine all schemas
 export const schemas = {
   ...activityLogSchemas,
   ...userSchemas,
   ...customerSchemas,
+  ...categorySchemas,
+  ...supplierSchemas,
+  ...accountSchemas,
 };

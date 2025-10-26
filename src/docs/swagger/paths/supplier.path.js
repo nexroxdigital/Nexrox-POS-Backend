@@ -1,135 +1,23 @@
-/**
- *  customer API Paths
- * --------------------------------------------
- *  This file defines all OpenAPI/Swagger path
- *  specifications for customer-related endpoints for documentation.
- *
- */
-
-export const customerPaths = {
-  "/api/v1/customer/all": {
-    get: {
-      tags: ["Customers"],
-      summary: "Get all customers",
-      description:
-        "Retrieve a list of all customers with their complete information including basic info, contact details, account balance and crate tracking",
-      responses: {
-        200: {
-          description: "List of customers retrieved successfully",
-          content: {
-            "application/json": {
-              schema: {
-                type: "object",
-                properties: {
-                  status: {
-                    type: "string",
-                    example: "success",
-                  },
-                  data: {
-                    type: "array",
-                    items: {
-                      $ref: "#/components/schemas/Customer",
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-        500: {
-          description: "Server error",
-          content: {
-            "application/json": {
-              schema: {
-                $ref: "#/components/schemas/Error",
-              },
-            },
-          },
-        },
-      },
-    },
-  },
-
-  "/api/v1/customer/details/{id}": {
-    get: {
-      tags: ["Customers"],
-      summary: "Get customer by ID",
-      description: "Retrieve a single customer by their MongoDB ObjectId",
-      parameters: [
-        {
-          in: "path",
-          name: "id",
-          required: true,
-          schema: {
-            type: "string",
-          },
-          description: "MongoDB ObjectId of the customer",
-          example: "68fca33d6f0ffeab02d26ca5",
-        },
-      ],
-      responses: {
-        200: {
-          description: "Customer retrieved successfully",
-          content: {
-            "application/json": {
-              schema: {
-                type: "object",
-                properties: {
-                  status: {
-                    type: "string",
-                    example: "success",
-                  },
-                  data: {
-                    $ref: "#/components/schemas/Customer",
-                  },
-                },
-              },
-            },
-          },
-        },
-        404: {
-          description: "Customer not found",
-          content: {
-            "application/json": {
-              schema: {
-                $ref: "#/components/schemas/Error",
-              },
-            },
-          },
-        },
-        500: {
-          description: "Server error",
-          content: {
-            "application/json": {
-              schema: {
-                $ref: "#/components/schemas/Error",
-              },
-            },
-          },
-        },
-      },
-    },
-  },
-
-  "/api/v1/customer/add": {
+export const supplierPaths = {
+  "/api/v1/suppliers/add": {
     post: {
-      tags: ["Customers"],
-      summary: "Create a new customer",
+      tags: ["Suppliers"],
+      summary: "Create a new supplier",
       description:
-        "Register a new customer in the system with their basic info, contact details, account and crate information",
+        "Add a new supplier to the system with basic info, contact details, account and crate information",
       requestBody: {
         required: true,
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/CustomerInput",
+              $ref: "#/components/schemas/SupplierInput",
             },
           },
         },
       },
       responses: {
         201: {
-          description: "Customer created successfully",
+          description: "Supplier created successfully",
           content: {
             "application/json": {
               schema: {
@@ -141,10 +29,10 @@ export const customerPaths = {
                   },
                   message: {
                     type: "string",
-                    example: "Customer created successfully",
+                    example: "Supplier created successfully",
                   },
                   data: {
-                    $ref: "#/components/schemas/Customer",
+                    $ref: "#/components/schemas/Supplier",
                   },
                 },
               },
@@ -175,12 +63,54 @@ export const customerPaths = {
     },
   },
 
-  "/api/v1/customer/update/{id}": {
-    put: {
-      tags: ["Customers"],
-      summary: "Update customer by ID",
+  "/api/v1/suppliers/all": {
+    get: {
+      tags: ["Suppliers"],
+      summary: "Get all suppliers",
       description:
-        "Update an existing customer's information including basic info, contact, account and crate details",
+        "Retrieve a list of all suppliers with their complete information including basic info, contact details, account balance and crate tracking",
+      responses: {
+        200: {
+          description: "List of suppliers retrieved successfully",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  status: {
+                    type: "string",
+                    example: "success",
+                  },
+                  data: {
+                    type: "array",
+                    items: {
+                      $ref: "#/components/schemas/Supplier",
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        500: {
+          description: "Server error",
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/Error",
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+
+  "/api/v1/suppliers/details/{id}": {
+    get: {
+      tags: ["Suppliers"],
+      summary: "Get supplier by ID",
+      description: "Retrieve a single supplier by their MongoDB ObjectId",
       parameters: [
         {
           in: "path",
@@ -189,8 +119,70 @@ export const customerPaths = {
           schema: {
             type: "string",
           },
-          description: "MongoDB ObjectId of the customer",
-          example: "68fca2c1fbe9916a7a90d65e",
+          description: "MongoDB ObjectId of the supplier",
+          example: "507f1f77bcf86cd799439011",
+        },
+      ],
+      responses: {
+        200: {
+          description: "Supplier retrieved successfully",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  status: {
+                    type: "string",
+                    example: "success",
+                  },
+                  data: {
+                    $ref: "#/components/schemas/Supplier",
+                  },
+                },
+              },
+            },
+          },
+        },
+        404: {
+          description: "Supplier not found",
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/Error",
+              },
+            },
+          },
+        },
+        500: {
+          description: "Server error",
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/Error",
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+
+  "/api/v1/suppliers/update/{id}": {
+    put: {
+      tags: ["Suppliers"],
+      summary: "Update supplier by ID",
+      description:
+        "Update an existing supplier's information including basic info, contact, account and crate details",
+      parameters: [
+        {
+          in: "path",
+          name: "id",
+          required: true,
+          schema: {
+            type: "string",
+          },
+          description: "MongoDB ObjectId of the supplier",
+          example: "507f1f77bcf86cd799439011",
         },
       ],
       requestBody: {
@@ -198,14 +190,14 @@ export const customerPaths = {
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/CustomerUpdate",
+              $ref: "#/components/schemas/SupplierInput",
             },
           },
         },
       },
       responses: {
         200: {
-          description: "Customer updated successfully",
+          description: "Supplier updated successfully",
           content: {
             "application/json": {
               schema: {
@@ -217,10 +209,10 @@ export const customerPaths = {
                   },
                   message: {
                     type: "string",
-                    example: "Customer updated successfully",
+                    example: "Supplier updated successfully",
                   },
                   data: {
-                    $ref: "#/components/schemas/Customer",
+                    $ref: "#/components/schemas/Supplier",
                   },
                 },
               },
@@ -228,7 +220,7 @@ export const customerPaths = {
           },
         },
         404: {
-          description: "Customer not found",
+          description: "Supplier not found",
           content: {
             "application/json": {
               schema: {

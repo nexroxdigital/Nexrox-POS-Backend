@@ -22,6 +22,14 @@ export const tags = [
     name: "Customers",
     description: "Customer management endpoints",
   },
+  {
+    name: "Suppliers",
+    description: "Suppliers management endpoints",
+  },
+  {
+    name: "Categories",
+    description: "Categories management endpoints",
+  },
 
   // Add more tags as your API grows
 ];
