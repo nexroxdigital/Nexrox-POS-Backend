@@ -6,12 +6,10 @@ import {
 
 const router = express.Router();
 
-// Get all activity logs
-// GET /api/v1/activity-logs
+// get all activity logs
 router.get("/all", getAllActivityLogs);
 
-// Get single activity log by ID
-// GET /api/v1/activity-logs/:id
+// get single activity log by ID
 router.get("/details/:id", getActivityLogById);
 
 export default router;

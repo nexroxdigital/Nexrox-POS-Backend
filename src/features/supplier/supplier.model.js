@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const customerSchema = new mongoose.Schema(
+const supplierSchema = new mongoose.Schema(
   {
     // Basic Information
     basic_info: {
@@ -14,14 +14,15 @@ const customerSchema = new mongoose.Schema(
         required: true,
         trim: true,
       },
-      role: {
-        type: String,
-        default: "customer",
-        enum: ["customer"],
-      },
       avatar: {
         type: String,
         default: "",
+        trim: true,
+      },
+      role: {
+        type: String,
+        default: "supplier",
+        enum: ["supplier"], // restricts to supplier role
       },
     },
 
@@ -29,25 +30,25 @@ const customerSchema = new mongoose.Schema(
     contact_info: {
       email: {
         type: String,
-        required: true,
         trim: true,
         lowercase: true,
       },
       phone: {
         type: String,
-        required: true,
         trim: true,
       },
       location: {
         type: String,
+        trim: true,
         default: "",
       },
     },
 
     // Account & Balance
     account_info: {
-      account_number: {
+      accountNumber: {
         type: String,
+        trim: true,
         default: "",
       },
       balance: {
@@ -58,7 +59,7 @@ const customerSchema = new mongoose.Schema(
         type: Number,
         default: 0,
       },
-      return_amount: {
+      cost: {
         type: Number,
         default: 0,
       },
@@ -66,19 +67,29 @@ const customerSchema = new mongoose.Schema(
 
     // Crate Tracking
     crate_info: {
-      type_1: {
+      crate1: {
         type: Number,
         default: 0,
       },
-      type_1_price: {
+      crate1Price: {
         type: Number,
         default: 0,
       },
-      type_2: {
+      remainingCrate1: {
         type: Number,
         default: 0,
       },
-      type_2_price: {
+
+      // Crate 2 Info
+      crate2: {
+        type: Number,
+        default: 0,
+      },
+      crate2Price: {
+        type: Number,
+        default: 0,
+      },
+      remainingCrate2: {
         type: Number,
         default: 0,
       },
@@ -89,4 +100,4 @@ const customerSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("Customer", customerSchema);
+export default mongoose.model("Supplier", supplierSchema);
