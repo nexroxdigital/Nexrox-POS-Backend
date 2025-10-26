@@ -7,8 +7,12 @@ export const createAccount = async (data) => {
 };
 
 // Get all accounts
-export const getAllAccounts = async () => {
-  return await Account.find().sort({ createdAt: -1 });
+export const getAllAccounts = async (skip, limit) => {
+  return await Account.find()
+    .sort({ createdAt: -1 })
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit);
 };
 
 // Update account

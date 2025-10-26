@@ -1,11 +1,9 @@
-export const supplierPaths = {
-  "/api/v1/suppliers/all": {
+export const expensePaths = {
+  "/api/v1/expenses/all": {
     get: {
-      tags: ["Suppliers"],
-      summary: "Get all suppliers",
-      description:
-        "Retrieve a list of all suppliers with their complete information including basic info, contact details, account balance and crate tracking",
-
+      tags: ["Expenses"],
+      summary: "Get all expenses",
+      description: "Retrieve a paginated list of all expenses",
       parameters: [
         {
           in: "query",
@@ -28,10 +26,9 @@ export const supplierPaths = {
           example: 10,
         },
       ],
-
       responses: {
         200: {
-          description: "List of suppliers retrieved successfully",
+          description: "List of expenses retrieved successfully",
           content: {
             "application/json": {
               schema: {
@@ -44,7 +41,28 @@ export const supplierPaths = {
                   data: {
                     type: "array",
                     items: {
-                      $ref: "#/components/schemas/Supplier",
+                      $ref: "#/components/schemas/Expense",
+                    },
+                  },
+                  pagination: {
+                    type: "object",
+                    properties: {
+                      currentPage: {
+                        type: "integer",
+                        example: 1,
+                      },
+                      totalPages: {
+                        type: "integer",
+                        example: 5,
+                      },
+                      totalItems: {
+                        type: "integer",
+                        example: 50,
+                      },
+                      limit: {
+                        type: "integer",
+                        example: 10,
+                      },
                     },
                   },
                 },
@@ -66,98 +84,24 @@ export const supplierPaths = {
     },
   },
 
-  "/api/v1/suppliers/details/{id}": {
-    get: {
-      tags: ["Suppliers"],
-      summary: "Get supplier by ID",
-      description: "Retrieve a single supplier by their MongoDB ObjectId",
-      parameters: [
-        {
-          in: "path",
-          name: "id",
-          required: true,
-          schema: {
-            type: "string",
-          },
-          description: "MongoDB ObjectId of the supplier",
-          example: "507f1f77bcf86cd799439011",
-        },
-      ],
-      responses: {
-        200: {
-          description: "Supplier retrieved successfully",
-          content: {
-            "application/json": {
-              schema: {
-                type: "object",
-                properties: {
-                  status: {
-                    type: "string",
-                    example: "success",
-                  },
-                  data: {
-                    $ref: "#/components/schemas/Supplier",
-                  },
-                },
-              },
-            },
-          },
-        },
-        404: {
-          description: "Supplier not found",
-          content: {
-            "application/json": {
-              schema: {
-                $ref: "#/components/schemas/Error",
-              },
-            },
-          },
-        },
-        500: {
-          description: "Server error",
-          content: {
-            "application/json": {
-              schema: {
-                $ref: "#/components/schemas/Error",
-              },
-            },
-          },
-        },
-      },
-    },
-  },
-
-  "/api/v1/suppliers/update/{id}": {
-    put: {
-      tags: ["Suppliers"],
-      summary: "Update supplier by ID",
-      description:
-        "Update an existing supplier's information including basic info, contact, account and crate details",
-      parameters: [
-        {
-          in: "path",
-          name: "id",
-          required: true,
-          schema: {
-            type: "string",
-          },
-          description: "MongoDB ObjectId of the supplier",
-          example: "507f1f77bcf86cd799439011",
-        },
-      ],
+  "/api/v1/expenses/add": {
+    post: {
+      tags: ["Expenses"],
+      summary: "Create a new expense",
+      description: "Add a new expense record to the system",
       requestBody: {
         required: true,
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/SupplierInput",
+              $ref: "#/components/schemas/ExpenseInput",
             },
           },
         },
       },
       responses: {
-        200: {
-          description: "Supplier updated successfully",
+        201: {
+          description: "Expense created successfully",
           content: {
             "application/json": {
               schema: {
@@ -169,22 +113,12 @@ export const supplierPaths = {
                   },
                   message: {
                     type: "string",
-                    example: "Supplier updated successfully",
+                    example: "Expense created successfully",
                   },
                   data: {
-                    $ref: "#/components/schemas/Supplier",
+                    $ref: "#/components/schemas/Expense",
                   },
                 },
-              },
-            },
-          },
-        },
-        404: {
-          description: "Supplier not found",
-          content: {
-            "application/json": {
-              schema: {
-                $ref: "#/components/schemas/Error",
               },
             },
           },
@@ -213,25 +147,36 @@ export const supplierPaths = {
     },
   },
 
-  "/api/v1/suppliers/add": {
-    post: {
-      tags: ["Suppliers"],
-      summary: "Create a new supplier",
-      description:
-        "Add a new supplier to the system with basic info, contact details, account and crate information",
+  "/api/v1/expenses/update/{id}": {
+    put: {
+      tags: ["Expenses"],
+      summary: "Update expense by ID",
+      description: "Update an existing expense's information",
+      parameters: [
+        {
+          in: "path",
+          name: "id",
+          required: true,
+          schema: {
+            type: "string",
+          },
+          description: "MongoDB ObjectId of the expense",
+          example: "507f1f77bcf86cd799439011",
+        },
+      ],
       requestBody: {
         required: true,
         content: {
           "application/json": {
             schema: {
-              $ref: "#/components/schemas/SupplierInput",
+              $ref: "#/components/schemas/ExpenseUpdate",
             },
           },
         },
       },
       responses: {
-        201: {
-          description: "Supplier created successfully",
+        200: {
+          description: "Expense updated successfully",
           content: {
             "application/json": {
               schema: {
@@ -243,12 +188,22 @@ export const supplierPaths = {
                   },
                   message: {
                     type: "string",
-                    example: "Supplier created successfully",
+                    example: "Expense updated successfully",
                   },
                   data: {
-                    $ref: "#/components/schemas/Supplier",
+                    $ref: "#/components/schemas/Expense",
                   },
                 },
+              },
+            },
+          },
+        },
+        404: {
+          description: "Expense not found",
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/Error",
               },
             },
           },

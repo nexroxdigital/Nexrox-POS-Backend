@@ -19,7 +19,13 @@ export const createSupplier = async (req, res) => {
 // @route   GET /api/v1/suppliers
 export const getAllSuppliers = async (req, res) => {
   try {
-    const suppliers = await supplierService.getAllSuppliers();
+    const { page = 1, limit = 10 } = req.query;
+
+    const suppliers = await supplierService.getAllSuppliers(
+      parseInt(page),
+      parseInt(limit)
+    );
+
     res.status(200).json(suppliers);
   } catch (error) {
     console.error("Get All Suppliers Error:", error);

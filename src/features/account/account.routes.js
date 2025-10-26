@@ -7,11 +7,11 @@ import {
 
 const router = express.Router();
 
-// add a account
-router.post("/add", createAccount);
-
 // get all
 router.get("/all", getAllAccounts);
+
+// add a account
+router.post("/add", createAccount);
 
 // details view
 router.put("/details/:id", updateAccount);
