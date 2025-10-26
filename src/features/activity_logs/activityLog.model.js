@@ -34,7 +34,6 @@ const activityLogSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-    collection: "activity_logs",
   }
 );
 

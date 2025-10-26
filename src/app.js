@@ -6,7 +6,10 @@ import swaggerSpec from "./config/swagger.config.js";
 // routes
 import userRouter from "./features/user/user.router.js";
 import customerRouter from "./features/customer/customer.router.js";
-import userProducts from "./features/products/products.router.js";
+import suppliersRouter from "./features/supplier/supplier.routes.js";
+import productsRouter from "./features/products/products.router.js";
+import categoryRouter from "./features/categories/categories.router.js";
+import accountRouter from "./features/account/account.routes.js";
 import activityLogRouter from "./features/activity_logs/activityLog.router.js";
 
 const app = express();
@@ -58,8 +61,17 @@ app.use(`${API_VERSION}/users`, userRouter);
 // customer routes
 app.use(`${API_VERSION}/customer`, customerRouter);
 
+// suppliers routes
+app.use(`${API_VERSION}/suppliers`, suppliersRouter);
+
 // products routes
-app.use("/products", userProducts);
+app.use(`${API_VERSION}/customer`, productsRouter);
+
+// category routes
+app.use(`${API_VERSION}/categories`, categoryRouter);
+
+// account routes
+app.use(`${API_VERSION}/account`, accountRouter);
 
 // activity routes
 app.use(`${API_VERSION}/activity`, activityLogRouter);

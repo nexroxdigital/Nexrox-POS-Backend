@@ -15,4 +15,7 @@ export { tags } from "./tags.js";
 
 export { activityLog } from "./paths/activityLog.path.js";
 export { userPaths } from "./paths/user.paths.js";
+export { suppliersPaths } from "./paths/supplier.path.js";
+export { categoryPaths } from "./paths/category.path.js";
 export { customerPaths } from "./paths/customer.path.js";
+export { accountPaths } from "./paths/account.path.js";
