@@ -7,7 +7,7 @@ export const createSupplier = async (data) => {
 };
 
 // Get all
-export const getAllSuppliers = async () => {
+export const getAllSuppliers = async (skip, limit) => {
   return await Supplier.find().sort({ createdAt: -1 }).skip(skip).limit(limit);
 };
 

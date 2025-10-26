@@ -47,9 +47,35 @@ git branch -d feature/your-feature-name      # delete local branch
 git push origin --delete feature/your-feature-name  # delete remote branch
 ```
 
----
+<br />
 
-### 2. Industry Standard Branch Naming Convention
+### 2. Express Feature Generator
+
+Automates creating feature folders with boilerplate files for Express + Mongoose projects.
+
+## Run
+
+```bash
+pnpm generate <feature-name>
+```
+
+**Example:**
+
+```bash
+pnpm generate user
+```
+
+## What It Creates
+
+```
+src/features/user/
+  ├── user.model.js      # Mongoose schema
+  ├── user.controller.js # Request handlers
+  ├── user.services.js   # Business logic
+  └── user.router.js     # Express routes
+```
+
+### 3. Industry Standard Branch Naming Convention
 
 | Branch Type   | Prefix     | Example                       |
 | ------------- | ---------- | ----------------------------- |
@@ -62,7 +88,7 @@ git push origin --delete feature/your-feature-name  # delete remote branch
 
 ---
 
-### 3. Commit Message Guidelines
+### 4. Commit Message Guidelines
 
 Follow the **Conventional Commits** standard:
 
