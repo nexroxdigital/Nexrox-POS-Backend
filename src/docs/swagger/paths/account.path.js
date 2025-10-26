@@ -1,4 +1,69 @@
 export const accountPaths = {
+  "/api/v1/account/all": {
+    get: {
+      tags: ["Accounts"],
+      summary: "Get all accounts",
+      description:
+        "Retrieve a list of all accounts including bank, mobile wallet, and cash accounts",
+      parameters: [
+        {
+          in: "query",
+          name: "page",
+          schema: {
+            type: "integer",
+            default: 1,
+          },
+          description: "Page number for pagination",
+          example: 1,
+        },
+        {
+          in: "query",
+          name: "limit",
+          schema: {
+            type: "integer",
+            default: 10,
+          },
+          description: "Number of items per page",
+          example: 10,
+        },
+      ],
+      responses: {
+        200: {
+          description: "List of accounts retrieved successfully",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  status: {
+                    type: "string",
+                    example: "success",
+                  },
+                  data: {
+                    type: "array",
+                    items: {
+                      $ref: "#/components/schemas/Account",
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        500: {
+          description: "Server error",
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/Error",
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+
   "/api/v1/account/add": {
     post: {
       tags: ["Accounts"],
@@ -45,49 +110,6 @@ export const accountPaths = {
             "application/json": {
               schema: {
                 $ref: "#/components/schemas/Error",
-              },
-            },
-          },
-        },
-        500: {
-          description: "Server error",
-          content: {
-            "application/json": {
-              schema: {
-                $ref: "#/components/schemas/Error",
-              },
-            },
-          },
-        },
-      },
-    },
-  },
-
-  "/api/v1/account/all": {
-    get: {
-      tags: ["Accounts"],
-      summary: "Get all accounts",
-      description:
-        "Retrieve a list of all accounts including bank, mobile wallet, and cash accounts",
-      responses: {
-        200: {
-          description: "List of accounts retrieved successfully",
-          content: {
-            "application/json": {
-              schema: {
-                type: "object",
-                properties: {
-                  status: {
-                    type: "string",
-                    example: "success",
-                  },
-                  data: {
-                    type: "array",
-                    items: {
-                      $ref: "#/components/schemas/Account",
-                    },
-                  },
-                },
               },
             },
           },

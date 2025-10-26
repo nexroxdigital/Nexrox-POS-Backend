@@ -5,6 +5,28 @@ export const activityLogPaths = {
       summary: "Get all activity logs",
       description:
         "Retrieve a list of all activity logs with information about actions performed in the system",
+      parameters: [
+        {
+          in: "query",
+          name: "page",
+          schema: {
+            type: "integer",
+            default: 1,
+          },
+          description: "Page number for pagination",
+          example: 1,
+        },
+        {
+          in: "query",
+          name: "limit",
+          schema: {
+            type: "integer",
+            default: 10,
+          },
+          description: "Number of items per page",
+          example: 10,
+        },
+      ],
       responses: {
         200: {
           description: "List of activity logs retrieved successfully",

@@ -32,9 +32,9 @@ const accountSchema = new mongoose.Schema(
       default: "",
     },
     added_by: {
-      type: String,
-      trim: true,
-      default: "",
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      // required: true,
     },
   },
   {

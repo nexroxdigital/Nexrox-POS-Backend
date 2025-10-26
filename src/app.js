@@ -10,6 +10,7 @@ import suppliersRouter from "./features/supplier/supplier.routes.js";
 import productsRouter from "./features/products/products.router.js";
 import categoryRouter from "./features/categories/categories.router.js";
 import accountRouter from "./features/account/account.routes.js";
+import expensesRouter from "./features/expense/expense.routes.js";
 import activityLogRouter from "./features/activity_logs/activityLog.router.js";
 
 const app = express();
@@ -72,6 +73,9 @@ app.use(`${API_VERSION}/categories`, categoryRouter);
 
 // account routes
 app.use(`${API_VERSION}/account`, accountRouter);
+
+// expenses routes
+app.use(`${API_VERSION}/expenses`, expensesRouter);
 
 // activity routes
 app.use(`${API_VERSION}/activity`, activityLogRouter);
