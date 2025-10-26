@@ -7,8 +7,21 @@ export const createSupplier = async (data) => {
 };
 
 // Get all
-export const getAllSuppliers = async () => {
-  return await Supplier.find().sort({ createdAt: -1 }).skip(skip).limit(limit);
+export const getAllSuppliers = async (page, limit) => {
+  const skip = (page - 1) * limit;
+  const total = await Supplier.countDocuments();
+  const suppliers = await Supplier.find()
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit);
+
+  return {
+    total,
+    page,
+    limit,
+    totalPages: Math.ceil(total / limit),
+    suppliers,
+  };
 };
 
 // Get single
