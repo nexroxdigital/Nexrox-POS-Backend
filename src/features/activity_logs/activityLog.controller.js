@@ -6,6 +6,7 @@ import * as activityLogService from "./activityLog.services.js";
 export const getAllActivityLogs = async (req, res) => {
   try {
     const { page = 1, limit = 10, action, by } = req.query;
+
     const logs = await activityLogService.getAllActivityLogs({
       page: parseInt(page),
       limit: parseInt(limit),

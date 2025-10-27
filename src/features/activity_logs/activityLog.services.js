@@ -12,7 +12,7 @@ export const getAllActivityLogs = async ({ page, limit, action, by }) => {
 
   const logs = await activityLogModel
     .find(query)
-    .populate("by", "name email role") // populate user info (if user ref is in schema)
+    .populate("by", "name email role")
     .sort({ createdAt: -1 })
     .skip(skip)
     .limit(limit);

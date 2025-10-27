@@ -8,12 +8,23 @@ export const createExpense = async (data) => {
 
 // Get all
 export const getAllExpenses = async (skip, limit) => {
-  return await Expense.find()
+  const skip = (page - 1) * limit;
+  const total = await Supplier.countDocuments();
+
+  const expenses = await Expense.find()
     .populate("expense_by", "name email")
     .populate("choose_account", "name account_type balance")
     .sort({ createdAt: -1 })
     .skip(skip)
     .limit(limit);
+
+  return {
+    total,
+    page,
+    limit,
+    totalPages: Math.ceil(total / limit),
+    expenses,
+  };
 };
 // Update
 export const updateExpense = async (id, data) => {
