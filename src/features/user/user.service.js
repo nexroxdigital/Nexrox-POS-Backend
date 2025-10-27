@@ -1,6 +1,6 @@
 import userModel from "./user.model.js";
 
-export async function getAllUsers() {
+export async function getAllUsers(page, limit) {
   const skip = (page - 1) * limit;
 
   const total = await userModel.countDocuments();

@@ -9,7 +9,7 @@ const activityLogSchema = new mongoose.Schema(
     logs_fields_id: {
       type: mongoose.Schema.Types.ObjectId,
       refPath: "model_name",
-      // required: true, //! need to update
+      // required: true,
     },
     model_name: {
       type: String,

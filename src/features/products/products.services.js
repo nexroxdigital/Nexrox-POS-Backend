@@ -3,7 +3,7 @@ import Product from "./products.model.js";
 // Get all products (populate category)
 export const getAllProducts = async (page, limit) => {
   const skip = (page - 1) * limit;
-  const total = await Supplier.countDocuments();
+  const total = await Product.countDocuments();
 
   const products = await Product.find()
     .populate("categoryId", "categoryName")

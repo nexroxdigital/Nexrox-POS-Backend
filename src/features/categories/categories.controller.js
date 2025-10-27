@@ -1,3 +1,4 @@
+import { logActivity } from "../../utils/activityLogger.js";
 import * as categoryService from "./categories.services.js";
 
 // @desc    Create a new category
@@ -6,6 +7,9 @@ import * as categoryService from "./categories.services.js";
 export const createCategory = async (req, res) => {
   try {
     const { categoryName, slug, description, comment } = req.body;
+
+    const userId = req.user.id;
+    const userEmail = req.user.email;
 
     // Check duplicate slug
     const existing = await categoryService.getCategoryBySlug(slug);
@@ -18,6 +22,15 @@ export const createCategory = async (req, res) => {
       slug,
       description,
       comment,
+    });
+
+    // Log activity
+    await logActivity({
+      model_name: "Category",
+      logs_fields_id: category._id,
+      by: userId,
+      action: "Created",
+      note: `new category ${category.categoryName} created by ${userEmail}`,
     });
 
     res.status(201).json({
@@ -73,6 +86,9 @@ export const updateCategory = async (req, res) => {
   try {
     const { categoryName, slug, description, comment } = req.body;
 
+    const userId = req.user.id;
+    const userEmail = req.user.email;
+
     // Check if slug is being changed to an existing one
     if (slug) {
       const existing = await categoryService.getCategoryBySlug(slug);
@@ -94,6 +110,15 @@ export const updateCategory = async (req, res) => {
       return res.status(404).json({ message: "Category not found" });
     }
 
+    // Log activity
+    await logActivity({
+      model_name: "Category",
+      logs_fields_id: updated._id,
+      by: userId,
+      action: "Created",
+      note: `category ${updated.categoryName} updated by ${userEmail}`,
+    });
+
     res.status(200).json({
       message: "Category updated successfully",
       data: updated,
@@ -109,7 +134,19 @@ export const updateCategory = async (req, res) => {
 // @access  Admin
 export const deleteCategory = async (req, res) => {
   try {
+    const userId = req.user.id;
+    const userEmail = req.user.email;
+
     const deleted = await categoryService.deleteCategory(req.params.id);
+
+    // Log activity
+    await logActivity({
+      model_name: "Category",
+      logs_fields_id: deleted._id,
+      by: userId,
+      action: "Deleted",
+      note: `category ${deleted.categoryName} deleted by ${userEmail}`,
+    });
 
     if (!deleted) {
       return res.status(404).json({ message: "Category not found" });

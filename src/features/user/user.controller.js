@@ -2,6 +2,7 @@ import { getAllUsers, getUserById } from "./user.service.js";
 
 export async function getAll(req, res) {
   try {
+    const { page = 1, limit = 10 } = req.query;
     const users = await getAllUsers(parseInt(page), parseInt(limit));
 
     res.json(users);

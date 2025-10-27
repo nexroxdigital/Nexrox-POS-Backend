@@ -6,6 +6,7 @@ import {
   getProducts,
   updateProduct,
 } from "./products.controller.js";
+import { authMiddleware } from "../../middleware/auth.js";
 
 const router = express.Router();
 
@@ -16,9 +17,9 @@ router.get("/all", getProducts);
 router.get("/details/:id", getProductById);
 
 // Create a new product
-router.post("/add", createProduct);
+router.post("/add", authMiddleware, createProduct);
 
 // Update an existing product
-router.put("/update/:id", updateProduct);
+router.put("/update/:id", authMiddleware, updateProduct);
 
 export default router;

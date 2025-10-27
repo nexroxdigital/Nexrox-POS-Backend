@@ -6,6 +6,7 @@ import {
   updateCategory,
   deleteCategory,
 } from "./categories.controller.js";
+import { authMiddleware } from "../../middleware/auth.js";
 
 const router = express.Router();
 
@@ -16,12 +17,12 @@ router.get("/all", getAllCategories);
 router.get("/details/:id", getCategoryById);
 
 // add new view category
-router.post("/add", createCategory);
+router.post("/add", authMiddleware, createCategory);
 
 // update category
-router.put("/update/:id", updateCategory);
+router.put("/update/:id", authMiddleware, updateCategory);
 
 // delete category
-router.delete("/delete/:id", deleteCategory);
+router.delete("/delete/:id", authMiddleware, deleteCategory);
 
 export default router;

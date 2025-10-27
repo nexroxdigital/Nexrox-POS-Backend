@@ -9,7 +9,7 @@ export const createExpense = async (data) => {
 // Get all
 export const getAllExpenses = async (page, limit) => {
   const skip = (page - 1) * limit;
-  const total = await Supplier.countDocuments();
+  const total = await Expense.countDocuments();
 
   const expenses = await Expense.find()
     .populate("expense_by", "name email")
