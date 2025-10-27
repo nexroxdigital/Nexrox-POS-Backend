@@ -7,7 +7,6 @@ export const createSupplier = async (data) => {
 };
 
 // Get all
-
 export const getAllSuppliers = async (page, limit) => {
   const skip = (page - 1) * limit;
   const total = await Supplier.countDocuments();
@@ -23,7 +22,7 @@ export const getAllSuppliers = async (page, limit) => {
     totalPages: Math.ceil(total / limit),
     suppliers,
   };
-
+};
 
 // Get single
 export const getSupplierById = async (id) => {

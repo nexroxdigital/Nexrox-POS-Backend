@@ -26,16 +26,16 @@ const swaggerDefinition = {
     // },
   },
 
-  // servers: [
-  //   {
-  //     url: process.env.API_URL || "http://localhost:8000",
-  //     description: "Development server",
-  //   },
-  //   {
-  //     url: "https://api.posinventory.com",
-  //     description: "Production server",
-  //   },
-  // ],
+  servers: [
+    {
+      url: process.env.API_URL || "http://localhost:8000",
+      description: "Development server",
+    },
+    {
+      url: "https://pos-inventory-server.vercel.app",
+      description: "Production server",
+    },
+  ],
 
   tags,
   components: {

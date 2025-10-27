@@ -8,11 +8,21 @@ export const createAccount = async (data) => {
 
 // Get all accounts
 export const getAllAccounts = async (skip, limit) => {
-  return await Account.find()
-    .sort({ createdAt: -1 })
+  const skip = (page - 1) * limit;
+  const total = await Account.countDocuments();
+
+  const accounts = await Account.find()
     .sort({ createdAt: -1 })
     .skip(skip)
     .limit(limit);
+
+  return {
+    total,
+    page,
+    limit,
+    totalPages: Math.ceil(total / limit),
+    accounts,
+  };
 };
 
 // Update account
