@@ -7,7 +7,7 @@ export const createAccount = async (data) => {
 };
 
 // Get all accounts
-export const getAllAccounts = async (skip, limit) => {
+export const getAllAccounts = async (page, limit) => {
   const skip = (page - 1) * limit;
   const total = await Account.countDocuments();
 

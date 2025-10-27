@@ -7,7 +7,7 @@ export const createExpense = async (data) => {
 };
 
 // Get all
-export const getAllExpenses = async (skip, limit) => {
+export const getAllExpenses = async (page, limit) => {
   const skip = (page - 1) * limit;
   const total = await Supplier.countDocuments();
 

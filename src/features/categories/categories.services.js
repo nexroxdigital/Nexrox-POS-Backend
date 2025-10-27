@@ -7,12 +7,11 @@ export const createCategory = async (data) => {
 };
 
 // Get all categories
-export const getAllCategories = async (skip, limit) => {
+export const getAllCategories = async (page, limit) => {
   const skip = (page - 1) * limit;
   const total = await Category.countDocuments();
 
   const categories = await Category.find()
-    .sort({ createdAt: -1 })
     .sort({ createdAt: -1 })
     .skip(skip)
     .limit(limit);
