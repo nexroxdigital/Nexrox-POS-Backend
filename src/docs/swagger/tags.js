@@ -30,6 +30,10 @@ export const tags = [
     name: "Categories",
     description: "Categories management endpoints",
   },
+  {
+    name: "Products",
+    description: "Products management endpoints",
+  },
 
   // Add more tags as your API grows
 ];

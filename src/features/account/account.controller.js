@@ -1,10 +1,24 @@
+import { logActivity } from "../../utils/activityLogger.js";
 import * as accountService from "./account.service.js";
 
 // @desc    Create a new account
 // @route   POST /api/v1/accounts
 export const createAccount = async (req, res) => {
   try {
+    const userId = req.user.id;
+    const userEmail = req.user.email;
+
     const account = await accountService.createAccount(req.body);
+
+    // Log activity
+    await logActivity({
+      model_name: "Account",
+      logs_fields_id: account._id,
+      by: userId,
+      action: "Created",
+      note: `account ${account.name} created  by ${userEmail}`,
+    });
+
     res.status(201).json({
       message: "Account created successfully",
       data: account,
@@ -37,7 +51,19 @@ export const getAllAccounts = async (req, res) => {
 // @route   PUT /api/v1/accounts/:id
 export const updateAccount = async (req, res) => {
   try {
+    const userId = req.user.id;
+    const userEmail = req.user.email;
+
     const updated = await accountService.updateAccount(req.params.id, req.body);
+
+    // Log activity
+    await logActivity({
+      model_name: "Category",
+      logs_fields_id: updated._id,
+      by: userId,
+      action: "Created",
+      note: `account ${updated.categoryName} updated by ${userEmail}`,
+    });
 
     if (!updated) {
       return res.status(404).json({ message: "Account not found" });

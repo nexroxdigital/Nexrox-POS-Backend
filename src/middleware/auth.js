@@ -13,6 +13,8 @@ export const authMiddleware = (req, res, next) => {
   try {
     // Verify JWT with the same secret as NextAuth
     const decoded = jwt.verify(token, process.env.AUTH_SECRET);
+    console.log(decoded);
+
     req.user = decoded; // { id, role }
     // console.log("form middleware auth", req.user);
 

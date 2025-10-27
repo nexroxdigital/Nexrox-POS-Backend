@@ -6,15 +6,18 @@ import * as customerService from "./customer.services.js";
 // @access  Admin
 export const createCustomer = async (req, res) => {
   try {
+    const userId = req.user.id;
+    const userEmail = req.user.email;
+
     const customer = await customerService.createCustomer(req.body);
 
     // Log activity
     await logActivity({
       model_name: "Customer",
       logs_fields_id: customer._id,
-      by: "68f4d6cac4fc8e34b086a0a8", //! req.user._id,
+      by: userId,
       action: "Created",
-      note: "New customer created",
+      note: `New customer ${customer.basic_info.name} created by ${userEmail}`,
     });
 
     res
@@ -31,6 +34,9 @@ export const createCustomer = async (req, res) => {
 // @access  Admin
 export const updateCustomer = async (req, res) => {
   try {
+    const userId = req.user.id;
+    const userEmail = req.user.email;
+
     const customer = await customerService.updateCustomer(
       req.params.id,
       req.body
@@ -40,6 +46,14 @@ export const updateCustomer = async (req, res) => {
       return res.status(404).json({ message: "Customer not found" });
     }
 
+    // Log activity
+    await logActivity({
+      model_name: "Customer",
+      logs_fields_id: customer._id,
+      by: userId,
+      action: "Created",
+      note: `customer ${customer.basic_info.name} updated by ${userEmail}`,
+    });
     // Log activity
     await logActivity({
       model_name: "Customer",

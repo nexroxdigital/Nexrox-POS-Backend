@@ -4,6 +4,7 @@ import {
   getAllAccounts,
   updateAccount,
 } from "./account.controller.js";
+import { authMiddleware } from "../../middleware/auth.js";
 
 const router = express.Router();
 
@@ -11,9 +12,9 @@ const router = express.Router();
 router.get("/all", getAllAccounts);
 
 // add a account
-router.post("/add", createAccount);
+router.post("/add", authMiddleware, createAccount);
 
 // details view
-router.put("/details/:id", updateAccount);
+router.put("/details/:id", authMiddleware, updateAccount);
 
 export default router;

@@ -13,17 +13,15 @@ import activityLogModel from "../features/activity_logs/activityLog.model.js";
 export const logActivity = async ({
   model_name,
   logs_fields_id,
-  // by,
+  by,
   action,
   note = "",
 }) => {
   try {
-    console.log(logs_fields_id);
-
     let activity = await activityLogModel.create({
       model_name,
       logs_fields_id,
-      // by,
+      by,
       action,
       note,
     });

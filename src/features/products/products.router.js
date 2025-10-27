@@ -1,10 +1,25 @@
 import express from "express";
-import { create, getAll } from "./products.controller.js";
+
+import {
+  createProduct,
+  getProductById,
+  getProducts,
+  updateProduct,
+} from "./products.controller.js";
+import { authMiddleware } from "../../middleware/auth.js";
 
 const router = express.Router();
 
-router.get("/", getAll);
+// Get all products
+router.get("/all", getProducts);
 
-router.post("/", create);
+// Get a single product by ID
+router.get("/details/:id", getProductById);
+
+// Create a new product
+router.post("/add", authMiddleware, createProduct);
+
+// Update an existing product
+router.put("/update/:id", authMiddleware, updateProduct);
 
 export default router;

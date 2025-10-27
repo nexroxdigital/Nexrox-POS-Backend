@@ -20,3 +20,4 @@ export { categoryPaths } from "./paths/category.path.js";
 export { customerPaths } from "./paths/customer.path.js";
 export { accountPaths } from "./paths/account.path.js";
 export { expensePaths } from "./paths/expense.path.js";
+export { productsPaths } from "./paths/expense.path.js";

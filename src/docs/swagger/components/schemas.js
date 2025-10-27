@@ -1093,6 +1093,155 @@ export const expenseSchemas = {
   },
 };
 
+// products schema
+export const productSchemas = {
+  Product: {
+    type: "object",
+    properties: {
+      _id: {
+        type: "string",
+        description: "Auto-generated MongoDB ID",
+        example: "507f1f77bcf86cd799439011",
+      },
+      productName: {
+        type: "string",
+        description: "Name of the product",
+        example: "Fresh Mango",
+      },
+      basePrice: {
+        type: "number",
+        minimum: 0,
+        description: "Base price of the product",
+        example: 150,
+      },
+      productImage: {
+        type: "string",
+        description: "URL to product image",
+        example: "https://example.com/mango.jpg",
+      },
+      description: {
+        type: "string",
+        description: "Product description",
+        example: "Fresh organic mangoes from local farms",
+      },
+      categoryId: {
+        type: "string",
+        description: "Category ID reference",
+        example: "507f1f77bcf86cd799439012",
+      },
+      commissionRate: {
+        type: "number",
+        minimum: 0,
+        maximum: 100,
+        description: "Commission rate percentage",
+        example: 10,
+      },
+      allowCommission: {
+        type: "boolean",
+        description: "Whether commission is allowed on this product",
+        example: true,
+      },
+      isCrated: {
+        type: "boolean",
+        description: "Whether product is sold in crates",
+        example: true,
+      },
+      createdAt: {
+        type: "string",
+        format: "date-time",
+        description: "Product creation timestamp",
+      },
+      updatedAt: {
+        type: "string",
+        format: "date-time",
+        description: "Product last update timestamp",
+      },
+    },
+  },
+
+  ProductInput: {
+    type: "object",
+    properties: {
+      productName: {
+        type: "string",
+        example: "Fresh Mango",
+      },
+      basePrice: {
+        type: "number",
+        minimum: 0,
+        example: 150,
+      },
+      productImage: {
+        type: "string",
+        example: "https://example.com/mango.jpg",
+      },
+      description: {
+        type: "string",
+        example: "Fresh organic mangoes from local farms",
+      },
+      categoryId: {
+        type: "string",
+        example: "507f1f77bcf86cd799439012",
+      },
+      commissionRate: {
+        type: "number",
+        minimum: 0,
+        maximum: 100,
+        example: 10,
+      },
+      allowCommission: {
+        type: "boolean",
+        example: true,
+      },
+      isCrated: {
+        type: "boolean",
+        example: true,
+      },
+    },
+  },
+
+  ProductUpdate: {
+    type: "object",
+    properties: {
+      productName: {
+        type: "string",
+        example: "Fresh Mango Updated",
+      },
+      basePrice: {
+        type: "number",
+        minimum: 0,
+        example: 175,
+      },
+      productImage: {
+        type: "string",
+        example: "https://example.com/mango-updated.jpg",
+      },
+      description: {
+        type: "string",
+        example: "Updated product description",
+      },
+      categoryId: {
+        type: "string",
+        example: "507f1f77bcf86cd799439013",
+      },
+      commissionRate: {
+        type: "number",
+        minimum: 0,
+        maximum: 100,
+        example: 15,
+      },
+      allowCommission: {
+        type: "boolean",
+        example: false,
+      },
+      isCrated: {
+        type: "boolean",
+        example: false,
+      },
+    },
+  },
+};
+
 // Combine all schemas
 export const schemas = {
   ...activityLogSchemas,
@@ -1102,4 +1251,5 @@ export const schemas = {
   ...supplierSchemas,
   ...accountSchemas,
   ...expenseSchemas,
+  ...productSchemas,
 };
