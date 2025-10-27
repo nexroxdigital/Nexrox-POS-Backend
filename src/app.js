@@ -64,7 +64,7 @@ app.use(`${API_VERSION}/customer`, customerRouter);
 app.use(`${API_VERSION}/suppliers`, suppliersRouter);
 
 // products routes
-app.use(`${API_VERSION}/customer`, productsRouter);
+app.use(`${API_VERSION}/products`, productsRouter);
 
 // category routes
 app.use(`${API_VERSION}/categories`, categoryRouter);

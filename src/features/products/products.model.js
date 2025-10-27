@@ -2,13 +2,46 @@ import mongoose from "mongoose";
 
 const productSchema = new mongoose.Schema(
   {
-    name: {
+    productName: {
       type: String,
-      required: true,
+      trim: true,
     },
-    price: {
+
+    basePrice: {
       type: Number,
-      required: true,
+      min: 0,
+    },
+
+    productImage: {
+      type: String,
+      default: "",
+    },
+
+    description: {
+      type: String,
+      default: "",
+    },
+
+    categoryId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+    },
+
+    commissionRate: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 100,
+    },
+
+    allowCommission: {
+      type: Boolean,
+      default: false,
+    },
+
+    isCrated: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }
