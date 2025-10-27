@@ -3,6 +3,7 @@ import cors from "cors";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./config/swagger.config.js";
 
+import { getAbsoluteFSPath } from "swagger-ui-dist";
 // routes
 import userRouter from "./features/user/user.router.js";
 import customerRouter from "./features/customer/customer.router.js";
@@ -21,6 +22,7 @@ app.use(cors());
 app.use(express.json());
 
 // Swagger Documentation Route
+app.use("/docs", express.static(getAbsoluteFSPath()));
 
 app.use(
   "/docs",
