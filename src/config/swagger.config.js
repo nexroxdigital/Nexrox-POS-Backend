@@ -9,6 +9,8 @@ import { supplierPaths } from "../docs/swagger/paths/supplier.path.js";
 import { accountPaths } from "../docs/swagger/paths/account.path.js";
 import { expensePaths } from "../docs/swagger/paths/expense.path.js";
 import { productPaths } from "../docs/swagger/paths/product.path.js";
+import { purchasePaths } from "../docs/swagger/paths/purchase.path.js";
+import { inventoryLotsPaths } from "../docs/swagger/paths/inventoryLots.paths.js";
 
 const swaggerDefinition = {
   openapi: "3.0.0",
@@ -52,7 +54,6 @@ const swaggerDefinition = {
   },
 
   // paths
-
   paths: {
     ...activityLogPaths,
     ...userPaths,
@@ -62,6 +63,8 @@ const swaggerDefinition = {
     ...accountPaths,
     ...expensePaths,
     ...productPaths,
+    ...purchasePaths,
+    ...inventoryLotsPaths,
   },
   security: [
     {
