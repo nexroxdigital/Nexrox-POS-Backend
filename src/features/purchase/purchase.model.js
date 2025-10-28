@@ -13,6 +13,11 @@ const purchaseSchema = new mongoose.Schema(
       default: "on the way",
     },
 
+    is_lots_created: {
+      type: Boolean,
+      default: false,
+    },
+
     // items (each supplier can have multiple lots)
     items: [
       {

@@ -12,6 +12,8 @@ import categoryRouter from "./features/categories/categories.router.js";
 import accountRouter from "./features/account/account.routes.js";
 import expensesRouter from "./features/expense/expense.routes.js";
 import activityLogRouter from "./features/activity_logs/activityLog.router.js";
+import purchaseRouter from "./features/purchase/purchase.router.js";
+import inventoryLotsRouter from "./features/inventoryLots/inventoryLots.router.js";
 
 const app = express();
 const API_VERSION = process.env.API_VERSION || "/api/v1";
@@ -77,6 +79,12 @@ app.use(`${API_VERSION}/expenses`, expensesRouter);
 
 // activity routes
 app.use(`${API_VERSION}/activity`, activityLogRouter);
+
+// purchase routes
+app.use(`${API_VERSION}/purchase`, purchaseRouter);
+
+// inventory Lots routes
+app.use(`${API_VERSION}/inventoryLots`, inventoryLotsRouter);
 
 // 404 Handler
 app.use((req, res) => {

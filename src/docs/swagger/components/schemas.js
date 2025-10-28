@@ -1242,6 +1242,640 @@ export const productSchemas = {
   },
 };
 
+// purchase schema
+export const purchaseSchemas = {
+  Purchase: {
+    type: "object",
+    properties: {
+      _id: {
+        type: "string",
+        description: "Auto-generated MongoDB ID",
+        example: "507f1f77bcf86cd799439011",
+      },
+      purchase_date: {
+        type: "string",
+        format: "date-time",
+        description: "Date of purchase",
+        example: "2025-10-25T10:30:00.000Z",
+      },
+      status: {
+        type: "string",
+        enum: ["on the way", "received", "canceled"],
+        description: "Status of the purchase",
+        example: "on the way",
+      },
+      is_lots_created: {
+        type: "boolean",
+        description: "Whether lots have been created for this purchase",
+        example: false,
+      },
+      items: {
+        type: "array",
+        description: "List of items purchased from suppliers",
+        items: {
+          type: "object",
+          properties: {
+            supplier: {
+              type: "string",
+              description: "Supplier ID reference",
+              example: "507f1f77bcf86cd799439012",
+            },
+            lots: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  productId: {
+                    type: "string",
+                    description: "Product ID reference",
+                    example: "507f1f77bcf86cd799439013",
+                  },
+                  lot_name: {
+                    type: "string",
+                    example: "Lot A-001",
+                  },
+                  unit_Cost: {
+                    type: "number",
+                    example: 150,
+                  },
+                  commission_rate: {
+                    type: "number",
+                    example: 5,
+                  },
+                  carat: {
+                    type: "object",
+                    properties: {
+                      carat_Type_1: {
+                        type: "number",
+                        example: 10,
+                      },
+                      carat_Type_2: {
+                        type: "number",
+                        example: 5,
+                      },
+                    },
+                  },
+                  expenses: {
+                    type: "object",
+                    properties: {
+                      labour: {
+                        type: "number",
+                        example: 500,
+                      },
+                      transportation: {
+                        type: "number",
+                        example: 300,
+                      },
+                      van_vara: {
+                        type: "number",
+                        example: 200,
+                      },
+                      moshjid: {
+                        type: "number",
+                        example: 100,
+                      },
+                      trading_post: {
+                        type: "number",
+                        example: 150,
+                      },
+                      other_expenses: {
+                        type: "number",
+                        example: 250,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      total_expenses: {
+        type: "object",
+        properties: {
+          labour: {
+            type: "number",
+            example: 1000,
+          },
+          transportation: {
+            type: "number",
+            example: 600,
+          },
+          van_vara: {
+            type: "number",
+            example: 400,
+          },
+          moshjid: {
+            type: "number",
+            example: 200,
+          },
+          trading_post: {
+            type: "number",
+            example: 300,
+          },
+          other_expenses: {
+            type: "number",
+            example: 500,
+          },
+        },
+      },
+      createdAt: {
+        type: "string",
+        format: "date-time",
+        description: "Purchase creation timestamp",
+      },
+      updatedAt: {
+        type: "string",
+        format: "date-time",
+        description: "Purchase last update timestamp",
+      },
+    },
+  },
+
+  PurchaseInput: {
+    type: "object",
+    properties: {
+      purchase_date: {
+        type: "string",
+        format: "date-time",
+        example: "2025-10-25T10:30:00.000Z",
+      },
+      status: {
+        type: "string",
+        enum: ["on the way", "received", "canceled"],
+        example: "on the way",
+      },
+      is_lots_created: {
+        type: "boolean",
+        example: false,
+      },
+      items: {
+        type: "array",
+        items: {
+          type: "object",
+          required: ["supplier", "lots"],
+          properties: {
+            supplier: {
+              type: "string",
+              example: "507f1f77bcf86cd799439012",
+            },
+            lots: {
+              type: "array",
+              items: {
+                type: "object",
+                required: ["productId", "lot_name", "unit_Cost"],
+                properties: {
+                  productId: {
+                    type: "string",
+                    example: "507f1f77bcf86cd799439013",
+                  },
+                  lot_name: {
+                    type: "string",
+                    example: "Lot A-001",
+                  },
+                  unit_Cost: {
+                    type: "number",
+                    example: 150,
+                  },
+                  commission_rate: {
+                    type: "number",
+                    example: 5,
+                  },
+                  carat: {
+                    type: "object",
+                    properties: {
+                      carat_Type_1: {
+                        type: "number",
+                        example: 10,
+                      },
+                      carat_Type_2: {
+                        type: "number",
+                        example: 5,
+                      },
+                    },
+                  },
+                  expenses: {
+                    type: "object",
+                    properties: {
+                      labour: {
+                        type: "number",
+                        example: 500,
+                      },
+                      transportation: {
+                        type: "number",
+                        example: 300,
+                      },
+                      van_vara: {
+                        type: "number",
+                        example: 200,
+                      },
+                      moshjid: {
+                        type: "number",
+                        example: 100,
+                      },
+                      trading_post: {
+                        type: "number",
+                        example: 150,
+                      },
+                      other_expenses: {
+                        type: "number",
+                        example: 250,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      total_expenses: {
+        type: "object",
+        properties: {
+          labour: {
+            type: "number",
+            example: 1000,
+          },
+          transportation: {
+            type: "number",
+            example: 600,
+          },
+          van_vara: {
+            type: "number",
+            example: 400,
+          },
+          moshjid: {
+            type: "number",
+            example: 200,
+          },
+          trading_post: {
+            type: "number",
+            example: 300,
+          },
+          other_expenses: {
+            type: "number",
+            example: 500,
+          },
+        },
+      },
+    },
+  },
+
+  PurchaseUpdate: {
+    type: "object",
+    properties: {
+      purchase_date: {
+        type: "string",
+        format: "date-time",
+        example: "2025-10-26T10:30:00.000Z",
+      },
+      status: {
+        type: "string",
+        enum: ["on the way", "received", "canceled"],
+        example: "received",
+      },
+      is_lots_created: {
+        type: "boolean",
+        example: true,
+      },
+      items: {
+        type: "array",
+        items: {
+          type: "object",
+          properties: {
+            supplier: {
+              type: "string",
+              example: "507f1f77bcf86cd799439012",
+            },
+            lots: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  productId: {
+                    type: "string",
+                    example: "507f1f77bcf86cd799439013",
+                  },
+                  lot_name: {
+                    type: "string",
+                    example: "Lot B-002",
+                  },
+                  unit_Cost: {
+                    type: "number",
+                    example: 175,
+                  },
+                  commission_rate: {
+                    type: "number",
+                    example: 7,
+                  },
+                  carat: {
+                    type: "object",
+                    properties: {
+                      carat_Type_1: {
+                        type: "number",
+                        example: 15,
+                      },
+                      carat_Type_2: {
+                        type: "number",
+                        example: 8,
+                      },
+                    },
+                  },
+                  expenses: {
+                    type: "object",
+                    properties: {
+                      labour: {
+                        type: "number",
+                        example: 600,
+                      },
+                      transportation: {
+                        type: "number",
+                        example: 350,
+                      },
+                      van_vara: {
+                        type: "number",
+                        example: 250,
+                      },
+                      moshjid: {
+                        type: "number",
+                        example: 120,
+                      },
+                      trading_post: {
+                        type: "number",
+                        example: 180,
+                      },
+                      other_expenses: {
+                        type: "number",
+                        example: 300,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      total_expenses: {
+        type: "object",
+        properties: {
+          labour: {
+            type: "number",
+            example: 1200,
+          },
+          transportation: {
+            type: "number",
+            example: 700,
+          },
+          van_vara: {
+            type: "number",
+            example: 500,
+          },
+          moshjid: {
+            type: "number",
+            example: 240,
+          },
+          trading_post: {
+            type: "number",
+            example: 360,
+          },
+          other_expenses: {
+            type: "number",
+            example: 600,
+          },
+        },
+      },
+    },
+  },
+};
+
+// inventoryLots Schemas
+export const inventoryLotsSchemas = {
+  InventoryLot: {
+    type: "object",
+    required: [
+      "lot_name",
+      "productsId",
+      "supplierId",
+      "purchaseListId",
+      "costs",
+    ],
+    properties: {
+      _id: {
+        type: "string",
+        description: "Auto-generated MongoDB ID",
+        example: "507f1f77bcf86cd799439011",
+      },
+      lot_name: {
+        type: "string",
+        description: "Name of the lot",
+        example: "Lot A-001",
+      },
+      purchase_date: {
+        type: "string",
+        format: "date-time",
+        description: "Date of purchase",
+        example: "2025-10-25T10:30:00.000Z",
+      },
+      status: {
+        type: "string",
+        enum: ["in stock", "stock out"],
+        description: "Current status of the lot",
+        example: "in stock",
+      },
+      hasCommission: {
+        type: "boolean",
+        description: "Whether commission is applicable",
+        example: true,
+      },
+      productsId: {
+        type: "string",
+        description: "Product ID reference",
+        example: "507f1f77bcf86cd799439012",
+      },
+      supplierId: {
+        type: "string",
+        description: "Supplier ID reference",
+        example: "507f1f77bcf86cd799439013",
+      },
+      purchaseListId: {
+        type: "string",
+        description: "Purchase list ID reference",
+        example: "507f1f77bcf86cd799439014",
+      },
+      costs: {
+        type: "object",
+        required: ["unitCost"],
+        properties: {
+          unitCost: {
+            type: "number",
+            description: "Cost per unit",
+            example: 150,
+          },
+          commissionRate: {
+            type: "number",
+            description: "Commission rate percentage",
+            example: 5,
+          },
+        },
+      },
+      sales: {
+        type: "object",
+        properties: {
+          totalKgSold: {
+            type: "number",
+            description: "Total kilograms sold",
+            example: 500,
+          },
+          totalSoldPrice: {
+            type: "number",
+            description: "Total price of sold items",
+            example: 75000,
+          },
+        },
+      },
+      profits: {
+        type: "object",
+        properties: {
+          lotProfit: {
+            type: "number",
+            description: "Profit from the lot",
+            example: 5000,
+          },
+          customerProfit: {
+            type: "number",
+            description: "Customer profit",
+            example: 2000,
+          },
+          totalProfit: {
+            type: "number",
+            description: "Total profit including commission",
+            example: 7000,
+          },
+          totalProfitWithoutComm: {
+            type: "number",
+            description: "Total profit without commission",
+            example: 6500,
+          },
+        },
+      },
+      createdAt: {
+        type: "string",
+        format: "date-time",
+        description: "Lot creation timestamp",
+      },
+      updatedAt: {
+        type: "string",
+        format: "date-time",
+        description: "Lot last update timestamp",
+      },
+    },
+  },
+
+  InventoryLotInput: {
+    type: "object",
+    required: [
+      "lot_name",
+      "productsId",
+      "supplierId",
+      "purchaseListId",
+      "costs",
+    ],
+    properties: {
+      lot_name: {
+        type: "string",
+        example: "Lot A-001",
+      },
+      purchase_date: {
+        type: "string",
+        format: "date-time",
+        example: "2025-10-25T10:30:00.000Z",
+      },
+      status: {
+        type: "string",
+        enum: ["in stock", "stock out"],
+        example: "in stock",
+      },
+      hasCommission: {
+        type: "boolean",
+        example: true,
+      },
+      productsId: {
+        type: "string",
+        example: "507f1f77bcf86cd799439012",
+      },
+      supplierId: {
+        type: "string",
+        example: "507f1f77bcf86cd799439013",
+      },
+      purchaseListId: {
+        type: "string",
+        example: "507f1f77bcf86cd799439014",
+      },
+      costs: {
+        type: "object",
+        required: ["unitCost"],
+        properties: {
+          unitCost: {
+            type: "number",
+            example: 150,
+          },
+          commissionRate: {
+            type: "number",
+            example: 5,
+          },
+        },
+      },
+      sales: {
+        type: "object",
+        properties: {
+          totalKgSold: {
+            type: "number",
+            example: 500,
+          },
+          totalSoldPrice: {
+            type: "number",
+            example: 75000,
+          },
+        },
+      },
+      profits: {
+        type: "object",
+        properties: {
+          lotProfit: {
+            type: "number",
+            example: 5000,
+          },
+          customerProfit: {
+            type: "number",
+            example: 2000,
+          },
+          totalProfit: {
+            type: "number",
+            example: 7000,
+          },
+          totalProfitWithoutComm: {
+            type: "number",
+            example: 6500,
+          },
+        },
+      },
+    },
+  },
+
+  LotStatusUpdate: {
+    type: "object",
+    required: ["status"],
+    properties: {
+      status: {
+        type: "string",
+        enum: ["in stock", "stock out"],
+        example: "stock out",
+      },
+    },
+  },
+};
+
 // Combine all schemas
 export const schemas = {
   ...activityLogSchemas,
@@ -1252,4 +1886,6 @@ export const schemas = {
   ...accountSchemas,
   ...expenseSchemas,
   ...productSchemas,
+  ...purchaseSchemas,
+  ...inventoryLotsSchemas,
 };

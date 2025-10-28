@@ -5,21 +5,20 @@ import {
   getPurchaseById,
   updatePurchase,
 } from "./purchase.controller.js";
-
-import authMiddleware from "../middleware/auth.middleware.js";
+import { authMiddleware } from "../../middleware/auth.js";
 
 const router = express.Router();
 
 // Create new purchase
-router.post("/", authMiddleware, createPurchase);
+router.post("/add", authMiddleware, createPurchase);
 
 // All purchases
-router.get("/", authMiddleware, getAllPurchases);
+router.get("/all", getAllPurchases);
 
 // Single purchase by ID
-router.get("/:id", authMiddleware, getPurchaseById);
+router.get("/details/:id", getPurchaseById);
 
 // Update purchase
-router.put("/:id", authMiddleware, updatePurchase);
+router.put("/update/:id", authMiddleware, updatePurchase);
 
 export default router;

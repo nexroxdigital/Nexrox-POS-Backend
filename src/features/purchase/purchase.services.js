@@ -1,28 +1,43 @@
 import Purchase from "./purchase.model.js";
 
-// Create new purchase
+// @desc   Create new purchase
+// @access  Admin
 export const createPurchase = async (data) => {
   return await Purchase.create(data);
 };
 
-// Get all purchases
-export const getAllPurchases = async () => {
-  return await Purchase.find()
+// @desc Get all purchases
+// @access  Admin
+export const getAllPurchases = async (page, limit) => {
+  const skip = (page - 1) * limit;
+  const total = await Purchase.countDocuments();
+
+  const purchase = await Purchase.find()
     .populate("items.supplier")
     .populate("items.lots.productId")
-    .sort({ createdAt: -1 });
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit);
+
+  return {
+    total,
+    page,
+    limit,
+    totalPages: Math.ceil(total / limit),
+    purchase,
+  };
 };
 
-// Get single purchase by ID
+// @desc Get single purchase by ID
+// @access  Admin
 export const getPurchaseById = async (id) => {
   return await Purchase.findById(id)
     .populate("items.supplier")
     .populate("items.lots.productId");
 };
 
-// Update purchase
+// @desc Update purchase
+// @access  Admin
 export const updatePurchase = async (id, data) => {
   return await Purchase.findByIdAndUpdate(id, data, { new: true });
 };
-
-
