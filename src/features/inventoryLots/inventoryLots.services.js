@@ -35,6 +35,10 @@ export const createLotsForPurchase = async (purchaseId) => {
         productsId: lot.productId,
         supplierId: item.supplier,
         purchaseListId: purchaseId,
+        carat: {
+          carat_Type_1: lot.carat.carat_Type_1,
+          carat_Type_2: lot.carat.carat_Type_2,
+        },
         costs: {
           unitCost: lot.unit_Cost,
           commissionRate: lot.commission_rate || 0,

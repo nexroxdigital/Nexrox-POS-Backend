@@ -128,7 +128,7 @@ export const accountPaths = {
     },
   },
 
-  "/api/v1/account/details/{id}": {
+  "/api/v1/account/update/{id}": {
     put: {
       tags: ["Accounts"],
       summary: "Update account by ID",
