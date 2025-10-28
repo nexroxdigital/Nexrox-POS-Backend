@@ -20,6 +20,8 @@ export const authMiddleware = (req, res, next) => {
 
     next();
   } catch (err) {
+    console.log("err from auth check middleware", err);
+
     return res.status(403).json({ message: "Invalid or expired token" });
   }
 };
