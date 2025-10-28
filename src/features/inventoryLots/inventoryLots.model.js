@@ -38,6 +38,18 @@ const inventoryLotsSchema = new mongoose.Schema(
       required: true,
     },
 
+    // Carat Details
+    carat: {
+      carat_Type_1: {
+        type: Number,
+        default: 0,
+      },
+      carat_Type_2: {
+        type: Number,
+        default: 0,
+      },
+    },
+
     costs: {
       unitCost: {
         type: Number,

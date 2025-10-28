@@ -127,6 +127,70 @@ export const supplierPaths = {
     },
   },
 
+  "/api/v1/suppliers/add": {
+    post: {
+      tags: ["Suppliers"],
+      summary: "Create a new supplier",
+      description:
+        "Add a new supplier to the system with basic info, contact details, account and crate information",
+      requestBody: {
+        required: true,
+        content: {
+          "application/json": {
+            schema: {
+              $ref: "#/components/schemas/SupplierInput",
+            },
+          },
+        },
+      },
+      responses: {
+        201: {
+          description: "Supplier created successfully",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  status: {
+                    type: "string",
+                    example: "success",
+                  },
+                  message: {
+                    type: "string",
+                    example: "Supplier created successfully",
+                  },
+                  data: {
+                    $ref: "#/components/schemas/Supplier",
+                  },
+                },
+              },
+            },
+          },
+        },
+        400: {
+          description: "Invalid input",
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/Error",
+              },
+            },
+          },
+        },
+        500: {
+          description: "Server error",
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/Error",
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+
   "/api/v1/suppliers/update/{id}": {
     put: {
       tags: ["Suppliers"],
@@ -185,70 +249,6 @@ export const supplierPaths = {
             "application/json": {
               schema: {
                 $ref: "#/components/schemas/Error",
-              },
-            },
-          },
-        },
-        400: {
-          description: "Invalid input",
-          content: {
-            "application/json": {
-              schema: {
-                $ref: "#/components/schemas/Error",
-              },
-            },
-          },
-        },
-        500: {
-          description: "Server error",
-          content: {
-            "application/json": {
-              schema: {
-                $ref: "#/components/schemas/Error",
-              },
-            },
-          },
-        },
-      },
-    },
-  },
-
-  "/api/v1/suppliers/add": {
-    post: {
-      tags: ["Suppliers"],
-      summary: "Create a new supplier",
-      description:
-        "Add a new supplier to the system with basic info, contact details, account and crate information",
-      requestBody: {
-        required: true,
-        content: {
-          "application/json": {
-            schema: {
-              $ref: "#/components/schemas/SupplierInput",
-            },
-          },
-        },
-      },
-      responses: {
-        201: {
-          description: "Supplier created successfully",
-          content: {
-            "application/json": {
-              schema: {
-                type: "object",
-                properties: {
-                  status: {
-                    type: "string",
-                    example: "success",
-                  },
-                  message: {
-                    type: "string",
-                    example: "Supplier created successfully",
-                  },
-                  data: {
-                    $ref: "#/components/schemas/Supplier",
-                  },
-                },
               },
             },
           },

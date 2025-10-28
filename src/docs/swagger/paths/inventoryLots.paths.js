@@ -128,7 +128,7 @@ export const inventoryLotsPaths = {
     },
   },
 
-  "/api/v1/inventory-lots/add": {
+  "/api/v1/inventory-lots/add/?id=xyz": {
     post: {
       tags: ["Inventory Lots"],
       summary: "Create new inventory lots",

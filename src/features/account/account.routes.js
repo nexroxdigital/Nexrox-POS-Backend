@@ -15,6 +15,6 @@ router.get("/all", getAllAccounts);
 router.post("/add", authMiddleware, createAccount);
 
 // details view
-router.put("/details/:id", authMiddleware, updateAccount);
+router.put("/update/:id", authMiddleware, updateAccount);
 
 export default router;
