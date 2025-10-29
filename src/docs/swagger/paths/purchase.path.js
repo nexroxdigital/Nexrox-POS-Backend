@@ -1,5 +1,5 @@
 export const purchasePaths = {
-  "/api/v1/purchases/all": {
+  "/api/v1/purchase/all": {
     get: {
       tags: ["Purchases"],
       summary: "Get all purchases",
@@ -84,7 +84,7 @@ export const purchasePaths = {
     },
   },
 
-  "/api/v1/purchases/details/{id}": {
+  "/api/v1/purchase/details/{id}": {
     get: {
       tags: ["Purchases"],
       summary: "Get purchase by ID",
@@ -145,7 +145,7 @@ export const purchasePaths = {
     },
   },
 
-  "/api/v1/purchases/status/{id}": {
+  "/api/v1/purchase/status/{id}": {
     patch: {
       tags: ["Purchases"],
       summary: "Change purchase status",
@@ -238,7 +238,7 @@ export const purchasePaths = {
     },
   },
 
-  "/api/v1/purchases/add": {
+  "/api/v1/purchase/add": {
     post: {
       tags: ["Purchases"],
       summary: "Create a new purchase",
@@ -317,7 +317,7 @@ export const purchasePaths = {
     },
   },
 
-  "/api/v1/purchases/update/{id}": {
+  "/api/v1/purchase/update/{id}": {
     put: {
       tags: ["Purchases"],
       summary: "Update purchase by ID",
