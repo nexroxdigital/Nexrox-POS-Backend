@@ -9,6 +9,8 @@ export const createPurchase = async (req, res) => {
     const userId = req.user.id;
     const userEmail = req.user.email;
 
+    console.log("hit");
+
     const purchase = await purchaseService.createPurchase(req.body);
 
     // Log activity

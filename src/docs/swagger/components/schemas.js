@@ -681,7 +681,7 @@ export const supplierSchemas = {
             description: "Price per Crate 1",
             example: 100,
           },
-          remainingCrate1: {
+          needToGiveCrate1: {
             type: "number",
             description: "Remaining Crate 1 count",
             example: 45,
@@ -696,7 +696,7 @@ export const supplierSchemas = {
             description: "Price per Crate 2",
             example: 150,
           },
-          remainingCrate2: {
+          needToGiveCrate2: {
             type: "number",
             description: "Remaining Crate 2 count",
             example: 28,
@@ -793,7 +793,7 @@ export const supplierSchemas = {
             type: "number",
             example: 100,
           },
-          remainingCrate1: {
+          needToGiveCrate1: {
             type: "number",
             example: 45,
           },
@@ -805,7 +805,7 @@ export const supplierSchemas = {
             type: "number",
             example: 150,
           },
-          remainingCrate2: {
+          needToGiveCrate2: {
             type: "number",
             example: 28,
           },
