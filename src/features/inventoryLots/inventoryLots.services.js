@@ -221,3 +221,11 @@ export const updateLotStatus = async (lotId, newStatus) => {
 
   return lot;
 };
+
+// Check if a lot name already exists
+// @route   GET /api/v1/inventoryLots/check-name
+// @access  Admin
+export const isLotNameDuplicate = async (lotName) => {
+  const existingLot = await inventoryLotsModel.findOne({ lot_name: lotName });
+  return !!existingLot;
+};

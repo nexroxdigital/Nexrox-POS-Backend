@@ -128,6 +128,73 @@ export const inventoryLotsPaths = {
     },
   },
 
+  "/api/v1/inventory-lots/check-name": {
+    get: {
+      tags: ["Inventory Lots"],
+      summary: "Check if lot name already exists",
+      description:
+        "Check for duplicate lot names before creating a new inventory lot",
+      parameters: [
+        {
+          in: "query",
+          name: "lot_name",
+          required: true,
+          schema: {
+            type: "string",
+          },
+          description: "Lot name to check for duplicates",
+          example: "RS-291020-BANANA-30",
+        },
+      ],
+      responses: {
+        200: {
+          description: "Lot name availability checked successfully",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  status: {
+                    type: "string",
+                    example: "success",
+                  },
+                  exists: {
+                    type: "boolean",
+                    example: false,
+                  },
+                  message: {
+                    type: "string",
+                    example: "Lot name is available",
+                  },
+                },
+              },
+            },
+          },
+        },
+        400: {
+          description: "Missing lot_name parameter",
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/Error",
+              },
+            },
+          },
+        },
+        500: {
+          description: "Server error",
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/Error",
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+
   "/api/v1/inventory-lots/add/?id=xyz": {
     post: {
       tags: ["Inventory Lots"],

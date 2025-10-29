@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  checkDuplicateLotName,
   createLots,
   fetchAllLots,
   fetchLotDetails,
@@ -20,6 +21,6 @@ router.get("/details/:id", fetchLotDetails);
 // change status
 router.put("/status/:id", updateLotStatusController);
 
-// todo :- check lots name
-
+// check lots name
+router.get("/check-name", checkDuplicateLotName);
 export default router;
