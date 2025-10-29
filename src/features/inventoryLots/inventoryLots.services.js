@@ -169,7 +169,7 @@ export const getAllLots = async (page, limit) => {
   const lots = await inventoryLotsModel
     .find()
     .populate("productsId", "productName")
-    .populate("supplierId", "name")
+    .populate("supplierId", "basic_info")
     .populate("purchaseListId", "purchase_date status")
     .sort({ createdAt: -1 })
     .skip(skip)
