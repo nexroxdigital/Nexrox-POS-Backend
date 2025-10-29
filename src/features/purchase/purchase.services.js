@@ -41,3 +41,22 @@ export const getPurchaseById = async (id) => {
 export const updatePurchase = async (id, data) => {
   return await Purchase.findByIdAndUpdate(id, data, { new: true });
 };
+
+// @desc Update the status of a purchase by ID
+// @access  Admin
+export const updatePurchaseStatus = async (purchaseId, status) => {
+  const allowedStatuses = ["on the way", "received", "canceled"];
+  if (!allowedStatuses.includes(status)) {
+    throw new Error("Invalid status value");
+  }
+
+  const purchase = await Purchase.findById(purchaseId);
+  if (!purchase) {
+    throw new Error("Purchase not found");
+  }
+
+  purchase.status = status;
+  await purchase.save();
+
+  return purchase;
+};

@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  changeStatus,
   createPurchase,
   getAllPurchases,
   getPurchaseById,
@@ -20,5 +21,8 @@ router.get("/details/:id", getPurchaseById);
 
 // Update purchase
 router.put("/update/:id", authMiddleware, updatePurchase);
+
+// update statues
+router.patch("/status/:id", changeStatus);
 
 export default router;

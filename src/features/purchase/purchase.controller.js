@@ -9,6 +9,8 @@ export const createPurchase = async (req, res) => {
     const userId = req.user.id;
     const userEmail = req.user.email;
 
+    console.log("hit");
+
     const purchase = await purchaseService.createPurchase(req.body);
 
     // Log activity
@@ -31,7 +33,7 @@ export const createPurchase = async (req, res) => {
 };
 
 // @desc Get All Purchases
-// @route   POST /api/v1/purchase/all
+// @route   GET /api/v1/purchase/all
 // @access  Admin
 export const getAllPurchases = async (req, res) => {
   try {
@@ -52,7 +54,7 @@ export const getAllPurchases = async (req, res) => {
 };
 
 // @desc Get Single Purchase Details
-// @route   POST /api/v1/purchase/details/:id
+// @route   GET /api/v1/purchase/details/:id
 // @access  Admin
 export const getPurchaseById = async (req, res) => {
   try {
@@ -103,5 +105,31 @@ export const updatePurchase = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @desc Update the status of a purchase by ID
+// @route   POST /api/v1/purchase/status/:id
+// @access  Admin
+export const changeStatus = async (req, res) => {
+  try {
+    const purchaseId = req.params.id;
+    const { status } = req.body;
+
+    const updatedPurchase = await purchaseService.updatePurchaseStatus(
+      purchaseId,
+      status
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Purchase status updated successfully",
+      data: updatedPurchase,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
   }
 };

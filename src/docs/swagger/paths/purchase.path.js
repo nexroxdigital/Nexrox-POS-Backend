@@ -1,5 +1,5 @@
 export const purchasePaths = {
-  "/api/v1/purchases/all": {
+  "/api/v1/purchase/all": {
     get: {
       tags: ["Purchases"],
       summary: "Get all purchases",
@@ -84,7 +84,7 @@ export const purchasePaths = {
     },
   },
 
-  "/api/v1/purchases/details/{id}": {
+  "/api/v1/purchase/details/{id}": {
     get: {
       tags: ["Purchases"],
       summary: "Get purchase by ID",
@@ -145,7 +145,100 @@ export const purchasePaths = {
     },
   },
 
-  "/api/v1/purchases/add": {
+  "/api/v1/purchase/status/{id}": {
+    patch: {
+      tags: ["Purchases"],
+      summary: "Change purchase status",
+      description: "Update the status of a purchase order",
+      parameters: [
+        {
+          in: "path",
+          name: "id",
+          required: true,
+          schema: {
+            type: "string",
+          },
+          description: "MongoDB ObjectId of the purchase",
+          example: "507f1f77bcf86cd799439011",
+        },
+      ],
+      requestBody: {
+        required: true,
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              required: ["status"],
+              properties: {
+                status: {
+                  type: "string",
+                  enum: ["on the way", "received", "canceled"],
+                  example: "received",
+                },
+              },
+            },
+          },
+        },
+      },
+      responses: {
+        200: {
+          description: "Purchase status updated successfully",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  status: {
+                    type: "string",
+                    example: "success",
+                  },
+                  message: {
+                    type: "string",
+                    example: "Purchase status updated successfully",
+                  },
+                  data: {
+                    $ref: "#/components/schemas/Purchase",
+                  },
+                },
+              },
+            },
+          },
+        },
+        404: {
+          description: "Purchase not found",
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/Error",
+              },
+            },
+          },
+        },
+        400: {
+          description: "Invalid status value",
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/Error",
+              },
+            },
+          },
+        },
+        500: {
+          description: "Server error",
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/Error",
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+
+  "/api/v1/purchase/add": {
     post: {
       tags: ["Purchases"],
       summary: "Create a new purchase",
@@ -224,7 +317,7 @@ export const purchasePaths = {
     },
   },
 
-  "/api/v1/purchases/update/{id}": {
+  "/api/v1/purchase/update/{id}": {
     put: {
       tags: ["Purchases"],
       summary: "Update purchase by ID",

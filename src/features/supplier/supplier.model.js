@@ -75,7 +75,7 @@ const supplierSchema = new mongoose.Schema(
         type: Number,
         default: 0,
       },
-      remainingCrate1: {
+      needToGiveCrate1: {
         type: Number,
         default: 0,
       },
@@ -89,7 +89,7 @@ const supplierSchema = new mongoose.Schema(
         type: Number,
         default: 0,
       },
-      remainingCrate2: {
+      needToGiveCrate2: {
         type: Number,
         default: 0,
       },
