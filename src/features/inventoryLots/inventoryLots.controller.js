@@ -20,6 +20,9 @@ export const createLots = async (req, res) => {
   }
 };
 
+
+
+
 // @desc Get all lots
 // @route   GET /api/v1/inventoryLots/all
 // @access  Admin

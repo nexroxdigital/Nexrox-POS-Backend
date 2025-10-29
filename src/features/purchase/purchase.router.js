@@ -21,4 +21,6 @@ router.get("/details/:id", getPurchaseById);
 // Update purchase
 router.put("/update/:id", authMiddleware, updatePurchase);
 
+// toDo : statues change
+
 export default router;

@@ -7,6 +7,7 @@ const purchaseSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
+
     status: {
       type: String,
       enum: ["on the way", "received", "canceled"],
