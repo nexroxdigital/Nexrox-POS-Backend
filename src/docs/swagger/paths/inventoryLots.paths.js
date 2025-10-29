@@ -1,5 +1,5 @@
 export const inventoryLotsPaths = {
-  "/api/v1/inventory-lots/all": {
+  "/api/v1/inventoryLots/all": {
     get: {
       tags: ["Inventory Lots"],
       summary: "Get all inventory lots",
@@ -66,7 +66,7 @@ export const inventoryLotsPaths = {
     },
   },
 
-  "/api/v1/inventory-lots/details/{id}": {
+  "/api/v1/inventoryLots/details/{id}": {
     get: {
       tags: ["Inventory Lots"],
       summary: "Get inventory lot by ID",
@@ -128,7 +128,7 @@ export const inventoryLotsPaths = {
     },
   },
 
-  "/api/v1/inventory-lots/check-name": {
+  "/api/v1/inventoryLots/check-name": {
     get: {
       tags: ["Inventory Lots"],
       summary: "Check if lot name already exists",
@@ -195,7 +195,7 @@ export const inventoryLotsPaths = {
     },
   },
 
-  "/api/v1/inventory-lots/add/?id=xyz": {
+  "/api/v1/inventoryLots/add/?id=xyz": {
     post: {
       tags: ["Inventory Lots"],
       summary: "Create new inventory lots",
@@ -259,7 +259,7 @@ export const inventoryLotsPaths = {
     },
   },
 
-  "/api/v1/inventory-lots/status/{id}": {
+  "/api/v1/inventoryLots/status/{id}": {
     put: {
       tags: ["Inventory Lots"],
       summary: "Update lot status",
