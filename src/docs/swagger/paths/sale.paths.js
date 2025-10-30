@@ -84,6 +84,70 @@ export const salePaths = {
     },
   },
 
+  "/api/v1/sale/by-customer/{id}": {
+    get: {
+      tags: ["Sales"],
+      summary: "Get sales by customer ID",
+      description: "Retrieve all sales for a specific customer",
+      parameters: [
+        {
+          in: "path",
+          name: "id",
+          required: true,
+          schema: {
+            type: "string",
+          },
+          description: "MongoDB ObjectId of the customer",
+          example: "507f1f77bcf86cd799439011",
+        },
+      ],
+      responses: {
+        200: {
+          description: "Sales retrieved successfully",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  status: {
+                    type: "string",
+                    example: "success",
+                  },
+                  data: {
+                    type: "array",
+                    items: {
+                      $ref: "#/components/schemas/Sale",
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        404: {
+          description: "Customer not found",
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/Error",
+              },
+            },
+          },
+        },
+        500: {
+          description: "Server error",
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/Error",
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+
   "/api/v1/sale/details/{id}": {
     get: {
       tags: ["Sales"],

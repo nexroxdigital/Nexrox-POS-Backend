@@ -238,6 +238,70 @@ export const inventoryLotsPaths = {
     },
   },
 
+  "/api/v1/inventoryLots/by-supplier/{id}": {
+    get: {
+      tags: ["Inventory Lots"],
+      summary: "Get inventory lots by supplier ID",
+      description: "Retrieve all inventory lots for a specific supplier",
+      parameters: [
+        {
+          in: "path",
+          name: "id",
+          required: true,
+          schema: {
+            type: "string",
+          },
+          description: "MongoDB ObjectId of the supplier",
+          example: "507f1f77bcf86cd799439011",
+        },
+      ],
+      responses: {
+        200: {
+          description: "Inventory lots retrieved successfully",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  status: {
+                    type: "string",
+                    example: "success",
+                  },
+                  data: {
+                    type: "array",
+                    items: {
+                      $ref: "#/components/schemas/InventoryLot",
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        404: {
+          description: "Supplier not found",
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/Error",
+              },
+            },
+          },
+        },
+        500: {
+          description: "Server error",
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/Error",
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+
   "/api/v1/inventoryLots/add/?id=xyz": {
     post: {
       tags: ["Inventory Lots"],
