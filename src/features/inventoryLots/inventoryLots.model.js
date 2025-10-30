@@ -11,6 +11,7 @@ const inventoryLotsSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
+    
     status: {
       type: String,
       enum: ["in stock", "stock out"],

@@ -4,7 +4,6 @@ import supplierModel from "../supplier/supplier.model.js";
 import inventoryLotsModel from "./inventoryLots.model.js";
 
 // @desc create lost from purchase list also update crate in supplier profile
-// @route   POST /api/v1/inventoryLots/add
 // @access  Admin
 // export const createLotsForPurchase = async (purchaseId) => {
 //   const selectedData = await purchaseModel.findById(purchaseId);
@@ -160,7 +159,6 @@ export const createLotsForPurchase = async (purchaseId) => {
 };
 
 // @desc Get all inventory lots
-// @route   GET /api/v1/inventoryLots/all
 // @access  Admin
 export const getAllLots = async (page, limit) => {
   const skip = (page - 1) * limit;
@@ -185,7 +183,6 @@ export const getAllLots = async (page, limit) => {
 };
 
 // @desc Get lot details by ID
-// @route   GET /api/v1/inventoryLots/details
 // @access  Admin
 export const getLotById = async (lotId) => {
   const lot = await inventoryLotsModel
@@ -201,8 +198,7 @@ export const getLotById = async (lotId) => {
   return lot;
 };
 
-// Update lot status
-// @route   GET /api/v1/inventoryLots/details
+// @desc Update lot status
 // @access  Admin
 export const updateLotStatus = async (lotId, newStatus) => {
   const allowedStatuses = ["in stock", "stock out"];
@@ -222,10 +218,21 @@ export const updateLotStatus = async (lotId, newStatus) => {
   return lot;
 };
 
-// Check if a lot name already exists
-// @route   GET /api/v1/inventoryLots/check-name
+// @desc Check if a lot name already exists
 // @access  Admin
 export const isLotNameDuplicate = async (lotName) => {
   const existingLot = await inventoryLotsModel.findOne({ lot_name: lotName });
   return !!existingLot;
+};
+
+// @desc Controller to get all in-stock loots
+// @access  Admin
+export const getAllInStockLots = async () => {
+  const lots = await inventoryLotsModel
+    .find({ status: "in stock" })
+    .sort({ createdAt: -1 })
+    .populate("productsId", "productName")
+    .populate("purchaseListId", "purchase_date");
+
+  return lots;
 };

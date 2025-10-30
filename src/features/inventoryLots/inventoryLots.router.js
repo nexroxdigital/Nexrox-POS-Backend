@@ -4,6 +4,7 @@ import {
   createLots,
   fetchAllLots,
   fetchLotDetails,
+  getAllInStockLots,
   updateLotStatusController,
 } from "./inventoryLots.controller.js";
 
@@ -23,4 +24,8 @@ router.put("/status/:id", updateLotStatusController);
 
 // check lots name
 router.get("/check-name", checkDuplicateLotName);
+
+// get all in stock lots
+router.get("/in-stock", getAllInStockLots);
+
 export default router;

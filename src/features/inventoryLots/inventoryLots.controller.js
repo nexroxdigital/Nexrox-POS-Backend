@@ -34,7 +34,7 @@ export const fetchAllLots = async (req, res) => {
     return res.status(200).json({ lots });
   } catch (error) {
     return res.status(500).json({ message: error.message });
-  } 
+  }
 };
 
 // @desc Get single lot details
@@ -99,6 +99,27 @@ export const checkDuplicateLotName = async (req, res) => {
     res.status(500).json({
       success: false,
       message: error.message,
+    });
+  }
+};
+
+// Controller to get all in-stock loots
+// @route   GET /api/v1/inventoryLots/in-stock
+// @access  Admins
+export const getAllInStockLots = async (req, res) => {
+  try {
+    const lots = await inventoryLotsService.getAllInStockLots();
+
+    res.status(200).json({
+      success: true,
+      count: lots.length,
+      data: lots,
+    });
+  } catch (error) {
+    console.error("Error in getAllInStockLots:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to fetch in-stock lots",
     });
   }
 };

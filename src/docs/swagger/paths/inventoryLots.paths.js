@@ -195,6 +195,49 @@ export const inventoryLotsPaths = {
     },
   },
 
+  "/api/v1/inventoryLots/in-stock": {
+    get: {
+      tags: ["Inventory Lots"],
+      summary: "Get all in-stock lots",
+      description:
+        "Retrieve a list of all inventory lots that are currently in stock",
+      responses: {
+        200: {
+          description: "List of in-stock lots retrieved successfully",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  status: {
+                    type: "string",
+                    example: "success",
+                  },
+                  data: {
+                    type: "array",
+                    items: {
+                      $ref: "#/components/schemas/InventoryLot",
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        500: {
+          description: "Server error",
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/Error",
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+
   "/api/v1/inventoryLots/add/?id=xyz": {
     post: {
       tags: ["Inventory Lots"],
