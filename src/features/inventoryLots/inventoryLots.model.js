@@ -11,11 +11,13 @@ const inventoryLotsSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
+
     status: {
       type: String,
       enum: ["in stock", "stock out"],
       default: "in stock",
     },
+
     hasCommission: {
       type: Boolean,
       default: false,
@@ -27,11 +29,13 @@ const inventoryLotsSchema = new mongoose.Schema(
       ref: "Product",
       required: true,
     },
+
     supplierId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Supplier",
       required: true,
     },
+    
     purchaseListId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Purchase",

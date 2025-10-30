@@ -28,6 +28,22 @@ export const getAllPurchases = async (page, limit) => {
   };
 };
 
+// @desc Get all purchases by supplier
+// @access  Admin
+export const getAllPurchasesBySupplier = async (id) => {
+  const purchase = await Purchase.find({ "items.supplier": id })
+    .populate("items.supplier")
+    .populate("items.lots.productId")
+    .sort({ createdAt: -1 });
+
+  const total = purchase.length;
+
+  return {
+    total,
+    purchase,
+  };
+};
+
 // @desc Get single purchase by ID
 // @access  Admin
 export const getPurchaseById = async (id) => {

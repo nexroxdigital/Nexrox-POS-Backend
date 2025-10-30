@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const saleSchema = new mongoose.Schema(
   {
-    sellDate: {
+    sale_date: {
       type: String,
       required: true,
     },
@@ -13,7 +13,12 @@ const saleSchema = new mongoose.Schema(
       required: true,
     },
 
-    total_Custom_Commission: {
+    total_custom_commission: {
+      type: Number,
+      default: 0,
+    },
+
+    total_lots_commission: {
       type: Number,
       default: 0,
     },
@@ -38,52 +43,52 @@ const saleSchema = new mongoose.Schema(
               required: true,
               default: 0,
             },
-            discountKg: {
+            discount_Kg: {
               type: Number,
               default: 0,
             },
-            unitPrice: {
+            unit_price: {
               type: Number,
               required: true,
               default: 0,
             },
-            totalPrice: {
+            total_price: {
               type: Number,
               default: 0, // totalPrice = kg * unitPrice
             },
-            discountAmount: {
+            discount_amount: {
               type: Number,
               default: 0, // discountAmount = discountKg * unitPrice
             },
-            sellingPrice: {
+            selling_price: {
               type: Number,
               default: 0, // sellingPrice = totalPrice - discountAmount
             },
-            lotCommissionRate: {
+            lot_commission_rate: {
               type: Number,
               default: 0,
             },
-            lotCommissionAmount: {
+            lot_commission_amount: {
               type: Number,
               default: 0, // sellingPrice * (lotCommissionRate / 100)
             },
-            crateType1: {
+            crate_type1: {
               type: Number,
               default: 0,
             },
-            crateType2: {
+            crate_type2: {
               type: Number,
               default: 0,
             },
           },
         ],
 
-        customer_commission_Rate: {
+        customer_commission_rate: {
           type: Number,
           default: 0,
         },
 
-        customer_commission_Amount: {
+        customer_commission_amount: {
           type: Number,
           default: 0,
         },
@@ -96,40 +101,55 @@ const saleSchema = new mongoose.Schema(
     ],
 
     // payments details
-    payment_Details: {
-      payable_Amount: {
+    payment_details: {
+      extra_crate_type1_price: {
+        type: Number,
+        default: 0,
+      },
+
+      extra_crate_type2_price: {
+        type: Number,
+        default: 0,
+      },
+
+      payable_amount: {
         type: Number,
         required: true,
         default: 0,
       },
 
-      change_Amount: {
+      change_amount: {
         type: Number,
         default: 0,
       },
 
-      due_Amount: {
+      due_amount: {
         type: Number,
         default: 0,
       },
 
-      payment_Type: {
+      payment_type: {
         type: String,
-        enum: ["cash", "bank", "mobile", "other"],
+        enum: ["cash", "bank", "mobile", "balance", "other"],
         default: "cash",
       },
 
-      received_Amount: {
+      received_amount: {
         type: Number,
         default: 0,
       },
 
-      Vat: {
+      received_amount_from_balance: {
         type: Number,
         default: 0,
       },
 
-      Note: {
+      vat: {
+        type: Number,
+        default: 0,
+      },
+
+      note: {
         type: String,
         trim: true,
       },
