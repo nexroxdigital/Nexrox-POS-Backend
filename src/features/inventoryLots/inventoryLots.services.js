@@ -198,6 +198,26 @@ export const getLotById = async (lotId) => {
   return lot;
 };
 
+// @desc Get all lots by supplier
+// @access  Admin
+export const getAllLotsBySupplier = async (id) => {
+  console.log(id);
+
+  const lot = await inventoryLotsModel
+    .find({ supplierId: id })
+    .sort({ createdAt: -1 })
+    .populate("productsId", "productName description")
+    .populate("supplierId", "name email")
+    .populate("purchaseListId", "purchase_date status");
+
+  const total = lot.length;
+
+  return {
+    total,
+    lot,
+  };
+};
+
 // @desc Update lot status
 // @access  Admin
 export const updateLotStatus = async (lotId, newStatus) => {
@@ -232,6 +252,7 @@ export const getAllInStockLots = async () => {
     .find({ status: "in stock" })
     .sort({ createdAt: -1 })
     .populate("productsId", "productName")
+    .populate("supplierId", "basic_info.name")
     .populate("purchaseListId", "purchase_date");
 
   return lots;

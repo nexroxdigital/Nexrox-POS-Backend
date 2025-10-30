@@ -43,7 +43,24 @@ export const getAllPurchases = async (req, res) => {
     );
     res.status(200).json({
       success: true,
-      count: purchases.length,
+      data: purchases,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @desc Get all purchases by supplier
+// @route   POST /api/v1/purchase/by-supplier/:id
+// @access  Admin
+export const purchasesBySupplier = async (req, res) => {
+  try {
+    const purchases = await purchaseService.getAllPurchasesBySupplier(
+      req.params.id
+    );
+
+    res.status(200).json({
+      success: true,
       data: purchases,
     });
   } catch (error) {

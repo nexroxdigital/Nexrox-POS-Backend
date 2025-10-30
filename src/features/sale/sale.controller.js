@@ -47,6 +47,25 @@ export const getAllSales = async (req, res) => {
   }
 };
 
+// @desc    Get all sales
+// @route   GET /api/v1/sale/by-customer/:id
+// @access  Admin
+export const salesByCustomer = async (req, res) => {
+  try {
+    const sales = await saleService.getAllSalesByCustomer(req.params.id);
+
+    res.status(200).json({
+      success: true,
+      data: sales,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to fetch sale details",
+    });
+  }
+};
+
 // @desc    Get sale details by ID
 // @route   GET /api/v1/sale/:id
 // @access  Admin

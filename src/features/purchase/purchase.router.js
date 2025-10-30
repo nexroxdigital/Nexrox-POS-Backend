@@ -4,6 +4,7 @@ import {
   createPurchase,
   getAllPurchases,
   getPurchaseById,
+  purchasesBySupplier,
   updatePurchase,
 } from "./purchase.controller.js";
 import { authMiddleware } from "../../middleware/auth.js";
@@ -15,6 +16,9 @@ router.post("/add", authMiddleware, createPurchase);
 
 // All purchases
 router.get("/all", getAllPurchases);
+
+// purchases by supplier
+router.get("/by-supplier/:id", purchasesBySupplier);
 
 // Single purchase by ID
 router.get("/details/:id", getPurchaseById);

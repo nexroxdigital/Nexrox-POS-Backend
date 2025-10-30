@@ -5,6 +5,7 @@ import {
   fetchAllLots,
   fetchLotDetails,
   getAllInStockLots,
+  lotsBySupplier,
   updateLotStatusController,
 } from "./inventoryLots.controller.js";
 
@@ -15,6 +16,9 @@ router.post("/add", createLots);
 
 // get all
 router.get("/all", fetchAllLots);
+
+// get all
+router.get("/by-supplier/:id", lotsBySupplier);
 
 // get details
 router.get("/details/:id", fetchLotDetails);

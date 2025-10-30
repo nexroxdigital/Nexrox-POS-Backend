@@ -36,6 +36,34 @@ export const getAllSales = async (page, limit) => {
   };
 };
 
+export const getAllSalesByCustomer = async (id) => {
+  console.log(id);
+
+  const sales = await Sale.find({ customerId: id })
+    .sort({ createdAt: -1 })
+    .populate(
+      "customerId",
+      "basic_info.name contact_info.phone contact_info.email"
+    )
+    .populate({
+      path: "items.productId",
+      select: "productName basePrice categoryId",
+      populate: {
+        path: "categoryId",
+        select: "categoryName",
+      },
+    })
+    .populate("items.selected_lots.lotId", "lot_name commissionRate");
+
+  const total = sales.length;
+
+  return {
+    total,
+    sales,
+  };
+  return {};
+};
+
 export const getSaleById = async (id) => {
   const sale = await Sale.findById(id)
     .populate(

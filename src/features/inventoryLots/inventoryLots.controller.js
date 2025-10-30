@@ -37,6 +37,22 @@ export const fetchAllLots = async (req, res) => {
   }
 };
 
+// @desc Get all lots by supplier
+// @route   GET /api/v1/inventoryLots/all
+// @access  Admin
+export const lotsBySupplier = async (req, res) => {
+  try {
+    const lots = await inventoryLotsService.getAllLotsBySupplier(req.params.id);
+
+    res.status(200).json({
+      success: true,
+      data: lots,
+    });
+  } catch (error) {
+    return res.status(404).json({ message: error.message });
+  }
+};
+
 // @desc Get single lot details
 // @route   GET /api/v1/inventoryLots/details
 // @access  Admin
