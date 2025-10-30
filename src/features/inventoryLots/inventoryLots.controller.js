@@ -34,7 +34,7 @@ export const fetchAllLots = async (req, res) => {
     return res.status(200).json({ lots });
   } catch (error) {
     return res.status(500).json({ message: error.message });
-  }
+  } 
 };
 
 // @desc Get single lot details

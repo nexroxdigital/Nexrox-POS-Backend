@@ -1,2 +1,76 @@
-import saleService from './sale.services.js';
+import * as saleService from "./sale.services.js";
 
+// @desc    Create sale record
+// @route   POST /api/v1/sale/add
+// @access  Admin
+export const createSale = async (req, res) => {
+  try {
+    const saleData = req.body;
+    const result = await saleService.createSale(saleData);
+
+    res.status(201).json({
+      success: true,
+      message: "Sale created successfully",
+      data: result,
+    });
+  } catch (error) {
+    console.error("Error in createSale:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to create sale",
+    });
+  }
+};
+
+// @desc    Get all sales
+// @route   GET /api/v1/sale
+// @access  Admin
+export const getAllSales = async (req, res) => {
+  try {
+    const { page = 1, limit = 10 } = req.query;
+    const result = await saleService.getAllSales(
+      parseInt(page),
+      parseInt(limit)
+    );
+
+    res.status(200).json({
+      success: true,
+      count: result.length,
+      data: result,
+    });
+  } catch (error) {
+    console.error("Error in getAllSales:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to fetch sales",
+    });
+  }
+};
+
+// @desc    Get sale details by ID
+// @route   GET /api/v1/sale/:id
+// @access  Admin
+export const getSaleById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await saleService.getSaleById(id);
+
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        message: "Sale not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (error) {
+    console.error("Error in getSaleById:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to fetch sale details",
+    });
+  }
+};
