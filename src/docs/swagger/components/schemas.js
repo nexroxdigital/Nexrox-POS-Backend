@@ -1649,7 +1649,7 @@ export const purchaseSchemas = {
   },
 };
 
-// inventoryLots Schemas
+// inventory Lots Schemas
 export const inventoryLotsSchemas = {
   InventoryLot: {
     type: "object",
@@ -1876,6 +1876,348 @@ export const inventoryLotsSchemas = {
   },
 };
 
+// sale schemas
+export const saleSchemas = {
+  Sale: {
+    type: "object",
+    required: ["sale_date", "customerId", "payment_details"],
+    properties: {
+      _id: {
+        type: "string",
+        description: "Auto-generated MongoDB ID",
+        example: "507f1f77bcf86cd799439011",
+      },
+      sale_date: {
+        type: "string",
+        description: "Date of sale",
+        example: "2025-10-25",
+      },
+      customerId: {
+        type: "string",
+        description: "Customer ID reference",
+        example: "507f1f77bcf86cd799439012",
+      },
+      total_custom_commission: {
+        type: "number",
+        description: "Total custom commission amount",
+        example: 500,
+      },
+      total_lots_commission: {
+        type: "number",
+        description: "Total lots commission amount",
+        example: 750,
+      },
+      items: {
+        type: "array",
+        description: "List of sale items",
+        items: {
+          type: "object",
+          properties: {
+            productId: {
+              type: "string",
+              description: "Product ID reference",
+              example: "507f1f77bcf86cd799439013",
+            },
+            selected_lots: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  lotId: {
+                    type: "string",
+                    description: "Lot ID reference",
+                    example: "507f1f77bcf86cd799439014",
+                  },
+                  kg: {
+                    type: "number",
+                    description: "Kilograms sold",
+                    example: 50,
+                  },
+                  discount_Kg: {
+                    type: "number",
+                    description: "Discount in kilograms",
+                    example: 2,
+                  },
+                  unit_price: {
+                    type: "number",
+                    description: "Price per unit",
+                    example: 150,
+                  },
+                  total_price: {
+                    type: "number",
+                    description: "Total price (kg * unit_price)",
+                    example: 7500,
+                  },
+                  discount_amount: {
+                    type: "number",
+                    description: "Discount amount (discount_Kg * unit_price)",
+                    example: 300,
+                  },
+                  selling_price: {
+                    type: "number",
+                    description: "Final selling price after discount",
+                    example: 7200,
+                  },
+                  lot_commission_rate: {
+                    type: "number",
+                    description: "Commission rate for this lot",
+                    example: 5,
+                  },
+                  lot_commission_amount: {
+                    type: "number",
+                    description: "Commission amount for this lot",
+                    example: 360,
+                  },
+                  crate_type1: {
+                    type: "number",
+                    description: "Number of crate type 1",
+                    example: 10,
+                  },
+                  crate_type2: {
+                    type: "number",
+                    description: "Number of crate type 2",
+                    example: 5,
+                  },
+                },
+              },
+            },
+            customer_commission_rate: {
+              type: "number",
+              description: "Customer commission rate percentage",
+              example: 3,
+            },
+            customer_commission_amount: {
+              type: "number",
+              description: "Customer commission amount",
+              example: 216,
+            },
+            profit: {
+              type: "number",
+              description: "Profit from this item",
+              example: 1000,
+            },
+          },
+        },
+      },
+      payment_details: {
+        type: "object",
+        required: ["payable_amount"],
+        properties: {
+          extra_crate_type1_price: {
+            type: "number",
+            description: "Extra charge for crate type 1",
+            example: 100,
+          },
+          extra_crate_type2_price: {
+            type: "number",
+            description: "Extra charge for crate type 2",
+            example: 150,
+          },
+          payable_amount: {
+            type: "number",
+            description: "Total payable amount",
+            example: 7450,
+          },
+          change_amount: {
+            type: "number",
+            description: "Change amount given to customer",
+            example: 50,
+          },
+          due_amount: {
+            type: "number",
+            description: "Due amount remaining",
+            example: 0,
+          },
+          payment_type: {
+            type: "string",
+            enum: ["cash", "bank", "mobile", "balance", "other"],
+            description: "Payment method",
+            example: "cash",
+          },
+          received_amount: {
+            type: "number",
+            description: "Amount received from customer",
+            example: 7500,
+          },
+          received_amount_from_balance: {
+            type: "number",
+            description: "Amount received from customer balance",
+            example: 0,
+          },
+          vat: {
+            type: "number",
+            description: "VAT amount",
+            example: 0,
+          },
+          note: {
+            type: "string",
+            description: "Additional notes about payment",
+            example: "Paid in full",
+          },
+        },
+      },
+      createdAt: {
+        type: "string",
+        format: "date-time",
+        description: "Sale creation timestamp",
+      },
+      updatedAt: {
+        type: "string",
+        format: "date-time",
+        description: "Sale last update timestamp",
+      },
+    },
+  },
+
+  SaleInput: {
+    type: "object",
+    required: ["sale_date", "customerId", "payment_details"],
+    properties: {
+      sale_date: {
+        type: "string",
+        example: "2025-10-25",
+      },
+      customerId: {
+        type: "string",
+        example: "507f1f77bcf86cd799439012",
+      },
+      total_custom_commission: {
+        type: "number",
+        example: 500,
+      },
+      total_lots_commission: {
+        type: "number",
+        example: 750,
+      },
+      items: {
+        type: "array",
+        items: {
+          type: "object",
+          required: ["productId", "selected_lots"],
+          properties: {
+            productId: {
+              type: "string",
+              example: "507f1f77bcf86cd799439013",
+            },
+            selected_lots: {
+              type: "array",
+              items: {
+                type: "object",
+                required: ["lotId", "kg", "unit_price"],
+                properties: {
+                  lotId: {
+                    type: "string",
+                    example: "507f1f77bcf86cd799439014",
+                  },
+                  kg: {
+                    type: "number",
+                    example: 50,
+                  },
+                  discount_Kg: {
+                    type: "number",
+                    example: 2,
+                  },
+                  unit_price: {
+                    type: "number",
+                    example: 150,
+                  },
+                  total_price: {
+                    type: "number",
+                    example: 7500,
+                  },
+                  discount_amount: {
+                    type: "number",
+                    example: 300,
+                  },
+                  selling_price: {
+                    type: "number",
+                    example: 7200,
+                  },
+                  lot_commission_rate: {
+                    type: "number",
+                    example: 5,
+                  },
+                  lot_commission_amount: {
+                    type: "number",
+                    example: 360,
+                  },
+                  crate_type1: {
+                    type: "number",
+                    example: 10,
+                  },
+                  crate_type2: {
+                    type: "number",
+                    example: 5,
+                  },
+                },
+              },
+            },
+            customer_commission_rate: {
+              type: "number",
+              example: 3,
+            },
+            customer_commission_amount: {
+              type: "number",
+              example: 216,
+            },
+            profit: {
+              type: "number",
+              example: 1000,
+            },
+          },
+        },
+      },
+      payment_details: {
+        type: "object",
+        required: ["payable_amount"],
+        properties: {
+          extra_crate_type1_price: {
+            type: "number",
+            example: 100,
+          },
+          extra_crate_type2_price: {
+            type: "number",
+            example: 150,
+          },
+          payable_amount: {
+            type: "number",
+            example: 7450,
+          },
+          change_amount: {
+            type: "number",
+            example: 50,
+          },
+          due_amount: {
+            type: "number",
+            example: 0,
+          },
+          payment_type: {
+            type: "string",
+            enum: ["cash", "bank", "mobile", "balance", "other"],
+            example: "cash",
+          },
+          received_amount: {
+            type: "number",
+            example: 7500,
+          },
+          received_amount_from_balance: {
+            type: "number",
+            example: 0,
+          },
+          vat: {
+            type: "number",
+            example: 0,
+          },
+          note: {
+            type: "string",
+            example: "Paid in full",
+          },
+        },
+      },
+    },
+  },
+};
+
 // Combine all schemas
 export const schemas = {
   ...activityLogSchemas,
@@ -1888,4 +2230,5 @@ export const schemas = {
   ...productSchemas,
   ...purchaseSchemas,
   ...inventoryLotsSchemas,
+  ...saleSchemas,
 };
