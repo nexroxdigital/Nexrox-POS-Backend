@@ -133,6 +133,87 @@ export const customerPaths = {
     },
   },
 
+  "/api/v1/customer": {
+    get: {
+      tags: ["Customers"],
+      summary: "Search customers by query",
+      description:
+        "Search and filter customers by name, email, phone, or location",
+      parameters: [
+        {
+          in: "query",
+          name: "name",
+          schema: {
+            type: "string",
+          },
+          description: "Search by customer name",
+          example: "Ahmed",
+        },
+        {
+          in: "query",
+          name: "email",
+          schema: {
+            type: "string",
+          },
+          description: "Search by customer email",
+          example: "ahmed@example.com",
+        },
+        {
+          in: "query",
+          name: "phone",
+          schema: {
+            type: "string",
+          },
+          description: "Search by customer phone number",
+          example: "+8801712345678",
+        },
+        {
+          in: "query",
+          name: "location",
+          schema: {
+            type: "string",
+          },
+          description: "Search by customer location",
+          example: "Dhaka",
+        },
+      ],
+      responses: {
+        200: {
+          description: "Customers retrieved successfully",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  status: {
+                    type: "string",
+                    example: "success",
+                  },
+                  data: {
+                    type: "array",
+                    items: {
+                      $ref: "#/components/schemas/Customer",
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        500: {
+          description: "Server error",
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/Error",
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+
   "/api/v1/customer/add": {
     post: {
       tags: ["Customers"],

@@ -1,4 +1,4 @@
-import { getAllUsers, getUserById } from "./user.service.js";
+import { getAllUsers, getUserById, getUsersByRole } from "./user.service.js";
 
 export async function getAll(req, res) {
   try {
@@ -20,3 +20,30 @@ export async function getById(req, res) {
     res.status(500).json({ message: err.message });
   }
 }
+
+export const filterUsersByRole = async (req, res) => {
+  try {
+    console.log("hit role by user");
+    console.log(req.params.role);
+
+    const users = await getUsersByRole(req.params.role);
+
+    if (users.length === 0) {
+      return res
+        .status(404)
+        .json({ message: `No users found with role: ${role}` });
+    }
+
+    res.status(200).json({
+      success: true,
+      count: users.length,
+      data: users,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};

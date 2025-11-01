@@ -169,7 +169,7 @@ export const getAllLots = async (page, limit) => {
     .populate("productsId", "productName")
     .populate("supplierId", "basic_info")
     .populate("purchaseListId", "purchase_date status")
-    .sort({ createdAt: -1 })
+    .sort({ status: 1, createdAt: -1 })
     .skip(skip)
     .limit(limit);
 

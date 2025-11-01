@@ -4,10 +4,13 @@ import {
   updateCustomer,
   getAllCustomers,
   getCustomerById,
+  getCustomersByQuery,
 } from "./customer.controller.js";
 import { authMiddleware } from "../../middleware/auth.js";
 
 const router = express.Router();
+
+router.get("/", getCustomersByQuery);
 
 // add new customer
 router.post("/add", authMiddleware, createCustomer);

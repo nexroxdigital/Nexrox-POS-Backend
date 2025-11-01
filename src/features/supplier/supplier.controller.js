@@ -72,3 +72,30 @@ export const updateSupplier = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+// @desc    Get  suppliers  by name, email, phone, location
+// @route   GET /api/v1/suppliers
+// @access  Admin
+export const getSuppliersByQuery = async (req, res) => {
+  try {
+    console.log("api hit");
+
+    const suppliers = await supplierService.searchSuppliers(req.query);
+
+    if (!suppliers.length) {
+      return res.status(404).json({ message: "No suppliers found" });
+    }
+
+    res.status(200).json({
+      success: true,
+      count: suppliers.length,
+      data: suppliers,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};

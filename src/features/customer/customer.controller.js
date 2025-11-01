@@ -108,3 +108,32 @@ export const getCustomerById = async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 };
+
+// @desc    Get  customers  by name, email, phone, location
+// @route   GET /api/v1/customers/
+// @access  Admin
+export const getCustomersByQuery = async (req, res) => {
+  try {
+    console.log("api hit");
+
+    const customers = await customerService.searchCustomers(req.query);
+
+    if (!customers.length) {
+      return res.status(404).json({ message: "No customers found" });
+    }
+
+    res.status(200).json({
+      success: true,
+      count: customers.length,
+      data: customers,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
