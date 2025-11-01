@@ -23,6 +23,12 @@ const saleSchema = new mongoose.Schema(
       default: 0,
     },
 
+    // customers commission + lots commission + with out commission
+    total_profit: {
+      type: Number,
+      default: 0,
+    },
+
     items: [
       {
         productId: {
@@ -47,31 +53,29 @@ const saleSchema = new mongoose.Schema(
               type: Number,
               default: 0,
             },
+
+            // default lot Unit cost other wise unit cost + extra amount
             unit_price: {
               type: Number,
               required: true,
               default: 0,
             },
+
             total_price: {
               type: Number,
               default: 0, // totalPrice = kg * unitPrice
             },
+
             discount_amount: {
               type: Number,
               default: 0, // discountAmount = discountKg * unitPrice
             },
+
             selling_price: {
               type: Number,
               default: 0, // sellingPrice = totalPrice - discountAmount
             },
-            lot_commission_rate: {
-              type: Number,
-              default: 0,
-            },
-            lot_commission_amount: {
-              type: Number,
-              default: 0, // sellingPrice * (lotCommissionRate / 100)
-            },
+
             crate_type1: {
               type: Number,
               default: 0,
@@ -80,23 +84,34 @@ const saleSchema = new mongoose.Schema(
               type: Number,
               default: 0,
             },
+
+            lot_commission_rate: {
+              type: Number,
+              default: 0,
+            },
+
+            lot_commission_amount: {
+              type: Number,
+              default: 0, // sellingPrice * (lotCommissionRate / 100)
+            },
+
+            customer_commission_rate: {
+              type: Number,
+              default: 0,
+            },
+
+            customer_commission_amount: {
+              type: Number,
+              default: 0,
+            },
+
+            // without commission
+            lot_profit: {
+              type: Number,
+              default: 0,
+            },
           },
         ],
-
-        customer_commission_rate: {
-          type: Number,
-          default: 0,
-        },
-
-        customer_commission_amount: {
-          type: Number,
-          default: 0,
-        },
-
-        profit: {
-          type: Number,
-          default: 0,
-        },
       },
     ],
 

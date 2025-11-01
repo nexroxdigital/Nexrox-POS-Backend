@@ -88,37 +88,6 @@ export const updateLotStatusController = async (req, res) => {
   }
 };
 
-// Controller to check duplicate lot name
-// @route   GET /api/v1/inventoryLots/check-name
-// @access  Admins
-export const checkDuplicateLotName = async (req, res) => {
-  try {
-    // Get lot_name from query instead of body
-    const lot_name = req.query.lot_name;
-    console.log(lot_name);
-
-    if (!lot_name) {
-      return res.status(400).json({
-        success: false,
-        message: "Lot name is required",
-      });
-    }
-
-    const exists = await inventoryLotsService.isLotNameDuplicate(lot_name);
-
-    res.status(200).json({
-      success: true,
-      lot_name,
-      isDuplicate: exists,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
 // Controller to get all in-stock loots
 // @route   GET /api/v1/inventoryLots/in-stock
 // @access  Admins

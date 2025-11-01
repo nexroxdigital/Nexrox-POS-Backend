@@ -238,13 +238,6 @@ export const updateLotStatus = async (lotId, newStatus) => {
   return lot;
 };
 
-// @desc Check if a lot name already exists
-// @access  Admin
-export const isLotNameDuplicate = async (lotName) => {
-  const existingLot = await inventoryLotsModel.findOne({ lot_name: lotName });
-  return !!existingLot;
-};
-
 // @desc Controller to get all in-stock loots
 // @access  Admin
 export const getAllInStockLots = async () => {

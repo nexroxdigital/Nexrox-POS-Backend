@@ -35,7 +35,7 @@ const inventoryLotsSchema = new mongoose.Schema(
       ref: "Supplier",
       required: true,
     },
-    
+
     purchaseListId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Purchase",
@@ -82,15 +82,13 @@ const inventoryLotsSchema = new mongoose.Schema(
         type: Number,
         default: 0,
       },
+
       customerProfit: {
         type: Number,
         default: 0,
       },
+
       totalProfit: {
-        type: Number,
-        default: 0,
-      },
-      totalProfitWithoutComm: {
         type: Number,
         default: 0,
       },
