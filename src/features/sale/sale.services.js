@@ -62,9 +62,11 @@ export const createSale = async (saleData) => {
       { session, new: true }
     );
 
+    let lotIds = [];
     // 6. Update inventory lots
     for (const item of saleData.items) {
       for (const lot of item.selected_lots) {
+        lotIds.push(lot.lotId);
         // Get current lot data
         const inventoryLot = await inventoryLotsModel
           .findById(lot.lotId)
@@ -112,16 +114,15 @@ export const createSale = async (saleData) => {
         saleId: sale._id.toString(),
         lots_Ids: lotIds,
       },
-      total_Sell: totalSell,
-      lot_Commission: saleData.total_lots_commission || 0,
-      customer_Commission: saleData.total_custom_commission || 0,
-      total_Income:
-        (saleData.total_lots_commission || 0) +
-        (saleData.total_custom_commission || 0),
-      total_Profit_Without_Commission: totalProfitWithoutCommission,
-      received:
-        (saleData.payment_details.received_amount || 0) +
-        (saleData.payment_details.received_amount_from_balance || 0),
+      total_Sell: saleData.payment_details.payable_amount,
+      lot_Commission: saleData.total_lots_commission,
+      customer_Commission: saleData.total_custom_commission,
+
+      total_Income: saleData.total_profit,
+
+      received_amount: saleData.payment_details.received_amount || 0,
+      received_amount_from_balance:
+        saleData.payment_details.received_amount_from_balance || 0,
       due: saleData.payment_details.due_amount || 0,
     };
 

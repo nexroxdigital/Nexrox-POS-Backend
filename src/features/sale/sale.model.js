@@ -73,7 +73,7 @@ const saleSchema = new mongoose.Schema(
 
             selling_price: {
               type: Number,
-              default: 0, // sellingPrice = totalPrice - discountAmount
+              default: 0, // sellingPrice
             },
 
             crate_type1: {

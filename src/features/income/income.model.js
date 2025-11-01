@@ -39,7 +39,12 @@ const incomeSchema = new mongoose.Schema(
       default: 0,
     },
 
-    received: {
+    received_amount: {
+      type: Number,
+      default: 0,
+    },
+
+    received_amount_from_balance: {
       type: Number,
       default: 0,
     },
