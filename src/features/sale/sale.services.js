@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 import customerModel from "../customer/customer.model.js";
 import incomeModel from "../income/income.model.js";
 import inventoryLotsModel from "../inventoryLots/inventoryLots.model.js";
