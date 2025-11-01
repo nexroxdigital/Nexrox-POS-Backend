@@ -38,3 +38,32 @@ export const getAllCustomers = async (page, limit) => {
 export const getCustomerById = async (id) => {
   return await customerModel.findById(id);
 };
+
+// @desc Get  customers  by name, email, phone, location
+// @access Admin
+export const searchCustomers = async (query) => {
+  const { name, email, phone, location } = query;
+
+  // Build dynamic filter
+  const filter = {};
+
+  if (name) {
+    filter["basic_info.name"] = { $regex: name, $options: "i" };
+  }
+
+  if (email) {
+    filter["contact_info.email"] = { $regex: email, $options: "i" };
+  }
+
+  if (phone) {
+    filter["contact_info.phone"] = { $regex: phone, $options: "i" };
+  }
+
+  if (location) {
+    filter["contact_info.location"] = { $regex: location, $options: "i" };
+  }
+
+  // Find matching customers
+  const customers = await customerModel.find(filter);
+  return customers;
+};

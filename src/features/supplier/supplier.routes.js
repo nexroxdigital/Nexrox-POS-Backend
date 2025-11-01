@@ -3,10 +3,13 @@ import {
   createSupplier,
   getAllSuppliers,
   getSupplierById,
+  getSuppliersByQuery,
   updateSupplier,
 } from "./supplier.controller.js";
 
 const router = express.Router();
+
+router.get("/", getSuppliersByQuery);
 
 // add suppliers
 router.post("/add", createSupplier);

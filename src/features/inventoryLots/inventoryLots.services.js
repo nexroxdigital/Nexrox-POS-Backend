@@ -169,7 +169,7 @@ export const getAllLots = async (page, limit) => {
     .populate("productsId", "productName")
     .populate("supplierId", "basic_info")
     .populate("purchaseListId", "purchase_date status")
-    .sort({ createdAt: -1 })
+    .sort({ status: 1, createdAt: -1 })
     .skip(skip)
     .limit(limit);
 
@@ -236,13 +236,6 @@ export const updateLotStatus = async (lotId, newStatus) => {
   await lot.save();
 
   return lot;
-};
-
-// @desc Check if a lot name already exists
-// @access  Admin
-export const isLotNameDuplicate = async (lotName) => {
-  const existingLot = await inventoryLotsModel.findOne({ lot_name: lotName });
-  return !!existingLot;
 };
 
 // @desc Controller to get all in-stock loots

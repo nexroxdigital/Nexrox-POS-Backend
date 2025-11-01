@@ -127,6 +127,87 @@ export const supplierPaths = {
     },
   },
 
+  "/api/v1/suppliers": {
+    get: {
+      tags: ["Suppliers"],
+      summary: "Search suppliers by query",
+      description:
+        "Search and filter suppliers by name, email, phone, or location",
+      parameters: [
+        {
+          in: "query",
+          name: "name",
+          schema: {
+            type: "string",
+          },
+          description: "Search by supplier name",
+          example: "Rahman Suppliers",
+        },
+        {
+          in: "query",
+          name: "email",
+          schema: {
+            type: "string",
+          },
+          description: "Search by supplier email",
+          example: "rahman@example.com",
+        },
+        {
+          in: "query",
+          name: "phone",
+          schema: {
+            type: "string",
+          },
+          description: "Search by supplier phone number",
+          example: "+8801712345678",
+        },
+        {
+          in: "query",
+          name: "location",
+          schema: {
+            type: "string",
+          },
+          description: "Search by supplier location",
+          example: "Dhaka",
+        },
+      ],
+      responses: {
+        200: {
+          description: "Suppliers retrieved successfully",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  status: {
+                    type: "string",
+                    example: "success",
+                  },
+                  data: {
+                    type: "array",
+                    items: {
+                      $ref: "#/components/schemas/Supplier",
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        500: {
+          description: "Server error",
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/Error",
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+
   "/api/v1/suppliers/add": {
     post: {
       tags: ["Suppliers"],

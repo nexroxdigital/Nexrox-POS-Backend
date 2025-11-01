@@ -133,4 +133,69 @@ export const userPaths = {
       },
     },
   },
+
+  "/api/v1/users/role/{role}": {
+    get: {
+      tags: ["Users"],
+      summary: "Get users by role",
+      description: "Filter and retrieve users by their role",
+      parameters: [
+        {
+          in: "path",
+          name: "role",
+          required: true,
+          schema: {
+            type: "string",
+            enum: ["admin", "user", "manager"],
+          },
+          description: "User role to filter by",
+          example: "user",
+        },
+      ],
+      responses: {
+        200: {
+          description: "Users retrieved successfully",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  status: {
+                    type: "string",
+                    example: "success",
+                  },
+                  data: {
+                    type: "array",
+                    items: {
+                      $ref: "#/components/schemas/User",
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        400: {
+          description: "Invalid role",
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/Error",
+              },
+            },
+          },
+        },
+        500: {
+          description: "Server error",
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/Error",
+              },
+            },
+          },
+        },
+      },
+    },
+  },
 };

@@ -20,5 +20,19 @@ export async function getAllUsers(page, limit) {
 }
 
 export async function getUserById(id) {
-  return await User.findById(id);
+  return await userModel.findById(id);
 }
+
+export const getUsersByRole = async (role) => {
+  // Validate role input
+  const validRoles = ["user", "admin", "manager", "operator", "staff"];
+
+  if (!validRoles.includes(role)) {
+    throw new Error("Invalid role. Allowed roles: user, admin, staff");
+  }
+
+  // Query users by role
+  const users = await userModel.find({ role }).select("-password"); // hide passwords
+
+  return users;
+};
