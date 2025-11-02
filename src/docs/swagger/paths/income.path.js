@@ -1,5 +1,5 @@
 export const incomePaths = {
-  "/api/v1/incomes/all": {
+  "/api/v1/income/all": {
     get: {
       tags: ["Incomes"],
       summary: "Get all incomes",
@@ -106,7 +106,7 @@ export const incomePaths = {
     },
   },
 
-  "/api/v1/incomes/details/{id}": {
+  "/api/v1/income/details/{id}": {
     get: {
       tags: ["Incomes"],
       summary: "Get income by ID",
@@ -168,7 +168,7 @@ export const incomePaths = {
     },
   },
 
-  "/api/v1/incomes/stats/summary": {
+  "/api/v1/income/stats/summary": {
     get: {
       tags: ["Incomes"],
       summary: "Get income statistics summary",
@@ -265,7 +265,7 @@ export const incomePaths = {
     },
   },
 
-  "/api/v1/incomes/periods": {
+  "/api/v1/income/periods": {
     get: {
       tags: ["Incomes"],
       summary: "Get all income periods",
