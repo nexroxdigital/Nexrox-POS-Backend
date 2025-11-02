@@ -2218,6 +2218,148 @@ export const saleSchemas = {
   },
 };
 
+// income schema
+export const incomeSchemas = {
+  Income: {
+    type: "object",
+    required: ["sellDate", "information", "total_Sell"],
+    properties: {
+      _id: {
+        type: "string",
+        description: "Auto-generated MongoDB ID",
+        example: "507f1f77bcf86cd799439011",
+      },
+      sellDate: {
+        type: "string",
+        format: "date-time",
+        description: "Date of the sale",
+        example: "2025-10-25T10:30:00.000Z",
+      },
+      information: {
+        type: "object",
+        required: ["saleId"],
+        properties: {
+          saleId: {
+            type: "string",
+            description: "Sale ID reference",
+            example: "507f1f77bcf86cd799439012",
+          },
+          lots_Ids: {
+            type: "array",
+            description: "Array of inventory lot IDs",
+            items: {
+              type: "string",
+              example: "507f1f77bcf86cd799439013",
+            },
+          },
+        },
+      },
+      total_Sell: {
+        type: "number",
+        description: "Total selling amount",
+        example: 50000,
+      },
+      lot_Commission: {
+        type: "number",
+        description: "Commission from lots",
+        example: 2500,
+      },
+      customer_Commission: {
+        type: "number",
+        description: "Commission from customer",
+        example: 1500,
+      },
+      total_Income: {
+        type: "number",
+        description: "Total income amount",
+        example: 46000,
+      },
+      received_amount: {
+        type: "number",
+        description: "Amount received from customer",
+        example: 45000,
+      },
+      received_amount_from_balance: {
+        type: "number",
+        description: "Amount received from customer balance",
+        example: 1000,
+      },
+      due: {
+        type: "number",
+        description: "Due amount remaining",
+        example: 0,
+      },
+      createdAt: {
+        type: "string",
+        format: "date-time",
+        description: "Income creation timestamp",
+      },
+      updatedAt: {
+        type: "string",
+        format: "date-time",
+        description: "Income last update timestamp",
+      },
+    },
+  },
+
+  IncomeInput: {
+    type: "object",
+    required: ["sellDate", "information", "total_Sell"],
+    properties: {
+      sellDate: {
+        type: "string",
+        format: "date-time",
+        example: "2025-10-25T10:30:00.000Z",
+      },
+      information: {
+        type: "object",
+        required: ["saleId"],
+        properties: {
+          saleId: {
+            type: "string",
+            example: "507f1f77bcf86cd799439012",
+          },
+          lots_Ids: {
+            type: "array",
+            items: {
+              type: "string",
+              example: "507f1f77bcf86cd799439013",
+            },
+          },
+        },
+      },
+      total_Sell: {
+        type: "number",
+        example: 50000,
+      },
+      lot_Commission: {
+        type: "number",
+        example: 2500,
+      },
+      customer_Commission: {
+        type: "number",
+        example: 1500,
+      },
+      total_Income: {
+        type: "number",
+        example: 46000,
+      },
+      received_amount: {
+        type: "number",
+        example: 45000,
+      },
+      received_amount_from_balance: {
+        type: "number",
+        example: 1000,
+      },
+      due: {
+        type: "number",
+        example: 0,
+      },
+    },
+  },
+};
+
 // Combine all schemas
 export const schemas = {
   ...activityLogSchemas,
@@ -2231,4 +2373,5 @@ export const schemas = {
   ...purchaseSchemas,
   ...inventoryLotsSchemas,
   ...saleSchemas,
+  ...incomeSchemas,
 };

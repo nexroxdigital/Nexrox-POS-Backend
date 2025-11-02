@@ -161,6 +161,36 @@ export const purchasePaths = {
           description: "MongoDB ObjectId of the supplier",
           example: "507f1f77bcf86cd799439011",
         },
+        {
+          in: "query",
+          name: "page",
+          schema: { type: "integer", default: 1 },
+          description: "Page number for pagination",
+        },
+        {
+          in: "query",
+          name: "limit",
+          schema: { type: "integer", default: 10 },
+          description: "Number of items per page",
+        },
+        {
+          in: "query",
+          name: "search",
+          schema: { type: "string" },
+          description: "Search keyword to filter purchases",
+        },
+        {
+          in: "query",
+          name: "fromDate",
+          schema: { type: "string", format: "date" },
+          description: "Filter results from this date (inclusive)",
+        },
+        {
+          in: "query",
+          name: "toDate",
+          schema: { type: "string", format: "date" },
+          description: "Filter results up to this date (inclusive)",
+        },
       ],
       responses: {
         200: {
@@ -170,15 +200,10 @@ export const purchasePaths = {
               schema: {
                 type: "object",
                 properties: {
-                  status: {
-                    type: "string",
-                    example: "success",
-                  },
+                  status: { type: "string", example: "success" },
                   data: {
                     type: "array",
-                    items: {
-                      $ref: "#/components/schemas/Purchase",
-                    },
+                    items: { $ref: "#/components/schemas/Purchase" },
                   },
                 },
               },
@@ -189,9 +214,7 @@ export const purchasePaths = {
           description: "Supplier not found",
           content: {
             "application/json": {
-              schema: {
-                $ref: "#/components/schemas/Error",
-              },
+              schema: { $ref: "#/components/schemas/Error" },
             },
           },
         },
@@ -199,9 +222,7 @@ export const purchasePaths = {
           description: "Server error",
           content: {
             "application/json": {
-              schema: {
-                $ref: "#/components/schemas/Error",
-              },
+              schema: { $ref: "#/components/schemas/Error" },
             },
           },
         },

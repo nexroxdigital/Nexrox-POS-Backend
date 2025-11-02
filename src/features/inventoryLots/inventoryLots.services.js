@@ -5,59 +5,6 @@ import inventoryLotsModel from "./inventoryLots.model.js";
 
 // @desc create lost from purchase list also update crate in supplier profile
 // @access  Admin
-// export const createLotsForPurchase = async (purchaseId) => {
-//   const selectedData = await purchaseModel.findById(purchaseId);
-
-//   if (!selectedData) {
-//     throw new Error("Purchase not found");
-//   }
-
-//   if (selectedData.is_lots_created) {
-//     throw new Error("Lots already created for this purchase");
-//   }
-
-//   const lotsToCreate = [];
-
-//   for (const item of selectedData.items) {
-//     for (const lot of item.lots) {
-//       // Check if lot_name already exists
-//       const existingLot = await inventoryLotsModel.findOne({
-//         lot_name: lot.lot_name,
-//       });
-//       if (existingLot) {
-//         throw new Error(`Lot name "${lot.lot_name}" already exists`);
-//       }
-
-//       lotsToCreate.push({
-//         lot_name: lot.lot_name,
-//         purchase_date: selectedData.purchase_date,
-//         status: "in stock",
-//         hasCommission: lot.commission_rate > 0,
-//         productsId: lot.productId,
-//         supplierId: item.supplier,
-//         purchaseListId: purchaseId,
-//         carat: {
-//           carat_Type_1: lot.carat.carat_Type_1,
-//           carat_Type_2: lot.carat.carat_Type_2,
-//         },
-//         costs: {
-//           unitCost: lot.unit_Cost,
-//           commissionRate: lot.commission_rate || 0,
-//         },
-//       });
-//     }
-//   }
-
-//   // Create lots
-//   await inventoryLotsModel.insertMany(lotsToCreate);
-
-//   // Update purchase
-//   selectedData.is_lots_created = true;
-//   await selectedData.save();
-
-//   return lotsToCreate.length; // return number of lots created
-// };
-
 export const createLotsForPurchase = async (purchaseId) => {
   const session = await mongoose.startSession();
   session.startTransaction();
@@ -200,21 +147,126 @@ export const getLotById = async (lotId) => {
 
 // @desc Get all lots by supplier
 // @access  Admin
-export const getAllLotsBySupplier = async (id) => {
-  console.log(id);
+export const getAllLotsBySupplier = async (
+  supplierId,
+  page,
+  limit,
+  filters = {}
+) => {
+  const skip = (page - 1) * limit;
 
-  const lot = await inventoryLotsModel
-    .find({ supplierId: id })
-    .sort({ createdAt: -1 })
-    .populate("productsId", "productName description")
-    .populate("supplierId", "name email")
-    .populate("purchaseListId", "purchase_date status");
+  const aggregationPipeline = [
+    // Stage 1: Match inventory lots by supplier
+    {
+      $match: {
+        supplierId: new mongoose.Types.ObjectId(supplierId),
+        ...(filters.fromDate || filters.toDate
+          ? {
+              createdAt: {
+                ...(filters.fromDate && { $gte: new Date(filters.fromDate) }),
+                ...(filters.toDate && { $lte: new Date(filters.toDate) }),
+              },
+            }
+          : {}),
+      },
+    },
 
-  const total = lot.length;
+    // Stage 2: Lookup products with search filter
+    {
+      $lookup: {
+        from: "products", 
+        localField: "productsId",
+        foreignField: "_id",
+        as: "productsId",
+        pipeline: [
+          // Apply product search filter here
+          ...(filters.search
+            ? [
+                {
+                  $match: {
+                    productName: { $regex: filters.search, $options: "i" },
+                  },
+                },
+              ]
+            : []),
+          {
+            $project: { productName: 1, description: 1, createdAt: 1 },
+          },
+        ],
+      },
+    },
+    // Stage 3: Filter out lots with empty products (ONLY if search is applied)
+    ...(filters.search
+      ? [
+          {
+            $match: {
+              "productsId.0": { $exists: true }, // At least one product exists
+            },
+          },
+        ]
+      : []),
+    // Stage 4: Lookup supplier
+    {
+      $lookup: {
+        from: "suppliers",
+        localField: "supplierId",
+        foreignField: "_id",
+        as: "supplierId",
+        pipeline: [
+          {
+            $project: { name: 1, email: 1 },
+          },
+        ],
+      },
+    },
+    {
+      $unwind: "$supplierId", // Convert array to object
+    },
+    // Stage 5: Lookup purchase list
+    {
+      $lookup: {
+        from: "purchaselists", // Make sure this matches your collection name
+        localField: "purchaseListId",
+        foreignField: "_id",
+        as: "purchaseListId",
+        pipeline: [
+          {
+            $project: { purchase_date: 1, status: 1 },
+          },
+        ],
+      },
+    },
+    {
+      $unwind: {
+        path: "$purchaseListId",
+        preserveNullAndEmptyArrays: true, // Keep lots even if no purchase list
+      },
+    },
+    // Stage 6: Sort and paginate
+    { $sort: { createdAt: -1 } },
+  ];
+
+  // Execute aggregation for data
+  const lots = await inventoryLotsModel.aggregate([
+    ...aggregationPipeline,
+    { $skip: skip },
+    { $limit: limit },
+  ]);
+
+  // Execute aggregation for total count
+  const totalResult = await inventoryLotsModel.aggregate([
+    ...aggregationPipeline,
+    { $count: "total" },
+  ]);
+
+  const total = totalResult[0]?.total || 0;
 
   return {
     total,
-    lot,
+    page,
+    limit,
+    totalPages: Math.ceil(total / limit),
+    lots,
   };
 };
 

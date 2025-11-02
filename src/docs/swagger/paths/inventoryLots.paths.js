@@ -128,73 +128,6 @@ export const inventoryLotsPaths = {
     },
   },
 
-  "/api/v1/inventoryLots/check-name": {
-    get: {
-      tags: ["Inventory Lots"],
-      summary: "Check if lot name already exists",
-      description:
-        "Check for duplicate lot names before creating a new inventory lot",
-      parameters: [
-        {
-          in: "query",
-          name: "lot_name",
-          required: true,
-          schema: {
-            type: "string",
-          },
-          description: "Lot name to check for duplicates",
-          example: "RS-291020-BANANA-30",
-        },
-      ],
-      responses: {
-        200: {
-          description: "Lot name availability checked successfully",
-          content: {
-            "application/json": {
-              schema: {
-                type: "object",
-                properties: {
-                  status: {
-                    type: "string",
-                    example: "success",
-                  },
-                  exists: {
-                    type: "boolean",
-                    example: false,
-                  },
-                  message: {
-                    type: "string",
-                    example: "Lot name is available",
-                  },
-                },
-              },
-            },
-          },
-        },
-        400: {
-          description: "Missing lot_name parameter",
-          content: {
-            "application/json": {
-              schema: {
-                $ref: "#/components/schemas/Error",
-              },
-            },
-          },
-        },
-        500: {
-          description: "Server error",
-          content: {
-            "application/json": {
-              schema: {
-                $ref: "#/components/schemas/Error",
-              },
-            },
-          },
-        },
-      },
-    },
-  },
-
   "/api/v1/inventoryLots/in-stock": {
     get: {
       tags: ["Inventory Lots"],
@@ -254,6 +187,36 @@ export const inventoryLotsPaths = {
           description: "MongoDB ObjectId of the supplier",
           example: "507f1f77bcf86cd799439011",
         },
+        {
+          in: "query",
+          name: "page",
+          schema: { type: "integer", default: 1 },
+          description: "Page number for pagination",
+        },
+        {
+          in: "query",
+          name: "limit",
+          schema: { type: "integer", default: 10 },
+          description: "Number of items per page",
+        },
+        {
+          in: "query",
+          name: "search",
+          schema: { type: "string" },
+          description: "Search keyword to filter inventory lots",
+        },
+        {
+          in: "query",
+          name: "fromDate",
+          schema: { type: "string", format: "date" },
+          description: "Filter results from this date (inclusive)",
+        },
+        {
+          in: "query",
+          name: "toDate",
+          schema: { type: "string", format: "date" },
+          description: "Filter results up to this date (inclusive)",
+        },
       ],
       responses: {
         200: {
@@ -263,15 +226,10 @@ export const inventoryLotsPaths = {
               schema: {
                 type: "object",
                 properties: {
-                  status: {
-                    type: "string",
-                    example: "success",
-                  },
+                  status: { type: "string", example: "success" },
                   data: {
                     type: "array",
-                    items: {
-                      $ref: "#/components/schemas/InventoryLot",
-                    },
+                    items: { $ref: "#/components/schemas/InventoryLot" },
                   },
                 },
               },
@@ -282,9 +240,7 @@ export const inventoryLotsPaths = {
           description: "Supplier not found",
           content: {
             "application/json": {
-              schema: {
-                $ref: "#/components/schemas/Error",
-              },
+              schema: { $ref: "#/components/schemas/Error" },
             },
           },
         },
@@ -292,9 +248,7 @@ export const inventoryLotsPaths = {
           description: "Server error",
           content: {
             "application/json": {
-              schema: {
-                $ref: "#/components/schemas/Error",
-              },
+              schema: { $ref: "#/components/schemas/Error" },
             },
           },
         },

@@ -52,7 +52,14 @@ export const getAllSales = async (req, res) => {
 // @access  Admin
 export const salesByCustomer = async (req, res) => {
   try {
-    const sales = await saleService.getAllSalesByCustomer(req.params.id);
+    const { page = 1, limit = 10, search, fromDate, toDate } = req.query;
+
+    const sales = await saleService.getAllSalesByCustomer(
+      req.params.id,   
+      parseInt(page),
+      parseInt(limit),
+      { search, fromDate, toDate }
+    );
 
     res.status(200).json({
       success: true,
