@@ -145,7 +145,7 @@ export const purchasePaths = {
     },
   },
 
-  "/api/v1/purchases/by-supplier/{id}": {
+  "/api/v1/purchase/by-supplier/{id}": {
     get: {
       tags: ["Purchases"],
       summary: "Get purchases by supplier ID",
