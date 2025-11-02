@@ -173,34 +173,220 @@ export const getAllSales = async (page, limit) => {
   };
 };
 
-// @desc    Get all sales
+// @desc    Get all sales by customer with search and pagination
 // @access  Admin
-export const getAllSalesByCustomer = async (id) => {
-  console.log(id);
+// @desc    Get all sales by customer with search and pagination
+// @access  Admin
+export const getAllSalesByCustomer = async (
+  customerId,
+  page,
+  limit,
+  filters = {}
+) => {
+  const skip = (page - 1) * limit;
 
-  const sales = await Sale.find({ customerId: id })
-    .sort({ createdAt: -1 })
-    .populate(
-      "customerId",
-      "basic_info.name contact_info.phone contact_info.email"
-    )
-    .populate({
-      path: "items.productId",
-      select: "productName basePrice categoryId",
-      populate: {
-        path: "categoryId",
-        select: "categoryName",
+  const aggregationPipeline = [
+    // Stage 1: Match sales by customer
+    {
+      $match: {
+        customerId: new mongoose.Types.ObjectId(customerId),
       },
-    })
-    .populate("items.selected_lots.lotId", "lot_name commissionRate");
+    },
+    // Stage 2: Unwind items to search within them
+    {
+      $unwind: "$items",
+    },
+    // Stage 3: Lookup product details with search filter
+    {
+      $lookup: {
+        from: "products",
+        localField: "items.productId",
+        foreignField: "_id",
+        as: "productData",
+        pipeline: [
+          // Apply product search filter here
+          ...(filters.search
+            ? [
+                {
+                  $match: {
+                    productName: { $regex: filters.search, $options: "i" },
+                  },
+                },
+              ]
+            : []),
+          // Lookup category
+          {
+            $lookup: {
+              from: "categories",
+              localField: "categoryId",
+              foreignField: "_id",
+              as: "categoryData",
+              pipeline: [
+                {
+                  $project: { categoryName: 1 },
+                },
+              ],
+            },
+          },
+          {
+            $unwind: {
+              path: "$categoryData",
+              preserveNullAndEmptyArrays: true,
+            },
+          },
+          {
+            $project: {
+              productName: 1,
+              basePrice: 1,
+              categoryId: 1,
+              categoryName: "$categoryData.categoryName",
+            },
+          },
+        ],
+      },
+    },
+    // Stage 4: Replace productId with the actual product data
+    {
+      $addFields: {
+        "items.productId": { $arrayElemAt: ["$productData", 0] },
+      },
+    },
+    // Stage 5: Lookup lot details
+    {
+      $lookup: {
+        from: "inventorylots",
+        localField: "items.selected_lots.lotId",
+        foreignField: "_id",
+        as: "lotData",
+        pipeline: [
+          {
+            $project: { lot_name: 1, commissionRate: 1 },
+          },
+        ],
+      },
+    },
+    // Stage 6: Replace lotId with actual lot data in selected_lots
+    {
+      $addFields: {
+        "items.selected_lots": {
+          $map: {
+            input: "$items.selected_lots",
+            as: "lot",
+            in: {
+              $mergeObjects: [
+                "$$lot",
+                {
+                  lotId: {
+                    $arrayElemAt: [
+                      {
+                        $filter: {
+                          input: "$lotData",
+                          as: "ld",
+                          cond: { $eq: ["$$ld._id", "$$lot.lotId"] },
+                        },
+                      },
+                      0,
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        },
+      },
+    },
+    // Stage 7: Filter out items with empty products (ONLY if search is applied)
+    ...(filters.search
+      ? [
+          {
+            $match: {
+              "items.productId": { $ne: null }, // Product exists after filtering
+            },
+          },
+        ]
+      : []),
+    // Stage 8: Lookup customer details
+    {
+      $lookup: {
+        from: "customers",
+        localField: "customerId",
+        foreignField: "_id",
+        as: "customerData",
+        pipeline: [
+          {
+            $project: {
+              "basic_info.name": 1,
+              "contact_info.phone": 1,
+              "contact_info.email": 1,
+            },
+          },
+        ],
+      },
+    },
+    {
+      $addFields: {
+        customerId: { $arrayElemAt: ["$customerData", 0] },
+      },
+    },
+    // Stage 9: Remove temporary fields
+    {
+      $project: {
+        productData: 0,
+        lotData: 0,
+        customerData: 0,
+      },
+    },
+    // Stage 10: Group back by sale
+    {
+      $group: {
+        _id: "$_id",
+        createdAt: { $first: "$createdAt" },
+        updatedAt: { $first: "$updatedAt" },
+        sale_date: { $first: "$sale_date" },
+        customerId: { $first: "$customerId" },
+        total_custom_commission: { $first: "$total_custom_commission" },
+        total_lots_commission: { $first: "$total_lots_commission" },
+        total_profit: { $first: "$total_profit" },
+        payment_details: { $first: "$payment_details" },
+        items: { $push: "$items" },
+      },
+    },
+    // Stage 11: Filter out sales with empty items (if search applied)
+    ...(filters.search
+      ? [
+          {
+            $match: {
+              "items.0": { $exists: true }, // At least one item exists
+            },
+          },
+        ]
+      : []),
+    // Stage 12: Sort
+    { $sort: { createdAt: -1 } },
+  ];
 
-  const total = sales.length;
+  // Execute aggregation for data
+  const sales = await Sale.aggregate([
+    ...aggregationPipeline,
+    { $skip: skip },
+    { $limit: limit },
+  ]);
+
+  // Execute aggregation for total count
+  const totalResult = await Sale.aggregate([
+    ...aggregationPipeline,
+    { $count: "total" },
+  ]);
+
+  const total = totalResult[0]?.total || 0;
 
   return {
     total,
+    page,
+    limit,
+    totalPages: Math.ceil(total / limit),
     sales,
   };
-  return {};
 };
 
 // @desc    Get sale details by ID

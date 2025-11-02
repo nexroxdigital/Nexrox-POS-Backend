@@ -55,8 +55,13 @@ export const getAllPurchases = async (req, res) => {
 // @access  Admin
 export const purchasesBySupplier = async (req, res) => {
   try {
+    const { page = 1, limit = 10, search, fromDate, toDate } = req.query;
+
     const purchases = await purchaseService.getAllPurchasesBySupplier(
-      req.params.id
+      req.params.id,
+      parseInt(page),
+      parseInt(limit),
+      { search, fromDate, toDate }
     );
 
     res.status(200).json({

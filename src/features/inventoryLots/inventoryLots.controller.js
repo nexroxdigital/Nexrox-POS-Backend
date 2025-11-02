@@ -38,18 +38,25 @@ export const fetchAllLots = async (req, res) => {
 };
 
 // @desc Get all lots by supplier
-// @route   GET /api/v1/inventoryLots/all
+// @route   GET /api/v1/inventoryLots/by-supplier
 // @access  Admin
 export const lotsBySupplier = async (req, res) => {
   try {
-    const lots = await inventoryLotsService.getAllLotsBySupplier(req.params.id);
+    const { page = 1, limit = 10, search, fromDate, toDate } = req.query;
+
+    const lots = await inventoryLotsService.getAllLotsBySupplier(
+      req.params.id,
+      parseInt(page),
+      parseInt(limit),
+      { search, fromDate, toDate }
+    );
 
     res.status(200).json({
       success: true,
-      data: lots,
+      ...lots,
     });
   } catch (error) {
-    return res.status(404).json({ message: error.message });
+    res.status(500).json({ success: false, message: error.message });
   }
 };
 
