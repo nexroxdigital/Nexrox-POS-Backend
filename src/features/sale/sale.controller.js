@@ -27,8 +27,11 @@ export const createSale = async (req, res) => {
 // @access  Admin
 export const getAllSales = async (req, res) => {
   try {
-    const { page = 1, limit = 10 } = req.query;
+    const { page = 1, limit = 10, search } = req.query;
+    console.log(req.query);
+
     const result = await saleService.getAllSales(
+      search,
       parseInt(page),
       parseInt(limit)
     );
@@ -55,7 +58,7 @@ export const salesByCustomer = async (req, res) => {
     const { page = 1, limit = 10, search, fromDate, toDate } = req.query;
 
     const sales = await saleService.getAllSalesByCustomer(
-      req.params.id,   
+      req.params.id,
       parseInt(page),
       parseInt(limit),
       { search, fromDate, toDate }
