@@ -142,27 +142,81 @@ export const createSale = async (saleData) => {
 
 // @desc    Get all sales
 // @access  Admin
-export const getAllSales = async (page, limit) => {
+export const getAllSales = async (search, page, limit) => {
   const skip = (page - 1) * limit;
-  const total = await Sale.countDocuments();
 
-  const sales = await Sale.find()
-    .sort({ createdAt: -1 })
-    .skip(skip)
-    .limit(limit)
-    .populate(
-      "customerId",
-      "basic_info.name contact_info.phone contact_info.email"
-    )
-    .populate({
+  let pipeline = [];
+
+  if (search) {
+    // Pipeline with search
+    pipeline = [
+      // Step 1: Unwind items array
+      { $unwind: "$items" },
+
+      // Step 2: Unwind selected_lots array
+      { $unwind: "$items.selected_lots" },
+
+      // Step 3: Lookup lot details for matching
+      {
+        $lookup: {
+          from: "inventorylots", // Make sure this matches your collection name
+          localField: "items.selected_lots.lotId",
+          foreignField: "_id",
+          as: "lotInfo",
+        },
+      },
+
+      // Step 4: Unwind lotInfo
+      { $unwind: { path: "$lotInfo", preserveNullAndEmptyArrays: true } },
+
+      // Step 5: Match the lot_name (case-insensitive search)
+      {
+        $match: {
+          "lotInfo.lot_name": {
+            $regex: search,
+            $options: "i",
+          },
+        },
+      },
+
+      // Step 6: Sort by createdAt
+      { $sort: { createdAt: -1 } },
+    ];
+  } else {
+    // Pipeline without search
+    pipeline = [{ $sort: { createdAt: -1 } }];
+  }
+
+  // Count total documents
+  const countPipeline = [...pipeline, { $count: "total" }];
+  const countResult = await Sale.aggregate(countPipeline);
+  const total = countResult.length > 0 ? countResult[0].total : 0;
+
+  // Add pagination
+  pipeline.push({ $skip: skip }, { $limit: limit });
+
+  // Execute aggregation
+  let sales = await Sale.aggregate(pipeline);
+
+  // Populate references
+  sales = await Sale.populate(sales, [
+    {
+      path: "customerId",
+      select: "basic_info.name contact_info.phone contact_info.email",
+    },
+    {
       path: "items.productId",
       select: "productName basePrice categoryId",
       populate: {
         path: "categoryId",
         select: "categoryName",
       },
-    })
-    .populate("items.selected_lots.lotId", "lot_name commissionRate");
+    },
+    {
+      path: "items.selected_lots.lotId",
+      select: "lot_name commissionRate",
+    },
+  ]);
 
   return {
     total,

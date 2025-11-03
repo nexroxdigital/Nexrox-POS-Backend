@@ -16,6 +16,7 @@ import purchaseRouter from "./features/purchase/purchase.router.js";
 import inventoryLotsRouter from "./features/inventoryLots/inventoryLots.router.js";
 import saleRouter from "./features/sale/sale.router.js";
 import incomeRoute from "./features/income/income.router.js";
+import balanceRoute from "./features/balance/balance.router.js";
 
 const app = express();
 const API_VERSION = process.env.API_VERSION || "/api/v1";
@@ -93,6 +94,9 @@ app.use(`${API_VERSION}/sale`, saleRouter);
 
 // inventory Lots routes
 app.use(`${API_VERSION}/income`, incomeRoute);
+
+// balance  routes
+app.use(`${API_VERSION}/balance`, balanceRoute);
 
 // 404 Handler
 app.use((req, res) => {
