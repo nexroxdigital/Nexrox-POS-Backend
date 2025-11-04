@@ -17,7 +17,7 @@ export const createBalance = async (data) => {
     const savedBalance = await balance.save({ session });
 
     // Update related profile
-    if (data.collection === "customer") {
+    if (data.role === "customer") {
       const customer = await customerModel.findByIdAndUpdate(
         data.balance_for,
         {
@@ -27,7 +27,7 @@ export const createBalance = async (data) => {
       );
 
       if (!customer) throw new Error("Customer not found");
-    } else if (data.collection === "supplier") {
+    } else if (data.role === "supplier") {
       const supplier = await supplierModel.findByIdAndUpdate(
         data.balance_for,
         {

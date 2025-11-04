@@ -28,14 +28,14 @@ const balanceSchema = new mongoose.Schema(
       enum: ["MFS", "bank", "cash"],
     },
 
-    // 
+    //
     balance_for: {
       type: String,
       required: true,
     },
 
-    // it could be supplier or customer 
-    collection: {
+    // it could be supplier or customer
+    role: {
       type: String,
       required: true,
     },

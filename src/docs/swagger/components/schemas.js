@@ -2364,7 +2364,7 @@ export const incomeSchemas = {
 export const balanceSchemas = {
   Balance: {
     type: "object",
-    required: ["date", "amount", "balance_for", "collection"],
+    required: ["date", "amount", "balance_for", "role"],
     properties: {
       _id: {
         type: "string",
@@ -2407,9 +2407,9 @@ export const balanceSchemas = {
         description: "ID of the customer or supplier",
         example: "507f1f77bcf86cd799439012",
       },
-      collection: {
+      role: {
         type: "string",
-        description: "Collection type (supplier or customer)",
+        description: "role type (supplier or customer)",
         example: "customer",
       },
       createdAt: {
@@ -2427,7 +2427,7 @@ export const balanceSchemas = {
 
   BalanceInput: {
     type: "object",
-    required: ["date", "amount", "balance_for", "collection"],
+    required: ["date", "amount", "balance_for", "role"],
     properties: {
       date: {
         type: "string",
@@ -2458,7 +2458,7 @@ export const balanceSchemas = {
         type: "string",
         example: "507f1f77bcf86cd799439012",
       },
-      collection: {
+      role: {
         type: "string",
         example: "customer",
       },
