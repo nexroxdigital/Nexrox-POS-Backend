@@ -5,6 +5,7 @@ const balanceSchema = new mongoose.Schema(
     date: {
       type: String,
       required: true,
+      default: Date.now,
     },
     amount: {
       type: Number,
@@ -12,7 +13,6 @@ const balanceSchema = new mongoose.Schema(
     },
     transaction_Id: {
       type: String,
-      required: true,
       unique: true,
     },
     slip_img: {
@@ -26,14 +26,16 @@ const balanceSchema = new mongoose.Schema(
     payment_method: {
       type: String,
       enum: ["MFS", "bank", "cash"],
-      required: true,
     },
+
+    //
     balance_for: {
       type: String,
       required: true,
     },
-    
-    collection: {
+
+    // it could be supplier or customer
+    role: {
       type: String,
       required: true,
     },

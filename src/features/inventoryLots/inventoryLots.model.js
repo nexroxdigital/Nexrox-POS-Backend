@@ -54,6 +54,16 @@ const inventoryLotsSchema = new mongoose.Schema(
       },
     },
 
+    box_quantity: {
+      type: Number,
+      default: 0,
+    },
+
+    remaining_boxes: {
+      type: Number,
+      default: 0,
+    },
+
     costs: {
       unitCost: {
         type: Number,

@@ -2360,6 +2360,112 @@ export const incomeSchemas = {
   },
 };
 
+// balance schemas
+export const balanceSchemas = {
+  Balance: {
+    type: "object",
+    required: ["date", "amount", "balance_for", "role"],
+    properties: {
+      _id: {
+        type: "string",
+        description: "Auto-generated MongoDB ID",
+        example: "507f1f77bcf86cd799439011",
+      },
+      date: {
+        type: "string",
+        description: "Date of the balance transaction",
+        example: "2025-10-25",
+      },
+      amount: {
+        type: "number",
+        description: "Transaction amount",
+        example: 5000,
+      },
+      transaction_Id: {
+        type: "string",
+        description: "Unique transaction identifier",
+        example: "TXN123456789",
+      },
+      slip_img: {
+        type: "string",
+        description: "URL to payment slip image",
+        example: "https://example.com/slip.jpg",
+      },
+      note: {
+        type: "string",
+        description: "Additional notes about the transaction",
+        example: "Payment for goods delivered",
+      },
+      payment_method: {
+        type: "string",
+        enum: ["MFS", "bank", "cash"],
+        description: "Payment method used",
+        example: "bank",
+      },
+      balance_for: {
+        type: "string",
+        description: "ID of the customer or supplier",
+        example: "507f1f77bcf86cd799439012",
+      },
+      role: {
+        type: "string",
+        description: "role type (supplier or customer)",
+        example: "customer",
+      },
+      createdAt: {
+        type: "string",
+        format: "date-time",
+        description: "Balance transaction creation timestamp",
+      },
+      updatedAt: {
+        type: "string",
+        format: "date-time",
+        description: "Balance transaction last update timestamp",
+      },
+    },
+  },
+
+  BalanceInput: {
+    type: "object",
+    required: ["date", "amount", "balance_for", "role"],
+    properties: {
+      date: {
+        type: "string",
+        example: "2025-10-25",
+      },
+      amount: {
+        type: "number",
+        example: 5000,
+      },
+      transaction_Id: {
+        type: "string",
+        example: "TXN123456789",
+      },
+      slip_img: {
+        type: "string",
+        example: "https://example.com/slip.jpg",
+      },
+      note: {
+        type: "string",
+        example: "Payment for goods delivered",
+      },
+      payment_method: {
+        type: "string",
+        enum: ["MFS", "bank", "cash"],
+        example: "bank",
+      },
+      balance_for: {
+        type: "string",
+        example: "507f1f77bcf86cd799439012",
+      },
+      role: {
+        type: "string",
+        example: "customer",
+      },
+    },
+  },
+};
+
 // Combine all schemas
 export const schemas = {
   ...activityLogSchemas,
@@ -2374,4 +2480,5 @@ export const schemas = {
   ...inventoryLotsSchemas,
   ...saleSchemas,
   ...incomeSchemas,
+  ...balanceSchemas,
 };

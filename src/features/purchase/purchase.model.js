@@ -61,6 +61,11 @@ const purchaseSchema = new mongoose.Schema(
               },
             },
 
+            box_quantity: {
+              type: Number,
+              default: 0,
+            },
+
             //  Expense Breakdown (per lot)
             expenses: {
               labour: {

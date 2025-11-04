@@ -8,8 +8,8 @@ import {
 const router = express.Router();
 
 // Routes
-router.get("/all", createBalance);
-router.get("/details/:id", getAllBalances);
-router.post("/add", getBalanceById);
+router.get("/all/:id", getAllBalances);
+router.post("/add", createBalance);
+router.get("/details/:id", getBalanceById);
 
 export default router;

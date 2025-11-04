@@ -85,6 +85,11 @@ const saleSchema = new mongoose.Schema(
               default: 0,
             },
 
+            box_quantity: {
+              type: Number,
+              default: 0,
+            },
+
             lot_commission_rate: {
               type: Number,
               default: 0,

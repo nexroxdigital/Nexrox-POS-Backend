@@ -1,7 +1,7 @@
 import * as balanceService from "./balance.services.js";
 
 // @desc    Create a new balance
-// @route   POST /api/v1/balances
+// @route   POST /api/v1/balances/add
 // @access  Admin or Accountant
 export const createBalance = async (req, res) => {
   try {
@@ -16,11 +16,21 @@ export const createBalance = async (req, res) => {
 };
 
 // @desc    Get all balances
-// @route   GET /api/v1/balances
+// @route   GET /api/v1/balances/all
 // @access  Admin or Accountant
 export const getAllBalances = async (req, res) => {
   try {
-    const balances = await balanceService.getAllBalances();
+    const balances = await balanceService.getAllBalances(
+      req.params.id,
+      parseInt(page),
+      parseInt(limit),
+      {
+        fromDate,
+        toDate,
+        role,
+      }
+    );
+
     res.status(200).json({
       message: "All balances fetched successfully",
       data: balances,
@@ -31,7 +41,7 @@ export const getAllBalances = async (req, res) => {
 };
 
 // @desc    Get balance details by ID
-// @route   GET /api/v1/balances/:id
+// @route   GET /api/v1/balances/details/:id
 // @access  Admin or Accountant
 export const getBalanceById = async (req, res) => {
   try {

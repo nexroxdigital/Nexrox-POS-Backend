@@ -96,6 +96,7 @@ export const createSale = async (saleData) => {
             inventoryLot.profits.totalProfit +
             lotCommission +
             customerCommission,
+          remaining_boxes: inventoryLot.remaining_boxes - lot.box_quantity,
         };
 
         // Apply updates to inventory lot
