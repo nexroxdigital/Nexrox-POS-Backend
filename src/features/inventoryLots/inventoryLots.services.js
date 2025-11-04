@@ -50,6 +50,8 @@ export const createLotsForPurchase = async (purchaseId) => {
           productsId: lot.productId,
           supplierId,
           purchaseListId: purchaseId,
+          box_quantity: lot.box_quantity,
+          remaining_boxes: lot.box_quantity,
           carat: {
             carat_Type_1: lot.carat.carat_Type_1,
             carat_Type_2: lot.carat.carat_Type_2,
@@ -174,7 +176,7 @@ export const getAllLotsBySupplier = async (
     // Stage 2: Lookup products with search filter
     {
       $lookup: {
-        from: "products", 
+        from: "products",
         localField: "productsId",
         foreignField: "_id",
         as: "productsId",
