@@ -8,7 +8,7 @@ import {
 const router = express.Router();
 
 // Routes
-router.get("/all", getAllBalances);
+router.get("/all/:id", getAllBalances);
 router.post("/add", createBalance);
 router.get("/details/:id", getBalanceById);
 

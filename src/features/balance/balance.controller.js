@@ -20,7 +20,17 @@ export const createBalance = async (req, res) => {
 // @access  Admin or Accountant
 export const getAllBalances = async (req, res) => {
   try {
-    const balances = await balanceService.getAllBalances();
+    const balances = await balanceService.getAllBalances(
+      req.params.id,
+      parseInt(page),
+      parseInt(limit),
+      {
+        fromDate,
+        toDate,
+        role,
+      }
+    );
+
     res.status(200).json({
       message: "All balances fetched successfully",
       data: balances,

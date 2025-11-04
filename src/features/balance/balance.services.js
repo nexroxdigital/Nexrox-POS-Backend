@@ -1,11 +1,10 @@
 import customerModel from "../customer/customer.model.js";
 import supplierModel from "../supplier/supplier.model.js";
 import Balance from "./balance.model.js";
+import mongoose from "mongoose";
 
 // @desc    Create a new balance
 // @access  Admin
-import mongoose from "mongoose";
-
 export const createBalance = async (data) => {
   console.log(data);
 
@@ -57,8 +56,32 @@ export const createBalance = async (data) => {
 
 // @desc    Get all balances
 // @access  Admin or Accountant
-export const getAllBalances = async () => {
-  return await Balance.find().sort({ createdAt: -1 });
+export const getAllBalances = async (id, page, limit, filters = {}) => {
+  const skip = (page - 1) * limit;
+
+  const query = { balance_for: id };
+
+  // Filter by date range
+  if (filters.fromDate || filters.toDate) {
+    query.sellDate = {};
+    if (filters.fromDate) query.sellDate.$gte = new Date(filters.fromDate);
+    if (filters.toDate) query.sellDate.$lte = new Date(filters.toDate);
+  }
+
+  let balances = await Balance.find(query)
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit);
+
+  const total = await Balance.countDocuments(query);
+
+  return {
+    total,
+    page,
+    limit,
+    totalPages: Math.ceil(total / limit),
+    balances,
+  };
 };
 
 // @desc    Get balance details by ID
