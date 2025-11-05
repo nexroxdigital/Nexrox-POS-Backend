@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const paymentSchema = new mongoose.Schema(
   {
@@ -7,6 +7,19 @@ const paymentSchema = new mongoose.Schema(
       required: true,
       default: Date.now,
     },
+
+    supplierId: {
+      type: Schema.Types.ObjectId,
+      ref: "Supplier",
+      required: true,
+    },
+
+    inventory_lot_ids: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "InventoryLot",
+      },
+    ],
 
     amount: {
       type: Number,
@@ -34,14 +47,6 @@ const paymentSchema = new mongoose.Schema(
       enum: ["MFS", "bank", "cash"],
       required: true,
     },
-
-    payment_targets: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "InventoryLot",
-        required: true,
-      },
-    ],
   },
   {
     timestamps: true,

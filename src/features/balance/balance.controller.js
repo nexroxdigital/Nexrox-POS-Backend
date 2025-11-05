@@ -2,7 +2,7 @@ import * as balanceService from "./balance.services.js";
 
 // @desc    Create a new balance
 // @route   POST /api/v1/balances/add
-// @access  Admin or Accountant
+// @access  Admin
 export const createBalance = async (req, res) => {
   try {
     const balance = await balanceService.createBalance(req.body);
@@ -17,9 +17,11 @@ export const createBalance = async (req, res) => {
 
 // @desc    Get all balances
 // @route   GET /api/v1/balances/all
-// @access  Admin or Accountant
+// @access  Admin
 export const getAllBalances = async (req, res) => {
   try {
+    const { page = 1, limit = 10, fromDate, toDate, role } = req.query;
+
     const balances = await balanceService.getAllBalances(
       req.params.id,
       parseInt(page),
@@ -42,7 +44,7 @@ export const getAllBalances = async (req, res) => {
 
 // @desc    Get balance details by ID
 // @route   GET /api/v1/balances/details/:id
-// @access  Admin or Accountant
+// @access  Admin
 export const getBalanceById = async (req, res) => {
   try {
     const balance = await balanceService.getBalanceById(req.params.id);

@@ -2,11 +2,18 @@ import mongoose from "mongoose";
 
 const inventoryLotsSchema = new mongoose.Schema(
   {
+    payment_status: {
+      type: String,
+      enum: ["paid", "unpaid"],
+      default: "unpaid",
+    },
+
     // Basic Info
     lot_name: {
       type: String,
       required: true,
     },
+
     purchase_date: {
       type: Date,
       default: Date.now,

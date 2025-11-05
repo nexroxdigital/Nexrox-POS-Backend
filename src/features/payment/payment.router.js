@@ -1,12 +1,19 @@
-import express from 'express';
-import * as paymentController from './payment.controller.js';
+import express from "express";
+import {
+  createTransaction,
+  getAllBySupplier,
+  getTransactionDetails,
+} from "./payment.controller.js";
 
 const router = express.Router();
 
-// Routes
-router.get('/all', );
-router.get('/details/:id', );
-router.post('/add', );
+// CREATE a new transaction
+router.post("/add", createTransaction);
 
+// GET all transactions by supplier
+router.get("/all/:supplierId", getAllBySupplier);
+
+// GET one transaction by id
+router.get("/details/:id", getTransactionDetails);
 
 export default router;
