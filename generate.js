@@ -45,7 +45,7 @@ const ${featureName}Schema = new mongoose.Schema({
 export default mongoose.model('${capitalizedName}', ${featureName}Schema);
 `,
 
-  controller: `import ${featureName}Service from './${featureName}.services.js';
+  controller: `import * as ${featureName}Service from './${featureName}.services.js';
 
 `,
 
@@ -54,7 +54,7 @@ export default mongoose.model('${capitalizedName}', ${featureName}Schema);
 `,
 
   router: `import express from 'express';
-import * as ${featureName}Controller from './${featureName}.controller.js';
+import  ${featureName}Controller from './${featureName}.controller.js';
 
 const router = express.Router();
 
