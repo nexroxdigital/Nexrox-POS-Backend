@@ -41,6 +41,11 @@ const CrateTransitionSchema = new Schema(
       default: 0,
     },
 
+    crate_type_2_price: {
+      type: Number,
+      default: 0,
+    },
+
     note: {
       type: String,
       trim: true,
