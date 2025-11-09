@@ -79,7 +79,10 @@ export const updateCrateOrSupplierController = async (req, res) => {
   }
 
   try {
-    const result = await updateCrateOrSupplierService(req.query, crate_info);
+    const result = await inventoryCrateService.updateCrateOrSupplierService(
+      req.query,
+      crate_info
+    );
 
     return res.status(200).json({
       success: true,
