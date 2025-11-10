@@ -140,84 +140,17 @@ export const addCratesForSupplierService = async (supplierId, crate_info) => {
   }
 };
 
-// @desc    Update crates for a supplier (e.g., returned crates)
+// @desc    Update supplier crate info OR update total crates if no supplier
 // @access  Admin
-export const updateCratesForSupplierService = async (
+export const updateCrateOrSupplierService = async (
   supplierId,
+  inventoryCratesId,
   crate_info
 ) => {
   const session = await mongoose.startSession();
   session.startTransaction();
 
   try {
-    // Fetch supplier
-    const supplier = await supplierModel.findById(supplierId).session(session);
-    if (!supplier) throw new Error("Supplier not found");
-
-    // Update supplier crate info
-    supplier.crate_info.crate1 -= crate_info.crate1;
-    supplier.crate_info.crate2 -= crate_info.crate2;
-
-    // Update prices only if provided
-    if (crate_info.crate1Price !== undefined) {
-      supplier.crate_info.crate1Price = crate_info.crate1Price;
-    }
-    if (crate_info.crate2Price !== undefined) {
-      supplier.crate_info.crate2Price = crate_info.crate2Price;
-    }
-
-    await supplier.save({ session });
-
-    // Create InventoryCrate record (status: IN)
-    const inventoryCrate = await InventoryCrate.create(
-      [
-        {
-          date: new Date().toISOString().split("T")[0],
-          supplierId,
-          crate_type_1_qty: crate_info.crate1,
-          crate_type_2_qty: crate_info.crate2,
-          status: "IN",
-          note: `Crates received from supplier ${supplierId}`,
-        },
-      ],
-      { session }
-    );
-
-    // Update CrateTotal (increase remaining because crates returned)
-    let totals = await CrateTotal.findOne().session(session);
-    if (!totals) {
-      totals = await CrateTotal.create([{}], { session });
-      totals = totals[0];
-    }
-
-    totals.remaining_type_1 =
-      (totals.remaining_type_1 || 0) + crate_info.crate1;
-    totals.remaining_type_2 =
-      (totals.remaining_type_2 || 0) + crate_info.crate2;
-
-    await totals.save({ session });
-
-    // Commit transaction
-    await session.commitTransaction();
-    session.endSession();
-
-    return { supplier, inventoryCrate: inventoryCrate[0], totals };
-  } catch (error) {
-    await session.abortTransaction();
-    session.endSession();
-    throw error;
-  }
-};
-
-// @desc    Update supplier crate info OR update total crates if no supplier
-// @access  Admin
-export const updateCrateOrSupplierService = async (query, crate_info) => {
-  const session = await mongoose.startSession();
-  session.startTransaction();
-
-  try {
-    const { supplierId } = query;
-
     // Get or create totals
     let totals = await CrateTotal.findOne().session(session);
     if (!totals) {
@@ -225,35 +158,73 @@ export const updateCrateOrSupplierService = async (query, crate_info) => {
       totals = totals[0];
     }
 
-    // CASE 1: If no supplierId → just update totals
+    // CASE 1: If no supplierId → update existing InventoryCrate and CrateTotal
     if (!supplierId) {
-      totals.type_1_total += crate_info.crate1 || 0;
-      totals.remaining_type_1 += crate_info.crate1 || 0;
+      if (!inventoryCratesId) {
+        throw new Error("inventoryCratesId is required for inventory update");
+      }
 
-      totals.type_2_total += crate_info.crate2 || 0;
-      totals.remaining_type_2 += crate_info.crate2 || 0;
+      // Find existing InventoryCrate document
+      const inventory =
+        await InventoryCrate.findById(inventoryCratesId).session(session);
+      if (!inventory) {
+        throw new Error("InventoryCrate record not found");
+      }
+
+      // Get existing totals document
+      let totals = await CrateTotal.findOne().session(session);
+      if (!totals) {
+        totals = (await CrateTotal.create([{}], { session }))[0];
+      }
+
+      // Previous quantities
+      const prev1 = inventory.crate_type_1_qty || 0;
+      const prev2 = inventory.crate_type_2_qty || 0;
+
+      // New quantities (if not provided, keep old)
+      const new1 = crate_info.crate1 ?? prev1;
+      const new2 = crate_info.crate2 ?? prev2;
+
+      // Calculate differences
+      const diff1 = new1 - prev1;
+      const diff2 = new2 - prev2;
+
+      // Validation: ensure remaining doesn’t go negative
+      if (diff1 < 0 && totals.remaining_type_1 < Math.abs(diff1)) {
+        throw new Error(
+          `Not enough Type 1 crates. Available: ${totals.remaining_type_1}`
+        );
+      }
+      if (diff2 < 0 && totals.remaining_type_2 < Math.abs(diff2)) {
+        throw new Error(
+          `Not enough Type 2 crates. Available: ${totals.remaining_type_2}`
+        );
+      }
+
+      // Update crate totals based on diff
+      totals.type_1_total += diff1;
+      totals.remaining_type_1 += diff1;
+      totals.type_2_total += diff2;
+      totals.remaining_type_2 += diff2;
 
       await totals.save({ session });
 
-      await InventoryCrate.create(
-        [
-          {
-            date: new Date().toISOString(),
-            supplierId: null,
-            isUpdated: true,
-            crate_type_1_qty: crate_info.crate1 || 0,
-            crate_type_2_qty: crate_info.crate2 || 0,
-            status: "IN",
-            note: "Warehouse crate restock",
-          },
-        ],
-        { session }
-      );
+      // Update the existing inventory document
+      inventory.crate_type_1_qty = new1;
+      inventory.crate_type_2_qty = new2;
+      inventory.isUpdated = true;
+      inventory.date = new Date().toISOString();
+
+      await inventory.save({ session });
 
       await session.commitTransaction();
       session.endSession();
 
-      return { message: "Crate totals updated successfully", totals };
+      return {
+        message: "Inventory crate updated and totals adjusted successfully",
+        totals,
+        inventory,
+      };
     }
 
     // CASE 2: SupplierId provided → update supplier and totals
