@@ -58,7 +58,7 @@ export const getAllCrateTransitionsService = async (page, limit) => {
   const skip = (page - 1) * limit;
 
   const transitions = await InventoryCrate.find()
-    .populate("supplierId", "supplier_name")
+    .populate("supplierId", "basic_info.name")
     .sort({ createdAt: -1 })
     .skip(skip)
     .limit(limit);
@@ -272,21 +272,6 @@ export const updateCrateOrSupplierService = async (
     }
 
     await supplier.save({ session });
-
-    // Add record
-    await InventoryCrate.create(
-      [
-        {
-          date: new Date().toISOString(),
-          supplierId,
-          crate_type_1_qty: diff1,
-          crate_type_2_qty: diff2,
-          status: diff1 < 0 || diff2 < 0 ? "IN" : "OUT",
-          note: "Supplier crate update",
-        },
-      ],
-      { session }
-    );
 
     await session.commitTransaction();
     session.endSession();
