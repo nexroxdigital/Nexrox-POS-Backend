@@ -5,11 +5,13 @@ import supplierModel from "../supplier/supplier.model.js";
 // @desc    Create a new crate transition
 // @access  Admin
 export const createCrateTransitionService = async (data) => {
+  console.log("data form inventory crate", data);
+
   const session = await mongoose.startSession();
   session.startTransaction();
 
   try {
-    const { date, crate_type_1_qty, crate_type_2_qty, note } = data;
+    const { date, crate_type_1_qty, crate_type_2_qty, stockType, note } = data;
 
     // Create the crate transition exactly like your original code
     const newTransition = await InventoryCrate.create(
