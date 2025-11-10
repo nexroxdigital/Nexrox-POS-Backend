@@ -17,6 +17,7 @@ export const createCrateTransitionService = async (data) => {
         {
           date,
           supplierId: null,
+          stockType,
           crate_type_1_qty,
           crate_type_2_qty,
           status: "IN",
@@ -33,8 +34,10 @@ export const createCrateTransitionService = async (data) => {
       totals = totals[0];
     }
 
-    totals.type_1_total += crate_type_1_qty;
-    totals.type_2_total += crate_type_2_qty;
+    if (stockType !== "re-stock") {
+      totals.type_1_total += crate_type_1_qty;
+      totals.type_2_total += crate_type_2_qty;
+    }
 
     totals.remaining_type_1 += crate_type_1_qty;
     totals.remaining_type_2 += crate_type_2_qty;
@@ -286,4 +289,16 @@ export const updateCrateOrSupplierService = async (
     session.endSession();
     throw new Error(error.message);
   }
+};
+
+// @desc  Get the current crate totals. Creates default if missing.
+// @access  Admin
+export const getCrateTotalsService = async () => {
+  let totals = await CrateTotal.findOne();
+
+  if (!totals) {
+    totals = await CrateTotal.create({});
+  }
+
+  return totals;
 };
