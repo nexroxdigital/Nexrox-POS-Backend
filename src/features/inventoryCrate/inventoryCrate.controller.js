@@ -67,7 +67,7 @@ export const addCratesForSupplier = async (req, res) => {
 // @query   supplierId (optional) - if present, updates supplier crates; otherwise updates total crates
 // @access  Admin
 export const updateCrateOrSupplierController = async (req, res) => {
-  const { supplierId } = req.query;
+  const { supplierId, inventoryCratesId } = req.query;
   const crate_info = req.body;
 
   // Basic validation
@@ -80,7 +80,8 @@ export const updateCrateOrSupplierController = async (req, res) => {
 
   try {
     const result = await inventoryCrateService.updateCrateOrSupplierService(
-      req.query,
+      supplierId,
+      inventoryCratesId,
       crate_info
     );
 
