@@ -88,13 +88,11 @@ const paymentSchema = new mongoose.Schema(
 
     need_to_pay_due: {
       type: Number,
-      required: true,
       default: 0,
     },
 
     transactionId: {
       type: String,
-      required: true,
     },
 
     proof_img: {

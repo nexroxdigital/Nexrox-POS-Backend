@@ -95,7 +95,7 @@ export const getPaymentsBySupplier = async (
 
   let transactions = await Payment.find({ supplierId })
     .populate("supplierId")
-    .populate("inventory_lot_ids")
+    .populate("selected_lots_info.lot_id")
     .sort({ createdAt: -1 })
     .skip(skip)
     .limit(limit);
