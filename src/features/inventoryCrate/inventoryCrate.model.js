@@ -10,9 +10,11 @@ const CrateTransitionSchema = new Schema(
       required: true,
     },
 
-    isUpdated: {
-      type: Boolean,
-      default: false,
+    stockType: {
+      type: String,
+      enum: ["new", "re-stock"],
+      required: true,
+      default: "new",
     },
 
     status: {

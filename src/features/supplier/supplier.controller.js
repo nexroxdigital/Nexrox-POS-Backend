@@ -78,7 +78,7 @@ export const updateSupplier = async (req, res) => {
 // @access  Admin
 export const getSuppliersByQuery = async (req, res) => {
   try {
-    console.log("api hit");
+ 
 
     const suppliers = await supplierService.searchSuppliers(req.query);
 

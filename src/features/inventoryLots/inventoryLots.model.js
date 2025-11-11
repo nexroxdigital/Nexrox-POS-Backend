@@ -105,7 +105,51 @@ const inventoryLotsSchema = new mongoose.Schema(
         default: 0,
       },
 
+      //  lotCommission +  customerCommission,
       totalProfit: {
+        type: Number,
+        default: 0,
+      },
+    },
+
+    expenses: {
+      labour: {
+        type: Number,
+        default: 0,
+      },
+
+      transportation: {
+        type: Number,
+        default: 0,
+      },
+
+      van_vara: {
+        type: Number,
+        default: 0,
+      },
+
+      moshjid: {
+        type: Number,
+        default: 0,
+      },
+
+      trading_post: {
+        type: Number,
+        default: 0,
+      },
+
+      other_expenses: {
+        type: Number,
+        default: 0,
+      },
+
+      // total
+      total_expenses: {
+        type: Number,
+        default: 0,
+      },
+
+      extra_discount: {
         type: Number,
         default: 0,
       },

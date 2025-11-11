@@ -28,7 +28,7 @@ export const createSale = async (req, res) => {
 export const getAllSales = async (req, res) => {
   try {
     const { page = 1, limit = 10, search } = req.query;
-    console.log(req.query);
+   
 
     const result = await saleService.getAllSales(
       search,

@@ -24,7 +24,6 @@ export const createCustomer = async (req, res) => {
       .status(201)
       .json({ message: "Customer created successfully", customer });
   } catch (error) {
-    console.log(error, "creating customer");
     res.status(500).json({ message: error.message });
   }
 };
@@ -114,8 +113,6 @@ export const getCustomerById = async (req, res) => {
 // @access  Admin
 export const getCustomersByQuery = async (req, res) => {
   try {
-    console.log("api hit");
-
     const customers = await customerService.searchCustomers(req.query);
 
     if (!customers.length) {
@@ -135,5 +132,3 @@ export const getCustomersByQuery = async (req, res) => {
     });
   }
 };
-
-

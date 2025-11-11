@@ -28,7 +28,6 @@ export const logActivity = async ({
 
     // console.log(activity);
   } catch (error) {
-    console.log("activity log error", error);
     console.error("Failed to log activity:", error.message);
   }
 };

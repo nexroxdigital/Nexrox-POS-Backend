@@ -1,36 +1,98 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
+
+const selectedLotInfoSchema = new mongoose.Schema(
+  {
+    lot_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "InventoryLot",
+      required: true,
+    },
+
+    total_sell: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+
+    total_expenses: {
+      type: Number,
+      default: 0,
+    },
+
+    profit: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+
+    discount: {
+      type: Number,
+      default: 0,
+    },
+
+    paid_amount: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+  },
+  { _id: false }
+);
 
 const paymentSchema = new mongoose.Schema(
   {
     date: {
       type: Date,
       required: true,
-      default: Date.now,
     },
 
     supplierId: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Supplier",
       required: true,
     },
 
-    inventory_lot_ids: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "InventoryLot",
-      },
-    ],
+    selected_lots_info: {
+      type: [selectedLotInfoSchema],
+      required: true,
+      default: [],
+    },
 
-    amount: {
+    payment_method: {
+      type: String,
+      enum: ["MFS", "bank", "cash", "balance"],
+      required: true,
+    },
+
+    payable_amount: {
       type: Number,
       required: true,
-      min: 0,
+      default: 0,
+    },
+
+    total_lots_expense: {
+      type: Number,
+      default: 0,
+    },
+
+    amount_from_balance: {
+      type: Number,
+      default: 0,
+    },
+
+    total_paid_amount: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+
+    need_to_pay_due: {
+      type: Number,
+      default: 0,
     },
 
     transactionId: {
       type: String,
-      unique: true,
-      trim: true,
     },
 
     proof_img: {
@@ -39,18 +101,10 @@ const paymentSchema = new mongoose.Schema(
 
     note: {
       type: String,
-      trim: true,
-    },
-
-    payment_method: {
-      type: String,
-      enum: ["MFS", "bank", "cash"],
-      required: true,
+      default: "",
     },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
 export default mongoose.model("Payment", paymentSchema);

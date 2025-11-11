@@ -5,11 +5,13 @@ import supplierModel from "../supplier/supplier.model.js";
 // @desc    Create a new crate transition
 // @access  Admin
 export const createCrateTransitionService = async (data) => {
+
+
   const session = await mongoose.startSession();
   session.startTransaction();
 
   try {
-    const { date, crate_type_1_qty, crate_type_2_qty, note } = data;
+    const { date, crate_type_1_qty, crate_type_2_qty, stockType, note } = data;
 
     // Create the crate transition exactly like your original code
     const newTransition = await InventoryCrate.create(
@@ -17,6 +19,7 @@ export const createCrateTransitionService = async (data) => {
         {
           date,
           supplierId: null,
+          stockType,
           crate_type_1_qty,
           crate_type_2_qty,
           status: "IN",
@@ -33,8 +36,10 @@ export const createCrateTransitionService = async (data) => {
       totals = totals[0];
     }
 
-    totals.type_1_total += crate_type_1_qty;
-    totals.type_2_total += crate_type_2_qty;
+    if (stockType !== "re-stock") {
+      totals.type_1_total += crate_type_1_qty;
+      totals.type_2_total += crate_type_2_qty;
+    }
 
     totals.remaining_type_1 += crate_type_1_qty;
     totals.remaining_type_2 += crate_type_2_qty;
@@ -58,7 +63,7 @@ export const getAllCrateTransitionsService = async (page, limit) => {
   const skip = (page - 1) * limit;
 
   const transitions = await InventoryCrate.find()
-    .populate("supplierId", "supplier_name")
+    .populate("supplierId", "basic_info.name")
     .sort({ createdAt: -1 })
     .skip(skip)
     .limit(limit);
@@ -273,21 +278,6 @@ export const updateCrateOrSupplierService = async (
 
     await supplier.save({ session });
 
-    // Add record
-    await InventoryCrate.create(
-      [
-        {
-          date: new Date().toISOString(),
-          supplierId,
-          crate_type_1_qty: diff1,
-          crate_type_2_qty: diff2,
-          status: diff1 < 0 || diff2 < 0 ? "IN" : "OUT",
-          note: "Supplier crate update",
-        },
-      ],
-      { session }
-    );
-
     await session.commitTransaction();
     session.endSession();
 
@@ -301,4 +291,16 @@ export const updateCrateOrSupplierService = async (
     session.endSession();
     throw new Error(error.message);
   }
+};
+
+// @desc  Get the current crate totals. Creates default if missing.
+// @access  Admin
+export const getCrateTotalsService = async () => {
+  let totals = await CrateTotal.findOne();
+
+  if (!totals) {
+    totals = await CrateTotal.create({});
+  }
+
+  return totals;
 };

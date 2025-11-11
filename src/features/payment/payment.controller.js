@@ -1,7 +1,7 @@
 import * as paymentService from "./payment.services.js";
 
 // @desc    Create transaction
-// @route   GET /api/v1/payments/add/
+// @route   POST /api/v1/payments/add/
 // @access  Admin
 export const createTransaction = async (req, res, next) => {
   try {

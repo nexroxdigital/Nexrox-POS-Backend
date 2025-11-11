@@ -6,7 +6,7 @@ import mongoose from "mongoose";
 // @desc    Create a new balance
 // @access  Admin
 export const createBalance = async (data) => {
-  console.log(data);
+
 
   const session = await mongoose.startSession();
   session.startTransaction();

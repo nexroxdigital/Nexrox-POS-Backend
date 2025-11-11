@@ -6,7 +6,6 @@ import * as inventoryLotsService from "./inventoryLots.services.js";
 export const createLots = async (req, res) => {
   try {
     const purchaseId = req.query.id;
-    console.log(purchaseId);
 
     const lotsCreatedCount =
       await inventoryLotsService.createLotsForPurchase(purchaseId);
@@ -113,5 +112,21 @@ export const getAllInStockLots = async (req, res) => {
       success: false,
       message: error.message || "Failed to fetch in-stock lots",
     });
+  }
+};
+
+// @desc    Get all unpaid & out-of-stock lots
+// @route   GET /api/v1/inventory-lots/unpaid-stock-out
+// @access  Admin
+export const getUnpaidAndOutOfStockLots = async (req, res) => {
+  try {
+    const lots = await inventoryLotsService.getUnpaidAndOutOfStockLots();
+    res.status(200).json({
+      success: true,
+      count: lots.length,
+      data: lots,
+    });
+  } catch (error) {
+    next(error);
   }
 };

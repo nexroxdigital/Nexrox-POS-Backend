@@ -100,3 +100,15 @@ export const updateCrateOrSupplierController = async (req, res) => {
     });
   }
 };
+
+// @desc Get current crate totals
+// @route GET /api/v1/crates/totals
+// @access Admin
+export const getCrateTotalsController = async (req, res) => {
+  const totals = await inventoryCrateService.getCrateTotalsService();
+
+  res.status(200).json({
+    message: "Crate totals fetched successfully",
+    totals,
+  });
+};

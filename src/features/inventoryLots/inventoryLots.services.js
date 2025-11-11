@@ -60,6 +60,22 @@ export const createLotsForPurchase = async (purchaseId) => {
             unitCost: lot.unit_Cost,
             commissionRate: lot.commission_rate || 0,
           },
+
+          expenses: {
+            labour: lot.expenses.labour,
+            transportation: lot.expenses.transportation,
+            van_vara: lot.expenses.van_vara,
+            moshjid: lot.expenses.moshjid,
+            trading_post: lot.expenses.trading_post,
+            other_expenses: lot.expenses.other_expenses,
+            total_expenses:
+              lot.expenses.labour +
+              lot.expenses.transportation +
+              lot.expenses.van_vara +
+              lot.expenses.moshjid +
+              lot.expenses.trading_post +
+              lot.expenses.other_expenses,
+          },
         });
 
         // Deduct crate per lot (Type 1)
@@ -227,7 +243,7 @@ export const getAllLotsBySupplier = async (
     // Stage 5: Lookup purchase list
     {
       $lookup: {
-        from: "purchaselists", // Make sure this matches your collection name
+        from: "purchase", // Make sure this matches your collection name
         localField: "purchaseListId",
         foreignField: "_id",
         as: "purchaseListId",
@@ -303,4 +319,18 @@ export const getAllInStockLots = async () => {
     .populate("purchaseListId", "purchase_date");
 
   return lots;
+};
+
+// @desc    Get all unpaid & out-of-stock lots
+// @access  Admin
+export const getUnpaidAndOutOfStockLots = async () => {
+  return await inventoryLotsModel
+    .find({
+      payment_status: "unpaid",
+      status: "stock out",
+    })
+    .populate("supplierId", "name phone")
+    .populate("productsId", "product_name")
+    .populate("purchaseListId", "invoice_number")
+    .sort({ createdAt: -1 });
 };
