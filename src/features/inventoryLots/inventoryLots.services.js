@@ -69,12 +69,12 @@ export const createLotsForPurchase = async (purchaseId) => {
             trading_post: lot.expenses.trading_post,
             other_expenses: lot.expenses.other_expenses,
             total_expenses:
-              labour +
-              transportation +
-              van_vara +
-              moshjid +
-              trading_post +
-              other_expenses,
+              lot.expenses.labour +
+              lot.expenses.transportation +
+              lot.expenses.van_vara +
+              lot.expenses.moshjid +
+              lot.expenses.trading_post +
+              lot.expenses.other_expenses,
           },
         });
 
