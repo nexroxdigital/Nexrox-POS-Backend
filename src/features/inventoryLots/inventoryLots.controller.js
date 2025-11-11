@@ -6,7 +6,7 @@ import * as inventoryLotsService from "./inventoryLots.services.js";
 export const createLots = async (req, res) => {
   try {
     const purchaseId = req.query.id;
-    console.log(purchaseId);
+  
 
     const lotsCreatedCount =
       await inventoryLotsService.createLotsForPurchase(purchaseId);

@@ -23,9 +23,6 @@ export async function getById(req, res) {
 
 export const filterUsersByRole = async (req, res) => {
   try {
-    console.log("hit role by user");
-    console.log(req.params.role);
-
     const users = await getUsersByRole(req.params.role);
 
     if (users.length === 0) {
@@ -40,7 +37,6 @@ export const filterUsersByRole = async (req, res) => {
       data: users,
     });
   } catch (error) {
-    console.log(error);
     res.status(400).json({
       success: false,
       message: error.message,
