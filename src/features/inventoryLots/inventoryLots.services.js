@@ -60,6 +60,22 @@ export const createLotsForPurchase = async (purchaseId) => {
             unitCost: lot.unit_Cost,
             commissionRate: lot.commission_rate || 0,
           },
+
+          express: {
+            labour: lot.expenses.labour,
+            transportation: lot.expenses.transportation,
+            van_vara: lot.expenses.van_vara,
+            moshjid: lot.expenses.moshjid,
+            trading_post: lot.expenses.trading_post,
+            other_expenses: lot.expenses.other_expenses,
+            total_express:
+              labour +
+              transportation +
+              van_vara +
+              moshjid +
+              trading_post +
+              other_expenses,
+          },
         });
 
         // Deduct crate per lot (Type 1)
@@ -227,7 +243,7 @@ export const getAllLotsBySupplier = async (
     // Stage 5: Lookup purchase list
     {
       $lookup: {
-        from: "purchaselists", // Make sure this matches your collection name
+        from: "purchase", // Make sure this matches your collection name
         localField: "purchaseListId",
         foreignField: "_id",
         as: "purchaseListId",

@@ -1,7 +1,7 @@
 import Payment from "./payment.model.js";
 
-// @desc    create new payment 
-// @route   GET /api/v1/payments/all/:supplierId
+// @desc    create new payment
+// @route   POST /api/v1/payments/all/:supplierId
 export const createTransaction = async (data) => {
   const transaction = new Payment(data);
   return await transaction.save();
