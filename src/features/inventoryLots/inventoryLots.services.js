@@ -320,3 +320,17 @@ export const getAllInStockLots = async () => {
 
   return lots;
 };
+
+// @desc    Get all unpaid & out-of-stock lots
+// @access  Admin
+export const getUnpaidAndOutOfStockLots = async () => {
+  return await inventoryLotsModel
+    .find({
+      payment_status: "unpaid",
+      status: "stock out",
+    })
+    .populate("supplierId", "name phone")
+    .populate("productsId", "product_name")
+    .populate("purchaseListId", "invoice_number")
+    .sort({ createdAt: -1 });
+};

@@ -4,6 +4,7 @@ import {
   fetchAllLots,
   fetchLotDetails,
   getAllInStockLots,
+  getUnpaidAndOutOfStockLots,
   lotsBySupplier,
   updateLotStatusController,
 } from "./inventoryLots.controller.js";
@@ -27,5 +28,7 @@ router.put("/status/:id", updateLotStatusController);
 
 // get all in stock lots
 router.get("/in-stock", getAllInStockLots);
+
+router.get("/unpaid-stock-out", getUnpaidAndOutOfStockLots);
 
 export default router;
