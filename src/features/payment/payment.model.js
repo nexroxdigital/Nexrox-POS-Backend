@@ -14,7 +14,7 @@ const selectedLotInfoSchema = new mongoose.Schema(
       default: 0,
     },
 
-    total_express: {
+    total_expenses: {
       type: Number,
       default: 0,
     },
@@ -70,7 +70,7 @@ const paymentSchema = new mongoose.Schema(
       default: 0,
     },
 
-    total_express: {
+    total_lots_expense: {
       type: Number,
       default: 0,
     },
@@ -86,7 +86,7 @@ const paymentSchema = new mongoose.Schema(
       default: 0,
     },
 
-    need_to_pay: {
+    need_to_pay_due: {
       type: Number,
       required: true,
       default: 0,

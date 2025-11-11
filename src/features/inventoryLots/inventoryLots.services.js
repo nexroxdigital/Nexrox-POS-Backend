@@ -61,14 +61,14 @@ export const createLotsForPurchase = async (purchaseId) => {
             commissionRate: lot.commission_rate || 0,
           },
 
-          express: {
+          expenses: {
             labour: lot.expenses.labour,
             transportation: lot.expenses.transportation,
             van_vara: lot.expenses.van_vara,
             moshjid: lot.expenses.moshjid,
             trading_post: lot.expenses.trading_post,
             other_expenses: lot.expenses.other_expenses,
-            total_express:
+            total_expenses:
               labour +
               transportation +
               van_vara +

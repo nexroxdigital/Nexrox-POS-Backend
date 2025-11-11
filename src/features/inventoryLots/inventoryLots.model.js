@@ -112,7 +112,7 @@ const inventoryLotsSchema = new mongoose.Schema(
       },
     },
 
-    express: {
+    expenses: {
       labour: {
         type: Number,
         default: 0,
@@ -144,7 +144,12 @@ const inventoryLotsSchema = new mongoose.Schema(
       },
 
       // total
-      total_express: {
+      total_expenses: {
+        type: Number,
+        default: 0,
+      },
+
+      extra_discount: {
         type: Number,
         default: 0,
       },
