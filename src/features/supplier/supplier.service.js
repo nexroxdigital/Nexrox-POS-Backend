@@ -66,3 +66,42 @@ export const searchSuppliers = async (query) => {
   const suppliers = await Supplier.find(filter);
   return suppliers;
 };
+
+// @desc Get suppliers with due amount and support search by name, email, phone
+// @access Admin
+export const getDueSuppliersService = async (searchQuery = "", page, limit) => {
+  const skip = (page - 1) * limit;
+
+  const searchFilter = {};
+
+  if (searchQuery) {
+    const regex = new RegExp(searchQuery, "i"); // case-insensitive search
+    searchFilter.$or = [
+      { "basic_info.name": regex },
+      { "contact_info.phone": regex },
+      { "contact_info.email": regex },
+    ];
+  }
+
+  const filter = {
+    ...searchFilter,
+    "account_info.due": { $gt: 0 },
+  };
+
+  const suppliers = await Supplier.find(filter)
+    .select(
+      "basic_info.name  basic_info.role contact_info.phone contact_info.email account_info.due"
+    )
+    .skip(skip)
+    .limit(limit);
+
+  const total = suppliers.length;
+
+  return {
+    suppliers,
+    page,
+    limit,
+    totalPages: Math.ceil(total / limit),
+    total,
+  };
+};
