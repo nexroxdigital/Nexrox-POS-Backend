@@ -2,6 +2,7 @@ import express from "express";
 import {
   createSupplier,
   getAllSuppliers,
+  getDueSuppliersController,
   getSupplierById,
   getSuppliersByQuery,
   updateSupplier,
@@ -22,5 +23,8 @@ router.get("/details/:id", getSupplierById);
 
 // update
 router.put("/update/:id", updateSupplier);
+
+// GET due-list
+router.get("/due-list", getDueSuppliersController);
 
 export default router;

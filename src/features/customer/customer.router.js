@@ -5,6 +5,7 @@ import {
   getAllCustomers,
   getCustomerById,
   getCustomersByQuery,
+  getDueCustomersController,
 } from "./customer.controller.js";
 import { authMiddleware } from "../../middleware/auth.js";
 
@@ -23,5 +24,8 @@ router.get("/all", getAllCustomers);
 
 // get details view
 router.get("/details/:id", getCustomerById);
+
+// GET due-list
+router.get("/due-list", getDueCustomersController);
 
 export default router;

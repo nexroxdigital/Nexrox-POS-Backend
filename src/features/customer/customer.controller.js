@@ -132,3 +132,26 @@ export const getCustomersByQuery = async (req, res) => {
     });
   }
 };
+
+// @desc    Get customers due list with optional search by name, email, phone
+// @route   GET /api/v1/customers/due-list
+// @access  Admin
+export const getDueCustomersController = async (req, res, next) => {
+  try {
+    const { search } = req.query;
+    const { page = 1, limit = 10 } = req.query;
+    const customers = await customerService.getDueCustomersService(
+      search,
+      parseInt(page),
+      parseInt(limit)
+    );
+
+    res.status(200).json({
+      success: true,
+      total: customers.length,
+      data: customers,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

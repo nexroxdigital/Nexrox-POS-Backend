@@ -130,3 +130,27 @@ export const getUnpaidAndOutOfStockLots = async (req, res) => {
     next(error);
   }
 };
+
+// @desc    Get all unpaid & out-of-stock lots
+// @route   GET /api/v1/inventory-lots/unpaid-stock-out
+// @access  Admin
+export const adjustStockController = async (req, res) => {
+  try {
+    const { lotId } = req.params;
+    const { unit_quantity, reason_note } = req.body;
+
+    const updatedLot = await inventoryLotsService.adjustStockService(lotId, {
+      unit_quantity,
+      reason_note,
+    });
+
+    res.status(200).json({
+      message: "Stock adjustment successful",
+      lot: updatedLot,
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: error.message || "Failed to adjust stock",
+    });
+  }
+};

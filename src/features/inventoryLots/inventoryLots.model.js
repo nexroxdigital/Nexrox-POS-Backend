@@ -110,6 +110,11 @@ const inventoryLotsSchema = new mongoose.Schema(
         type: Number,
         default: 0,
       },
+
+      lot_loss: {
+        type: Number,
+        default: 0,
+      },
     },
 
     expenses: {
@@ -152,6 +157,16 @@ const inventoryLotsSchema = new mongoose.Schema(
       extra_discount: {
         type: Number,
         default: 0,
+      },
+    },
+
+    stock_adjust: {
+      unit_quantity: {
+        type: Number,
+        default: 0,
+      },
+      reason_note: {
+        type: String,
       },
     },
   },

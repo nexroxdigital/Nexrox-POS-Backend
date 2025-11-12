@@ -67,3 +67,43 @@ export const searchCustomers = async (query) => {
   const customers = await customerModel.find(filter);
   return customers;
 };
+
+// @desc   Get customers due list with optional search by name, email, phone
+// @access Admin
+export const getDueCustomersService = async (searchQuery = "", page, limit) => {
+  const skip = (page - 1) * limit;
+
+  const searchFilter = {};
+
+  if (searchQuery) {
+    const regex = new RegExp(searchQuery, "i"); // case-insensitive search
+    searchFilter.$or = [
+      { "basic_info.name": regex },
+      { "contact_info.phone": regex },
+      { "contact_info.email": regex },
+    ];
+  }
+
+  const filter = {
+    ...searchFilter,
+    "account_info.due": { $gt: 0 },
+  };
+
+  const customers = await customerModel
+    .find(filter)
+    .select(
+      "basic_info.name  basic_info.role contact_info.phone contact_info.email account_info.due"
+    )
+    .skip(skip)
+    .limit(limit);
+
+  const total = customers.length;
+
+  return {
+    customers,
+    page,
+    limit,
+    totalPages: Math.ceil(total / limit),
+    total,
+  };
+};

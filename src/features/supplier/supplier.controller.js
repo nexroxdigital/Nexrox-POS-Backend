@@ -78,8 +78,6 @@ export const updateSupplier = async (req, res) => {
 // @access  Admin
 export const getSuppliersByQuery = async (req, res) => {
   try {
- 
-
     const suppliers = await supplierService.searchSuppliers(req.query);
 
     if (!suppliers.length) {
@@ -97,5 +95,28 @@ export const getSuppliersByQuery = async (req, res) => {
       success: false,
       message: error.message,
     });
+  }
+};
+
+// @desc    Get suppliers due list with optional search by name, email, phone
+// @route   GET /api/v1/suppliers/due-list
+// @access  Admin
+export const getDueSuppliersController = async (req, res, next) => {
+  try {
+    const { search } = req.query;
+    const { page = 1, limit = 10 } = req.query;
+    const suppliers = await supplierService.getDueSuppliersService(
+      search,
+      parseInt(page),
+      parseInt(limit)
+    );
+
+    res.status(200).json({
+      success: true,
+      total: suppliers.length,
+      data: suppliers,
+    });
+  } catch (error) {
+    next(error);
   }
 };
