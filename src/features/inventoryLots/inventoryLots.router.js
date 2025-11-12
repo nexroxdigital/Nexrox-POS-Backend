@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  adjustStockController,
   createLots,
   fetchAllLots,
   fetchLotDetails,
@@ -30,5 +31,7 @@ router.put("/status/:id", updateLotStatusController);
 router.get("/in-stock", getAllInStockLots);
 
 router.get("/unpaid-stock-out", getUnpaidAndOutOfStockLots);
+
+router.patch("/:lotId/adjust-stock", adjustStockController);
 
 export default router;

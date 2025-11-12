@@ -290,19 +290,69 @@ export const getAllLotsBySupplier = async (
 
 // @desc Update lot status
 // @access  Admin
+// export const updateLotStatus = async (lotId, newStatus) => {
+//   const allowedStatuses = ["in stock", "stock out"];
+
+//   if (!allowedStatuses.includes(newStatus)) {
+//     throw new Error(`Invalid status. Allowed: ${allowedStatuses.join(", ")}`);
+//   }
+
+//   const lot = await inventoryLotsModel.findById(lotId);
+//   if (!lot) {
+//     throw new Error("Lot not found");
+//   }
+
+//   lot.status = newStatus;
+//   await lot.save();
+
+//   return lot;
+// };
 export const updateLotStatus = async (lotId, newStatus) => {
   const allowedStatuses = ["in stock", "stock out"];
 
+  // Validate incoming status
   if (!allowedStatuses.includes(newStatus)) {
     throw new Error(`Invalid status. Allowed: ${allowedStatuses.join(", ")}`);
   }
 
+  // Find the lot
   const lot = await inventoryLotsModel.findById(lotId);
   if (!lot) {
     throw new Error("Lot not found");
   }
 
+  // Update status
   lot.status = newStatus;
+
+  // Calculate Loss
+  const { totalKgSold, totalSoldPrice } = lot.sales;
+  const { unitCost } = lot.costs;
+  const { box_quantity } = lot;
+  const { hasCommission } = lot;
+
+  let originalPrice = 0;
+  let loss = 0;
+
+  // Check if product is box-based or kg-based
+  if (box_quantity && box_quantity > 0) {
+    // Box-based calculation
+    originalPrice = box_quantity * unitCost - totalSoldPrice;
+    loss = originalPrice > 0 ? originalPrice : 0;
+  } else {
+    //  Kg-based calculation
+    originalPrice = totalKgSold * unitCost;
+    loss = originalPrice - totalSoldPrice;
+    if (loss < 0) loss = 0;
+  }
+
+  // Save loss
+  lot.profits.lot_loss = loss;
+
+  // Save customerProfit only if hasCommission = false
+  if (!hasCommission) {
+    lot.profits.customerProfit = totalSoldPrice - originalPrice;
+  }
+
   await lot.save();
 
   return lot;
@@ -333,4 +383,49 @@ export const getUnpaidAndOutOfStockLots = async () => {
     .populate("productsId", "product_name")
     .populate("purchaseListId", "invoice_number")
     .sort({ createdAt: -1 });
+};
+
+// @desc    Get all unpaid & out-of-stock lots
+// @access  Admin
+export const adjustStockService = async (lotId, stockAdjustData) => {
+  const { unit_quantity, reason_note } = stockAdjustData;
+
+  const lot = await inventoryLotsModel.findById(lotId);
+  if (!lot) {
+    throw new Error("Inventory lot not found");
+  }
+
+  const { totalKgSold, totalSoldPrice } = lot.sales;
+  const { unitCost } = lot.costs;
+  const { box_quantity } = lot;
+  const { hasCommission } = lot;
+
+  // Update stock_adjust fields
+  lot.stock_adjust.unit_quantity = unit_quantity;
+  lot.stock_adjust.reason_note = reason_note;
+
+  let originalPrice = 0;
+  let loss = 0;
+
+  // Determine calculation type
+  if (box_quantity && box_quantity > 0) {
+    // BOX-based product
+    originalPrice = box_quantity * unitCost - totalSoldPrice;
+    loss = originalPrice > 0 ? originalPrice : 0;
+  } else {
+    // KG-based product
+    originalPrice = (totalKgSold + unit_quantity) * unitCost;
+    loss = originalPrice - totalSoldPrice;
+    if (loss < 0) loss = 0;
+  }
+
+  // Update profits
+  lot.profits.lot_loss = loss;
+
+  if (!hasCommission) {
+    lot.profits.customerProfit = totalSoldPrice - originalPrice;
+  }
+
+  await lot.save();
+  return lot;
 };
