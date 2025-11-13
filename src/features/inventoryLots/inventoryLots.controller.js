@@ -154,3 +154,33 @@ export const adjustStockController = async (req, res) => {
     });
   }
 };
+
+export const getProfitLoss = async (req, res) => {
+  try {
+    const { purchase_date } = req.query;
+
+    // Validate date format if provided
+    if (purchase_date && isNaN(Date.parse(purchase_date))) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid date format. Use YYYY-MM-DD",
+      });
+    }
+
+    const filters = {};
+    if (purchase_date) {
+      filters.purchase_date = purchase_date;
+    }
+
+    const result = await inventoryLotsService.calculateProfitLoss(filters);
+
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error("Profit/Loss calculation error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to calculate profit/loss",
+      error: error.message,
+    });
+  }
+};

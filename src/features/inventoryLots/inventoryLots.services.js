@@ -290,23 +290,6 @@ export const getAllLotsBySupplier = async (
 
 // @desc Update lot status
 // @access  Admin
-// export const updateLotStatus = async (lotId, newStatus) => {
-//   const allowedStatuses = ["in stock", "stock out"];
-
-//   if (!allowedStatuses.includes(newStatus)) {
-//     throw new Error(`Invalid status. Allowed: ${allowedStatuses.join(", ")}`);
-//   }
-
-//   const lot = await inventoryLotsModel.findById(lotId);
-//   if (!lot) {
-//     throw new Error("Lot not found");
-//   }
-
-//   lot.status = newStatus;
-//   await lot.save();
-
-//   return lot;
-// };
 export const updateLotStatus = async (lotId, newStatus) => {
   const allowedStatuses = ["in stock", "stock out"];
 
@@ -428,4 +411,58 @@ export const adjustStockService = async (lotId, stockAdjustData) => {
 
   await lot.save();
   return lot;
+};
+
+export const calculateProfitLoss = async (filters = {}) => {
+  try {
+    // Build query
+    const query = {
+      payment_status: "unpaid",
+      status: "stock out",
+    };
+
+    // Add date filter if provided
+    if (filters.purchase_date) {
+      const startDate = new Date(filters.purchase_date);
+      startDate.setHours(0, 0, 0, 0);
+
+      const endDate = new Date(filters.purchase_date);
+      endDate.setHours(23, 59, 59, 999);
+
+      query.purchase_date = {
+        $gte: startDate,
+        $lte: endDate,
+      };
+    }
+
+    // Fetch matching lots
+    const lots = await inventoryLotsModel.find(query).select("profits");
+
+    // Calculate totals
+    const totals = lots.reduce(
+      (acc, lot) => {
+        acc.totalCustomerProfit += lot.profits.customerProfit || 0;
+        acc.totalLotProfit += lot.profits.lotProfit || 0;
+        acc.totalCombinedProfit += lot.profits.totalProfit || 0;
+        acc.totalLoss += lot.profits.lot_loss || 0;
+        return acc;
+      },
+      {
+        totalCustomerProfit: 0,
+        totalLotProfit: 0,
+        totalCombinedProfit: 0,
+        totalLoss: 0,
+      }
+    );
+
+    return {
+      success: true,
+      data: {
+        ...totals,
+        recordCount: lots.length,
+      },
+    };
+  } catch (error) {
+    throw error;
+  }
 };

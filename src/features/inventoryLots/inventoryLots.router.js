@@ -5,6 +5,7 @@ import {
   fetchAllLots,
   fetchLotDetails,
   getAllInStockLots,
+  getProfitLoss,
   getUnpaidAndOutOfStockLots,
   lotsBySupplier,
   updateLotStatusController,
@@ -30,8 +31,11 @@ router.put("/status/:id", updateLotStatusController);
 // get all in stock lots
 router.get("/in-stock", getAllInStockLots);
 
+// get all in unpaid/stock out  lots
 router.get("/unpaid-stock-out", getUnpaidAndOutOfStockLots);
 
 router.patch("/:lotId/adjust-stock", adjustStockController);
+
+router.get("/profit-loss", getProfitLoss);
 
 export default router;
