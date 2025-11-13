@@ -19,6 +19,7 @@ import incomeRoute from "./features/income/income.router.js";
 import balanceRoute from "./features/balance/balance.router.js";
 import paymentsRoute from "./features/payment/payment.router.js";
 import crateRoute from "./features/inventoryCrate/inventoryCrate.router.js";
+import imageRoute from "./features/image/image.router.js";
 
 const app = express();
 const API_VERSION = process.env.API_VERSION || "/api/v1";
@@ -105,6 +106,9 @@ app.use(`${API_VERSION}/payment`, paymentsRoute);
 
 // crates  routes
 app.use(`${API_VERSION}/crates`, crateRoute);
+
+// img  routes
+app.use(`${API_VERSION}/image`, imageRoute);
 
 // 404 Handler
 app.use((req, res) => {
