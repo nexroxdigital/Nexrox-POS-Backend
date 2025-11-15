@@ -2,6 +2,7 @@ import express from "express";
 import {
   createSale,
   getAllSales,
+  getLotSummaryController,
   getSaleById,
   salesByCustomer,
 } from "./sale.controller.js";
@@ -19,5 +20,7 @@ router.get("/by-customer/:id", salesByCustomer);
 
 // get details
 router.get("/details/:id", getSaleById);
+
+router.get("/lot-sale-summary/:lotId", getLotSummaryController);
 
 export default router;

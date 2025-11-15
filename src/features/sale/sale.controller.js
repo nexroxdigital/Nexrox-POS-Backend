@@ -28,7 +28,6 @@ export const createSale = async (req, res) => {
 export const getAllSales = async (req, res) => {
   try {
     const { page = 1, limit = 10, search } = req.query;
-   
 
     const result = await saleService.getAllSales(
       search,
@@ -101,5 +100,18 @@ export const getSaleById = async (req, res) => {
       success: false,
       message: error.message || "Failed to fetch sale details",
     });
+  }
+};
+
+// @desc    Get lot summary from sales by lotId
+// @route   GET /api/v1/sales/lot-summary/:lotId
+// @access  private
+export const getLotSummaryController = async (req, res, next) => {
+  try {
+    const { lotId } = req.params;
+    const data = await saleService.getLotSummaryService(lotId);
+    res.status(200).json({ success: true, data });
+  } catch (err) {
+    next(err);
   }
 };
