@@ -155,6 +155,9 @@ export const adjustStockController = async (req, res) => {
   }
 };
 
+// @desc    Get profit/loss (all-time or by purchase date)
+// @route   GET /api/v1/profit-loss
+// @access  Public
 export const getProfitLoss = async (req, res) => {
   try {
     const { purchase_date } = req.query;

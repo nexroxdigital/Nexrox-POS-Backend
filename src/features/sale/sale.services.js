@@ -464,3 +464,115 @@ export const getSaleById = async (id) => {
 
   return sale;
 };
+
+// @desc Get lot summary with sales list by lotId
+// @access private
+export const getLotSummaryService = async (lotId) => {
+  const data = await Sale.aggregate([
+    { $unwind: "$items" },
+    { $unwind: "$items.selected_lots" },
+
+    // @desc Filter by lotId from params
+    {
+      $match: {
+        "items.selected_lots.lotId": new mongoose.Types.ObjectId(lotId),
+      },
+    },
+
+    // @desc Join lot info
+    {
+      $lookup: {
+        from: "inventorylots",
+        localField: "items.selected_lots.lotId",
+        foreignField: "_id",
+        as: "lot",
+      },
+    },
+    { $unwind: "$lot" },
+
+    // @desc Join supplier info
+    {
+      $lookup: {
+        from: "suppliers",
+        localField: "lot.supplierId",
+        foreignField: "_id",
+        as: "supplier",
+      },
+    },
+    { $unwind: "$supplier" },
+
+    // @desc Project sale-level and lot-level fields
+    {
+      $project: {
+        _id: 0,
+        lot_name: "$lot.lot_name",
+        supplier_name: "$supplier.basic_info.name",
+        lot_expenses: "$lot.expenses",
+
+        sale: {
+          kg: "$items.selected_lots.kg",
+          discount_Kg: "$items.selected_lots.discount_Kg",
+          unit_price: "$items.selected_lots.unit_price",
+
+          total_price: {
+            $multiply: [
+              {
+                $subtract: [
+                  "$items.selected_lots.kg",
+                  "$items.selected_lots.discount_Kg",
+                ],
+              },
+              "$items.selected_lots.unit_price",
+            ],
+          },
+
+          total_crate: {
+            $cond: [
+              {
+                $gt: [
+                  {
+                    $add: [
+                      "$items.selected_lots.crate_type1",
+                      "$items.selected_lots.crate_type2",
+                    ],
+                  },
+                  0,
+                ],
+              },
+
+              {
+                $add: [
+                  "$items.selected_lots.crate_type1",
+                  "$items.selected_lots.crate_type2",
+                ],
+              },
+
+              {
+                $cond: [
+                  { $gt: ["$items.selected_lots.box_quantity", 0] },
+                  "$items.selected_lots.box_quantity",
+                  0,
+                ],
+              },
+            ],
+          },
+        },
+      },
+    },
+
+    // @desc Group all sales under the same lot
+    {
+      $group: {
+        _id: "$lot_name",
+        lot_name: { $first: "$lot_name" },
+        supplier_name: { $first: "$supplier_name" },
+        lot_expenses: { $first: "$lot_expenses" },
+        sales: { $push: "$sale" }, // all sale items under this lot
+      },
+    },
+
+    { $project: { _id: 0 } }, // remove _id field
+  ]);
+
+  return data[0] || {}; // return the first (and only) lot object
+};

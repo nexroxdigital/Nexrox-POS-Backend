@@ -413,15 +413,16 @@ export const adjustStockService = async (lotId, stockAdjustData) => {
   return lot;
 };
 
+// @desc Calculate profit/loss (all-time or filtered by purchase date)
+// @access Public
 export const calculateProfitLoss = async (filters = {}) => {
   try {
-    // Build query
+    // Base query: always show stock out lots
     const query = {
-      payment_status: "unpaid",
       status: "stock out",
     };
 
-    // Add date filter if provided
+    // Add date filter only if provided
     if (filters.purchase_date) {
       const startDate = new Date(filters.purchase_date);
       startDate.setHours(0, 0, 0, 0);
@@ -435,7 +436,7 @@ export const calculateProfitLoss = async (filters = {}) => {
       };
     }
 
-    // Fetch matching lots
+    // Fetch lots
     const lots = await inventoryLotsModel.find(query).select("profits");
 
     // Calculate totals
