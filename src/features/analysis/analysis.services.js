@@ -92,3 +92,116 @@ export const getStats = async (filter) => {
     total_supplier: totalSupplier,
   };
 };
+
+// @desc Get monthly summary for current year
+// @access Private/Admin
+export const getMonthlySummaryService = async () => {
+  const year = new Date().getFullYear();
+
+  // Month names array
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  // Sales by month
+  const salesAgg = await saleModel.aggregate([
+    {
+      $match: {
+        sale_date: {
+          $gte: `${year}-01-01`,
+          $lte: `${year}-12-31`,
+        },
+      },
+    },
+    {
+      $group: {
+        _id: { $month: { $dateFromString: { dateString: "$sale_date" } } },
+        totalSales: { $sum: "$payment_details.payable_amount" },
+        customers: { $addToSet: "$customerId" },
+      },
+    },
+  ]);
+
+  // Profit by month (InventoryLot.purchase_date)
+  const profitAgg = await inventoryLotsModel.aggregate([
+    {
+      $match: {
+        purchase_date: {
+          $gte: new Date(`${year}-01-01`),
+          $lte: new Date(`${year}-12-31`),
+        },
+      },
+    },
+    {
+      $group: {
+        _id: { $month: "$purchase_date" },
+        totalProfit: { $sum: "$profits.totalProfit" },
+        totalLoss: { $sum: "$profits.lot_loss" },
+      },
+    },
+  ]);
+
+  // Expenses by month (Expense.createdAt)
+  const expenseAgg = await expenseModel.aggregate([
+    {
+      $match: {
+        createdAt: {
+          $gte: new Date(`${year}-01-01`),
+          $lte: new Date(`${year}-12-31`),
+        },
+      },
+    },
+    {
+      $group: {
+        _id: { $month: "$createdAt" },
+        totalExpenses: { $sum: "$amount" },
+      },
+    },
+  ]);
+
+  // Customer count by month (Customer.createdAt)
+  const customerAgg = await customerModel.aggregate([
+    {
+      $match: {
+        createdAt: {
+          $gte: new Date(`${year}-01-01`),
+          $lte: new Date(`${year}-12-31`),
+        },
+      },
+    },
+    {
+      $group: {
+        _id: { $month: "$createdAt" },
+        customerCount: { $sum: 1 },
+      },
+    },
+  ]);
+
+  // Combine all into 12 months with month names
+  const summary = Array.from({ length: 12 }, (_, i) => {
+    const monthNumber = i + 1;
+    return {
+      month: monthNames[i], // Month name
+      sales: salesAgg.find((s) => s._id === monthNumber)?.totalSales || 0,
+      profit: profitAgg.find((p) => p._id === monthNumber)?.totalProfit || 0,
+      loss: profitAgg.find((p) => p._id === monthNumber)?.totalLoss || 0,
+      expenses:
+        expenseAgg.find((e) => e._id === monthNumber)?.totalExpenses || 0,
+      customerCount:
+        customerAgg.find((c) => c._id === monthNumber)?.customerCount || 0,
+    };
+  });
+
+  return { year, summary };
+};
