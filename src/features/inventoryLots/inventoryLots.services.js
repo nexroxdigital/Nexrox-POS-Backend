@@ -261,7 +261,14 @@ export const getAllLotsBySupplier = async (
       },
     },
     // Stage 6: Sort and paginate
-    { $sort: { createdAt: -1 } },
+    {
+      $addFields: {
+        statusOrder: {
+          $cond: [{ $eq: ["$status", "in stock"] }, 0, 1],
+        },
+      },
+    },
+    { $sort: { statusOrder: 1, createdAt: -1 } },
   ];
 
   // Execute aggregation for data

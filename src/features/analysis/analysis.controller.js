@@ -17,3 +17,16 @@ export const getDashboardStats = async (req, res, next) => {
     next(error);
   }
 };
+
+// @desc    Get monthly summary for current year
+// @route   GET /api/reports/monthly-summary
+// @access  Private/Admin
+export const getMonthlySummary = async (req, res) => {
+  try {
+    const summary = await analysisService.getMonthlySummaryService();
+    res.status(200).json(summary);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
