@@ -39,10 +39,10 @@ export const createSale = async (saleData) => {
     const updates = {};
 
     // Update balance (deduct received_amount_from_balance)
-    const receivedFromBalance =
-      saleData.payment_details.received_amount_from_balance || 0;
-    updates["account_info.balance"] =
-      customer.account_info.balance - receivedFromBalance;
+    // const receivedFromBalance =
+    //   saleData.payment_details.received_amount_from_balance || 0;
+    // updates["account_info.balance"] =
+    //   customer.account_info.balance - receivedFromBalance;
 
     // Update due (add due_amount)
     const dueAmount = saleData.payment_details.due_amount || 0;
@@ -122,8 +122,8 @@ export const createSale = async (saleData) => {
       total_Income: saleData.total_profit,
 
       received_amount: saleData.payment_details.received_amount || 0,
-      received_amount_from_balance:
-        saleData.payment_details.received_amount_from_balance || 0,
+      // received_amount_from_balance:
+      //   saleData.payment_details.received_amount_from_balance || 0,
       due: saleData.payment_details.due_amount || 0,
     };
 
