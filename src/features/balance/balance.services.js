@@ -6,8 +6,6 @@ import mongoose from "mongoose";
 // @desc    Create a new balance
 // @access  Admin
 export const createBalance = async (data) => {
-
-
   const session = await mongoose.startSession();
   session.startTransaction();
 
@@ -18,15 +16,16 @@ export const createBalance = async (data) => {
 
     // Update related profile
     if (data.role === "customer") {
-      const customer = await customerModel.findByIdAndUpdate(
-        data.balance_for,
-        {
-          $inc: { "account_info.balance": data.amount },
-        },
-        { new: true, session }
-      );
+      throw new Error("Customer not found");
+      // const customer = await customerModel.findByIdAndUpdate(
+      //   data.balance_for,
+      //   {
+      //     $inc: { "account_info.balance": data.amount },
+      //   },
+      //   { new: true, session }
+      // );
 
-      if (!customer) throw new Error("Customer not found");
+      // if (!customer) throw new Error("Customer not found");
     } else if (data.role === "supplier") {
       const supplier = await supplierModel.findByIdAndUpdate(
         data.balance_for,
