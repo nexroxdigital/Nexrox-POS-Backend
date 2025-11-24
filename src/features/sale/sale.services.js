@@ -4,6 +4,7 @@ import customerModel from "../customer/customer.model.js";
 import incomeModel from "../income/income.model.js";
 import inventoryLotsModel from "../inventoryLots/inventoryLots.model.js";
 import Sale from "./sale.model.js";
+import customerCrateHistoryModel from "../customerCrateHistory/customerCrateHistory.model.js";
 
 // @desc Create sale a sale list + Update customer collection  ( caret info + due + balance ) Update inventory lots ( total sold + total sold kg + lotCommission + customerCommission ) + Create Income document
 // @access  Admin
@@ -49,8 +50,8 @@ export const createSale = async (saleData) => {
     updates["account_info.due"] = customer.account_info.due + dueAmount;
 
     // Update crates (subtract used crates, minimum 0)
-    const newCrateType1 = customer.crate_info.type_1 - totalCrateType1;
-    const newCrateType2 = customer.crate_info.type_2 - totalCrateType2;
+    const newCrateType1 = customer.crate_info.type_1 + totalCrateType1;
+    const newCrateType2 = customer.crate_info.type_2 + totalCrateType2;
 
     updates["crate_info.type_1"] = Math.max(0, newCrateType1);
     updates["crate_info.type_2"] = Math.max(0, newCrateType2);
@@ -129,7 +130,22 @@ export const createSale = async (saleData) => {
 
     await incomeModel.create([incomeData], { session });
 
-    // 8. Commit transaction
+    // 8. Create Customer Crate History if crates used
+    if (totalCrateType1 > 0 || totalCrateType2 > 0) {
+      const crateHistoryData = {
+        saleId: sale._id,
+        customerId: saleData.customerId,
+        crate_type1: totalCrateType1,
+        crate_type2: totalCrateType2,
+        crate_type1_price:
+          saleData.payment_details?.extra_crate_type1_price || 0,
+        crate_type2_price:
+          saleData.payment_details?.extra_crate_type2_price || 0,
+      };
+
+      await customerCrateHistoryModel.create([crateHistoryData], { session });
+    }
+    // 9. Commit transaction
     await session.commitTransaction();
     session.endSession();
 

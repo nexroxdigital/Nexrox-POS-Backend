@@ -24,6 +24,7 @@ import crateRoute from "./features/inventoryCrate/inventoryCrate.router.js";
 import imageRoute from "./features/image/image.router.js";
 import analysisRoute from "./features/analysis/analysis.router.js";
 import expenseRoute from "./features/expenseCategories/expenseCategories.router.js";
+import customerCrateHistoryRoute from "./features/customerCrateHistory/customerCrateHistory.router.js";
 
 const app = express();
 const API_VERSION = process.env.API_VERSION || "/api/v1";
@@ -126,7 +127,10 @@ app.use(`${API_VERSION}/image`, imageRoute);
 app.use(`${API_VERSION}/analysis`, analysisRoute);
 
 // Expense  routes
-app.use(`${API_VERSION}/expense`, expenseRoute);
+app.use(`${API_VERSION}/expense-category`, expenseRoute);
+
+// Expense  routes
+app.use(`${API_VERSION}/customer-crate-history`, customerCrateHistoryRoute);
 
 // 404 Handler
 app.use((req, res) => {
