@@ -5,9 +5,13 @@ import * as customerCrateHistoryService from "./customerCrateHistory.services.js
 // @access Private
 export const getAllHistoryController = async (req, res, next) => {
   try {
+    const { page = 1, limit = 10 } = req.query;
     const data = await customerCrateHistoryService.getCustomerCrateHistory(
-      req.params.customerId
+      req.params.customerId,
+      parseInt(page),
+      parseInt(limit)
     );
+
     res.json(data);
   } catch (err) {
     next(err);
