@@ -7,8 +7,11 @@ export const getCustomerCrateHistory = async (customerId, page, limit) => {
 
   const total = await CustomerCrateHistory.countDocuments({ customerId });
   const history = await CustomerCrateHistory.find({ customerId })
-    .populate("customerId", "name")
-    .populate("saleId", "sale_date")
+    .populate(
+      "customerId",
+      "basic_info.name contact_info.phone contact_info.email"
+    )
+    // .populate("saleId", "sale_date")
     .sort({ status: 1, createdAt: -1 }) // given -> partial_return -> returned
     .skip(skip)
     .limit(limit);
