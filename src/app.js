@@ -127,7 +127,7 @@ app.use(`${API_VERSION}/image`, imageRoute);
 app.use(`${API_VERSION}/analysis`, analysisRoute);
 
 // Expense  routes
-app.use(`${API_VERSION}/expense`, expenseRoute);
+app.use(`${API_VERSION}/expense-category`, expenseRoute);
 
 // Expense  routes
 app.use(`${API_VERSION}/customer-crate-history`, customerCrateHistoryRoute);
