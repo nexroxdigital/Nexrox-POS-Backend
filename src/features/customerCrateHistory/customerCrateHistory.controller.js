@@ -38,6 +38,7 @@ export const getHistoryDetailsController = async (req, res, next) => {
 export const updateStatusController = async (req, res, next) => {
   try {
     const { status } = req.body;
+
     if (!status) throw new Error("Status is required");
 
     const updated = await customerCrateHistoryService.updateCrateStatus(
@@ -46,6 +47,7 @@ export const updateStatusController = async (req, res, next) => {
     );
     res.json(updated);
   } catch (err) {
+    console.error("Controller error:", err);
     next(err);
   }
 };
