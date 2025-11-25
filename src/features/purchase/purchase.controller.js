@@ -7,7 +7,6 @@ import * as purchaseService from "./purchase.services.js";
 export const createPurchase = async (req, res) => {
   try {
     const userId = req.user.id;
-    const userEmail = req.user.email;
 
     const purchase = await purchaseService.createPurchase(req.body);
 
@@ -17,7 +16,7 @@ export const createPurchase = async (req, res) => {
       logs_fields_id: purchase._id,
       by: userId,
       action: "Created",
-      note: `Purchase made on ${purchase.purchase_date.toLocaleDateString()} by ${userEmail}.`,
+      note: `Purchase made on ${purchase.purchase_date.toLocaleDateString()} `,
     });
 
     res.status(201).json({

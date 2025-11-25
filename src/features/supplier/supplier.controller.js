@@ -15,7 +15,7 @@ export const createSupplier = async (req, res) => {
       logs_fields_id: supplier._id,
       by: userId,
       action: "Created",
-      note: `New customer ${supplier.basic_info.name} created`,
+      note: `New supplier ${supplier.basic_info.name} created`,
     });
 
     res.status(201).json({

@@ -14,7 +14,7 @@ export const createSale = async (req, res) => {
     // Log activity
     await logActivity({
       model_name: "Sale",
-      logs_fields_id: sale._id,
+      logs_fields_id: result._id,
       by: userId,
       action: "Created",
       note: `New sale ${result.sale_date} created`,
