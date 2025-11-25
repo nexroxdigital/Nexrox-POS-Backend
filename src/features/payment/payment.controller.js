@@ -1,3 +1,5 @@
+import { logActivity } from "../../utils/activityLogger.js";
+import supplierModel from "../supplier/supplier.model.js";
 import * as paymentService from "./payment.services.js";
 
 // @desc    Create transaction
@@ -5,7 +7,26 @@ import * as paymentService from "./payment.services.js";
 // @access  Admin
 export const createTransaction = async (req, res, next) => {
   try {
+    const userId = req.user.id;
+
     const transaction = await paymentService.createTransaction(req.body);
+
+    // Get supplier info
+    const supplier = await supplierModel
+      .findById(transaction.supplierId)
+      .select("basic_info.name");
+
+    const supplierName = supplier?.basic_info?.name;
+
+    // Log activity
+    await logActivity({
+      model_name: "Payment",
+      logs_fields_id: transaction._id,
+      by: userId,
+      action: "Payment Cleared",
+      note: `Payment clear for ${supplierName}. Amount:${transaction.payable_amount} `,
+    });
+
     res.status(201).json({
       success: true,
       message: "Transaction created successfully",

@@ -1,3 +1,5 @@
+import { logActivity } from "../../utils/activityLogger.js";
+import supplierModel from "../supplier/supplier.model.js";
 import * as balanceService from "./balance.services.js";
 
 // @desc    Create a new balance
@@ -5,7 +7,26 @@ import * as balanceService from "./balance.services.js";
 // @access  Admin
 export const createBalance = async (req, res) => {
   try {
+    const userId = req.user.id;
+
     const balance = await balanceService.createBalance(req.body);
+
+    // Get supplier info
+    const supplier = await supplierModel
+      .findById(balance.balance_for)
+      .select("basic_info.name");
+
+    const supplierName = supplier?.basic_info?.name;
+
+    // Log activity
+    await logActivity({
+      model_name: "Balance",
+      logs_fields_id: balance._id,
+      by: userId,
+      action: "Created",
+      note: `Balance added to ${supplierName}'s account. Amount:${balance.amount}`,
+    });
+
     res.status(201).json({
       message: "Balance created successfully",
       data: balance,
