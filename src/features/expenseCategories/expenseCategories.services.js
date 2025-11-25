@@ -30,13 +30,7 @@ export const getAllExpenseCategories = async (
   };
 };
 
-// @desc    Get single expense category by ID
-// @access  Public
-export const getExpenseCategoryById = async (id) => {
-  const category = await ExpenseCategory.findById(id);
-  if (!category) throw new Error("Expense category not found");
-  return category;
-};
+
 
 // @desc    Create new expense category
 // @access  Public

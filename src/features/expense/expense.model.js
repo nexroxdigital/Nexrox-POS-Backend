@@ -11,6 +11,10 @@ const expenseSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    expense_category: {
+      type: String,
+      required: true,
+    },
     expense_for: {
       type: String,
       required: true,
