@@ -1,10 +1,23 @@
+import { logActivity } from "../../utils/activityLogger.js";
 import * as supplierService from "./supplier.service.js";
 
 // @desc    Create a new supplier
 // @route   POST /api/v1/suppliers
 export const createSupplier = async (req, res) => {
   try {
+    const userId = req.user.id;
+
     const supplier = await supplierService.createSupplier(req.body);
+
+    // Log activity
+    await logActivity({
+      model_name: "Supplier",
+      logs_fields_id: supplier._id,
+      by: userId,
+      action: "Created",
+      note: `New customer ${supplier.basic_info.name} created`,
+    });
+
     res.status(201).json({
       message: "Supplier created successfully",
       data: supplier,
@@ -58,6 +71,15 @@ export const updateSupplier = async (req, res) => {
       req.params.id,
       req.body
     );
+
+    // Log activity
+    await logActivity({
+      model_name: "Supplier",
+      logs_fields_id: supplier._id,
+      by: req.user._id,
+      action: "Updated",
+      note: "supplier information updated",
+    });
 
     if (!updatedSupplier) {
       return res.status(404).json({ message: "Supplier not found" });

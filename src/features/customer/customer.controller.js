@@ -7,7 +7,6 @@ import * as customerService from "./customer.services.js";
 export const createCustomer = async (req, res) => {
   try {
     const userId = req.user.id;
-    const userEmail = req.user.email;
 
     const customer = await customerService.createCustomer(req.body);
 
@@ -17,7 +16,7 @@ export const createCustomer = async (req, res) => {
       logs_fields_id: customer._id,
       by: userId,
       action: "Created",
-      note: `New customer ${customer.basic_info.name} created by ${userEmail}`,
+      note: `New customer ${customer.basic_info.name} created`,
     });
 
     res
@@ -33,9 +32,6 @@ export const createCustomer = async (req, res) => {
 // @access  Admin
 export const updateCustomer = async (req, res) => {
   try {
-    const userId = req.user.id;
-    const userEmail = req.user.email;
-
     const customer = await customerService.updateCustomer(
       req.params.id,
       req.body
@@ -49,15 +45,7 @@ export const updateCustomer = async (req, res) => {
     await logActivity({
       model_name: "Customer",
       logs_fields_id: customer._id,
-      by: userId,
-      action: "Created",
-      note: `customer ${customer.basic_info.name} updated by ${userEmail}`,
-    });
-    // Log activity
-    await logActivity({
-      model_name: "Customer",
-      logs_fields_id: customer._id,
-      // by: req.user._id,
+      by: req.user._id,
       action: "Updated",
       note: "Customer information updated",
     });
