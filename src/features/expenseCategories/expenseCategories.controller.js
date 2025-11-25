@@ -24,33 +24,6 @@ export const getExpenseCategories = async (req, res) => {
   }
 };
 
-// @desc    Get single expense category
-// @route   GET /api/v1/expense-categories/:id
-// @access  Public
-export const getExpenseCategoryDetail = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const category = await ExpenseCategoriesService.getExpenseCategoryById(id);
-
-    res.status(200).json({
-      success: true,
-      message: "Expense category retrieved successfully",
-      data: category,
-    });
-  } catch (error) {
-    if (error.message === "Expense category not found") {
-      return res.status(404).json({
-        success: false,
-        message: error.message,
-      });
-    }
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
 // @desc    Create new expense category
 // @route   POST /api/v1/expense-categories
 // @access  Public
