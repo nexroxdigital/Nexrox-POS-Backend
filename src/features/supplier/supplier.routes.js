@@ -7,13 +7,14 @@ import {
   getSuppliersByQuery,
   updateSupplier,
 } from "./supplier.controller.js";
+import { authMiddleware } from "../../middleware/auth.js";
 
 const router = express.Router();
 
 router.get("/", getSuppliersByQuery);
 
 // add suppliers
-router.post("/add", createSupplier);
+router.post("/add", authMiddleware, createSupplier);
 
 // add get all
 router.get("/all", getAllSuppliers);
@@ -22,7 +23,7 @@ router.get("/all", getAllSuppliers);
 router.get("/details/:id", getSupplierById);
 
 // update
-router.put("/update/:id", updateSupplier);
+router.put("/update/:id", authMiddleware, updateSupplier);
 
 // GET due-list
 router.get("/due-list", getDueSuppliersController);

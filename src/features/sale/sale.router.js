@@ -10,7 +10,7 @@ import {
 const router = express.Router();
 
 // add sale
-router.post("/add", createSale);
+router.post("/add", authMiddleware, createSale);
 
 // get all
 router.get("/all", getAllSales);

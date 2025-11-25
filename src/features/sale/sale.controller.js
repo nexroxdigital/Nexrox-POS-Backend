@@ -1,3 +1,4 @@
+import { logActivity } from "../../utils/activityLogger.js";
 import * as saleService from "./sale.services.js";
 
 // @desc    Create sale record
@@ -5,8 +6,19 @@ import * as saleService from "./sale.services.js";
 // @access  Admin
 export const createSale = async (req, res) => {
   try {
+    const userId = req.user.id;
+
     const saleData = req.body;
     const result = await saleService.createSale(saleData);
+
+    // Log activity
+    await logActivity({
+      model_name: "Sale",
+      logs_fields_id: sale._id,
+      by: userId,
+      action: "Created",
+      note: `New sale ${result.sale_date} created`,
+    });
 
     res.status(201).json({
       success: true,
