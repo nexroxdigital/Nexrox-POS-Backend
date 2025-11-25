@@ -6,6 +6,7 @@ import {
   getSaleById,
   salesByCustomer,
 } from "./sale.controller.js";
+import { authMiddleware } from "../../middleware/auth.js";
 
 const router = express.Router();
 
