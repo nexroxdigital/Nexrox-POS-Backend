@@ -101,8 +101,8 @@ export const createSale = async (saleData) => {
           }
 
           newStatus =
-            inventoryLot.remaining_carat_Type_1 - lot.carat_type1 === 0 &&
-            inventoryLot.remaining_carat_Type_2 - lot.carat_type2 === 0
+            inventoryLot.carat.remaining_carat_Type_1 - lot.carat_type1 === 0 &&
+            inventoryLot.carat.remaining_carat_Type_2 - lot.carat_type2 === 0
               ? "stock out"
               : "in stock";
         }
