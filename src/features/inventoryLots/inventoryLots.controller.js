@@ -155,6 +155,32 @@ export const adjustStockController = async (req, res) => {
   }
 };
 
+// @desc    Update extra expense for a lot
+// @route   PATCH /api/v1/inventoryLots/:lotId/extra-expense
+// @access  Admin
+export const updateExtraExpenseController = async (req, res) => {
+  try {
+    const { lotId } = req.params;
+    const { extra_expense, extra_expense_note } = req.body;
+
+    const updatedLot = await inventoryLotsService.updateExtraExpense(lotId, {
+      extra_expense,
+      extra_expense_note,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Extra expense updated successfully",
+      lot: updatedLot,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 // @desc    Get profit/loss (all-time or by purchase date)
 // @route   GET /api/v1/profit-loss
 // @access  Public

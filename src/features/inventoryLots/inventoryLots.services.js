@@ -70,13 +70,16 @@ export const createLotsForPurchase = async (purchaseId) => {
             moshjid: lot.expenses.moshjid,
             trading_post: lot.expenses.trading_post,
             other_expenses: lot.expenses.other_expenses,
+            extra_expense: lot.expenses.extra_expense || 0,
+            extra_expense_note: lot.expenses.extra_expense_note || "",
             total_expenses:
               lot.expenses.labour +
               lot.expenses.transportation +
               lot.expenses.van_vara +
               lot.expenses.moshjid +
               lot.expenses.trading_post +
-              lot.expenses.other_expenses,
+              lot.expenses.other_expenses +
+              (lot.expenses.extra_expense || 0),
           },
         });
 
@@ -417,6 +420,34 @@ export const adjustStockService = async (lotId, stockAdjustData) => {
   if (!hasCommission) {
     lot.profits.customerProfit = totalSoldPrice - originalPrice;
   }
+
+  await lot.save();
+  return lot;
+};
+
+// @desc Add or update extra expense to a lot
+// @access Admin
+export const updateExtraExpense = async (lotId, extraExpenseData) => {
+  const { extra_expense, extra_expense_note } = extraExpenseData;
+
+  const lot = await inventoryLotsModel.findById(lotId);
+  if (!lot) {
+    throw new Error("Lot not found");
+  }
+
+  // Update extra expense fields
+  lot.expenses.extra_expense = extra_expense || 0;
+  lot.expenses.extra_expense_note = extra_expense_note || "";
+
+  // Recalculate total_expenses
+  lot.expenses.total_expenses =
+    lot.expenses.labour +
+    lot.expenses.transportation +
+    lot.expenses.van_vara +
+    lot.expenses.moshjid +
+    lot.expenses.trading_post +
+    lot.expenses.other_expenses +
+    lot.expenses.extra_expense;
 
   await lot.save();
   return lot;
