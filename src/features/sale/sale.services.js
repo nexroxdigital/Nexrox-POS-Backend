@@ -90,14 +90,14 @@ export const createSale = async (saleData) => {
               : "in stock";
         }
 
-        // for check carat quantity and update status
-        if (lot.carat_type1 > 0 || lot.carat_type2 > 0) {
+        // for check crate quantity and update status
+        if (lot.crate_type1 > 0 || lot.crate_type2 > 0) {
           if (inventoryLot.carat.remaining_crate_Type_1 < lot.crate_type1) {
-            throw new Error(`Not enough carat in lot: ${lot.lot_name}`);
+            throw new Error(`Not enough crate in lot: ${lot.lot_name}`);
           }
 
           if (inventoryLot.carat.remaining_crate_Type_2 < lot.crate_type2) {
-            throw new Error(`Not enough carat in lot: ${lot.lot_name}`);
+            throw new Error(`Not enough crate in lot: ${lot.lot_name}`);
           }
 
           newStatus =
