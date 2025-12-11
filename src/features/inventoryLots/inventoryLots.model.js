@@ -59,6 +59,14 @@ const inventoryLotsSchema = new mongoose.Schema(
         type: Number,
         default: 0,
       },
+      remaining_carat_Type_1: {
+        type: Number,
+        default: 0,
+      },
+      remaining_carat_Type_2: {
+        type: Number,
+        default: 0,
+      },
     },
 
     box_quantity: {

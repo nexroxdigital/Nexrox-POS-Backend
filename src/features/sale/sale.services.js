@@ -77,6 +77,36 @@ export const createSale = async (saleData) => {
           throw new Error(`InventoryLot not found: ${lot.lotId}`);
         }
 
+        let newStatus;
+        // for check box quantity and update status
+        if (lot.box_quantity > 0) {
+          if (inventoryLot.remaining_boxes < lot.box_quantity) {
+            throw new Error(`Not enough boxes in lot: ${lot.lot_name}`);
+          }
+
+          newStatus =
+            inventoryLot.remaining_boxes - lot.box_quantity === 0
+              ? "stock out"
+              : "in stock";
+        }
+
+        // for check carat quantity and update status
+        if (lot.carat_type1 > 0 || lot.carat_type2 > 0) {
+          if (inventoryLot.remaining_carat_Type_1 < lot.carat_type1) {
+            throw new Error(`Not enough carat in lot: ${lot.lot_name}`);
+          }
+
+          if (inventoryLot.remaining_carat_Type_2 < lot.carat_type2) {
+            throw new Error(`Not enough carat in lot: ${lot.lot_name}`);
+          }
+
+          newStatus =
+            inventoryLot.remaining_carat_Type_1 - lot.carat_type1 === 0 &&
+            inventoryLot.remaining_carat_Type_2 - lot.carat_type2 === 0
+              ? "stock out"
+              : "in stock";
+        }
+
         // Calculate increments for this lot
         const kgSold = lot.kg || 0;
         const soldPrice = lot.selling_price || 0;
@@ -98,6 +128,13 @@ export const createSale = async (saleData) => {
             lotCommission +
             customerCommission,
           remaining_boxes: inventoryLot.remaining_boxes - lot.box_quantity,
+
+          "carat.remaining_carat_Type_1":
+            inventoryLot.remaining_carat_Type_1 - lot.carat_type1,
+          "carat.remaining_carat_Type_2":
+            inventoryLot.remaining_carat_Type_2 - lot.carat_type2,
+
+          status: newStatus,
         };
 
         // Apply updates to inventory lot
@@ -145,6 +182,7 @@ export const createSale = async (saleData) => {
 
       await customerCrateHistoryModel.create([crateHistoryData], { session });
     }
+
     // 9. Commit transaction
     await session.commitTransaction();
     session.endSession();
