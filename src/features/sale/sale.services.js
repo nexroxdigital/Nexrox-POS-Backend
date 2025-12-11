@@ -92,11 +92,11 @@ export const createSale = async (saleData) => {
 
         // for check carat quantity and update status
         if (lot.carat_type1 > 0 || lot.carat_type2 > 0) {
-          if (inventoryLot.remaining_carat_Type_1 < lot.carat_type1) {
+          if (inventoryLot.carat.remaining_carat_Type_1 < lot.carat_type1) {
             throw new Error(`Not enough carat in lot: ${lot.lot_name}`);
           }
 
-          if (inventoryLot.remaining_carat_Type_2 < lot.carat_type2) {
+          if (inventoryLot.carat.remaining_carat_Type_2 < lot.carat_type2) {
             throw new Error(`Not enough carat in lot: ${lot.lot_name}`);
           }
 
@@ -130,9 +130,9 @@ export const createSale = async (saleData) => {
           remaining_boxes: inventoryLot.remaining_boxes - lot.box_quantity,
 
           "carat.remaining_carat_Type_1":
-            inventoryLot.remaining_carat_Type_1 - lot.carat_type1,
+            inventoryLot.carat.remaining_carat_Type_1 - lot.carat_type1,
           "carat.remaining_carat_Type_2":
-            inventoryLot.remaining_carat_Type_2 - lot.carat_type2,
+            inventoryLot.carat.remaining_carat_Type_2 - lot.carat_type2,
 
           status: newStatus,
         };
