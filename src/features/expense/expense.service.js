@@ -28,7 +28,6 @@ export const getAllExpenses = async (page, limit, filters = {}) => {
     query.$or = [
       { reference_num: { $regex: filters.search, $options: "i" } },
       { expense_category: { $regex: filters.search, $options: "i" } },
-      { employeeId: { $regex: filters.search, $options: "i" } },
     ];
   }
 
@@ -36,6 +35,7 @@ export const getAllExpenses = async (page, limit, filters = {}) => {
 
   const expenses = await Expense.find(query)
     .populate("expense_by", "name email")
+    .populate("employeeId", "name")
     .populate("choose_account", "name account_type balance")
     .sort({ createdAt: -1 })
     .skip(skip)
