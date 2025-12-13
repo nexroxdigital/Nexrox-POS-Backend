@@ -156,6 +156,16 @@ const inventoryLotsSchema = new mongoose.Schema(
         default: 0,
       },
 
+      extra_expense: {
+        type: Number,
+        default: 0,
+      },
+
+      extra_expense_note: {
+        type: String,
+        default: "",
+      },
+
       // total
       total_expenses: {
         type: Number,
@@ -166,6 +176,7 @@ const inventoryLotsSchema = new mongoose.Schema(
         type: Number,
         default: 0,
       },
+
     },
 
     stock_adjust: {

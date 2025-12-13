@@ -8,7 +8,8 @@ import {
   getProfitLoss,
   getUnpaidAndOutOfStockLots,
   lotsBySupplier,
-  updateLotStatusController,
+  updateExtraExpenseController,
+  updateLotStatusController
 } from "./inventoryLots.controller.js";
 
 const router = express.Router();
@@ -35,6 +36,8 @@ router.get("/in-stock", getAllInStockLots);
 router.get("/unpaid-stock-out", getUnpaidAndOutOfStockLots);
 
 router.patch("/:lotId/adjust-stock", adjustStockController);
+
+router.patch("/:lotId/extra-expense", updateExtraExpenseController);
 
 router.get("/profit-loss", getProfitLoss);
 
