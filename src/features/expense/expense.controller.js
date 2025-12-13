@@ -33,11 +33,19 @@ export const createExpense = async (req, res) => {
 // @route   GET /api/v1/expenses
 export const getAllExpenses = async (req, res) => {
   try {
-    const { page = 1, limit = 10 } = req.query;
+    const {
+      page = 1,
+      limit = 10,
+      search,
+      category,
+      expense_for_user,
+      date,
+    } = req.query;
 
     const expenses = await expenseService.getAllExpenses(
       parseInt(page),
-      parseInt(limit)
+      parseInt(limit),
+      { search, category, expense_for_user, date }
     );
 
     res.status(200).json(expenses);

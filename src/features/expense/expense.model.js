@@ -30,12 +30,19 @@ const expenseSchema = new mongoose.Schema(
       trim: true,
       default: "",
     },
+
     // Relations
     expense_by: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User", // relates to User collection
       required: true,
     },
+
+    expense_for_user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User", // relates to User collection
+    },
+
     choose_account: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Account", // relates to Account collection
