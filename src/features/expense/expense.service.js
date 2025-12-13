@@ -7,7 +7,6 @@ export const createExpense = async (data) => {
 };
 
 // Get all
-// Get all
 export const getAllExpenses = async (page, limit, filters = {}) => {
   const skip = (page - 1) * limit;
 
@@ -17,8 +16,8 @@ export const getAllExpenses = async (page, limit, filters = {}) => {
     query.expense_category = filters.category;
   }
 
-  if (filters.expense_for_user) {
-    query.expense_for_user = filters.expense_for_user;
+  if (filters.employeeId) {
+    query.employeeId = filters.employeeId;
   }
 
   if (filters.date) {
@@ -29,7 +28,7 @@ export const getAllExpenses = async (page, limit, filters = {}) => {
     query.$or = [
       { reference_num: { $regex: filters.search, $options: "i" } },
       { expense_category: { $regex: filters.search, $options: "i" } },
-      { expense_for_user: { $regex: filters.search, $options: "i" } },
+      { employeeId: { $regex: filters.search, $options: "i" } },
     ];
   }
 

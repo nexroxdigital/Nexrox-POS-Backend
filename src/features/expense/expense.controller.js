@@ -38,14 +38,14 @@ export const getAllExpenses = async (req, res) => {
       limit = 10,
       search,
       category,
-      expense_for_user,
+      employeeId,
       date,
     } = req.query;
 
     const expenses = await expenseService.getAllExpenses(
       parseInt(page),
       parseInt(limit),
-      { search, category, expense_for_user, date }
+      { search, category, employeeId, date }
     );
 
     res.status(200).json(expenses);
@@ -83,6 +83,26 @@ export const updateExpense = async (req, res) => {
     });
   } catch (error) {
     console.error("Update Expense Error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// @desc    Get expenses by employee ID
+// @route   GET /api/v1/expenses/employee/:employeeId
+export const getExpensesByEmployeeId = async (req, res) => {
+  try {
+    const { employeeId } = req.params;
+    const { page = 1, limit = 10 } = req.query;
+
+    const expenses = await expenseService.getAllExpenses(
+      parseInt(page),
+      parseInt(limit),
+      { employeeId }
+    );
+
+    res.status(200).json(expenses);
+  } catch (error) {
+    console.error("Get Expenses By Employee ID Error:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
